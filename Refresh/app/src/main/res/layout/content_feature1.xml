@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Feature1"
+    tools:showIn="@layout/activity_feature1">
+
+
+    <RelativeLayout
+        android:id="@+id/signature_pad_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        android:layout_above="@+id/buttons_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/signature_pad_description"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/signature_pad_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="64dp"
+            android:text="Please Sign Above"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="17sp" />
+
+        <com.github.gcacace.signaturepad.views.SignaturePad
+            android:id="@+id/signature_pad"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignBottom="@+id/signature_pad_description"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="-16dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal"
+        android:paddingTop="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/signature_pad_container"
+        app:layout_constraintEnd_toEndOf="@+id/signature_pad_container"
+        app:layout_constraintStart_toStartOf="@+id/signature_pad_container">
+
+        <Button
+            android:id="@+id/clear_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:background="@color/satblue"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"
+            android:text="@string/clear_pad" />
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:background="@color/satblue"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"
+            android:text="@string/save_signature" />
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
