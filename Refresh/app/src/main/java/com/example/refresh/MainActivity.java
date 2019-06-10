@@ -14,6 +14,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     private Button signature_button;
     private Button scanner_button;
+    private Button address_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        address_button = (Button) findViewById(R.id.mapsButton);
+        address_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                openMaps();
+            }
+        });
+
+    }
+
+    public void openMaps(){
+        Intent intent = new Intent(this, Address.class);
+        startActivity(intent);
     }
 
     public void openFeature1(){
