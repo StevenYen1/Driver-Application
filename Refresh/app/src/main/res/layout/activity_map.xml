@@ -27,16 +27,12 @@
         android:layout_height="41dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/Delivery_Info"
         android:textColor="@color/black"
         android:textSize="15pt"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/OrderNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.294" />
@@ -80,8 +76,8 @@
 
     <TextView
         android:id="@+id/Address"
-        android:layout_width="98dp"
-        android:layout_height="41dp"
+        android:layout_width="88dp"
+        android:layout_height="33dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
@@ -101,10 +97,10 @@
         android:layout_width="354dp"
         android:layout_height="31dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="14dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="14dp"
-        android:layout_marginBottom="376dp"
+        android:layout_marginBottom="20dp"
         android:text="49 Alton Street, Arlington MA 02474"
         android:textColor="@color/black"
         android:textSize="20dp"
@@ -143,7 +139,7 @@
 
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="92dp"
         android:layout_marginBottom="8dp"
         android:background="@color/satblue"
@@ -167,7 +163,7 @@
         android:layout_width="140dp"
         android:layout_height="47dp"
 
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="8dp"
         android:background="@color/satblue"
         android:shadowColor="#A8A8A8"
@@ -181,6 +177,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_address"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/backbutton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/blueback"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/OrderscreenTitle"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 

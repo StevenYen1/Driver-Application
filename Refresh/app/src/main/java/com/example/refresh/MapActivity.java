@@ -1,6 +1,7 @@
 package com.example.refresh;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Button geolocateButton;
     private Button myLocationButton;
+    private Button backButton;
     private TextView maplocation;
 
     private int mapLocation_value = DESTINATION;
@@ -93,7 +96,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        backButton = (Button) findViewById(R.id.backbutton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View w) {
+//                goBack();
+            }
+        });
+
     }
+
+//    private void goBack(){
+//        Intent intent = new Intent(this, Address.class);
+//        startActivity(intent);
+//    }
 
     private void changeMapLocation(){
         TextView mapLocation = findViewById(R.id.maplocation);
