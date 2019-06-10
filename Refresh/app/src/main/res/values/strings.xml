@@ -5,5 +5,6 @@
     <string name="agreement">I agree the terms and conditions.</string>
     <string name="clear_pad">Clear Pad</string>
     <string name="save_signature">Save Signature</string>
+    <string name="google_maps_API_key">AIzaSyCtVyzl66eqCxygWxKfO1nqWu0cANeZvCs</string>
 
 </resources>
