@@ -100,9 +100,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="20dp"
+        android:autoSizeTextType="uniform"
         android:text="Currently No Address"
         android:textColor="@color/black"
-        android:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="@+id/map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -181,12 +181,15 @@
 
     <Button
         android:id="@+id/backbutton"
-        android:layout_width="40dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/blueback"
-        app:layout_constraintStart_toEndOf="@+id/OrderscreenTitle"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="30dp"
+
+        android:background="@color/skyblue"
+        app:layout_constraintStart_toEndOf="@+id/geolocateButton"
+        app:layout_constraintTop_toBottomOf="@+id/input_address" />
 
 
 

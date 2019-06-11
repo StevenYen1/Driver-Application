@@ -31,11 +31,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, Serializable {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -109,15 +110,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
-//                goBack();
+//                removeEntry();
+                onBackPressed();
             }
         });
 
     }
 
-//    private void goBack(){
-//        Intent intent = new Intent(this, Address.class);
-//        startActivity(intent);
+//    private void removeEntry(){
+//        Bundle bundle = this.getIntent().getBundleExtra("list");
+//        ArrayList<Delivery_Item> itemList = (ArrayList<Delivery_Item>) bundle.getSerializable("ARRAYLIST");
+//        for (Delivery_Item x : itemList){
+//            if(x.getOrderNumber() == this.getIntent().getStringExtra("orderNumber")){
+//                itemList.remove(x);
+//            }
+//        }
 //    }
 
     private void changeMapLocation(){

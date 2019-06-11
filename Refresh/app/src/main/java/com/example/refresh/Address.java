@@ -25,10 +25,12 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.lang.annotation.Target;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Address extends AppCompatActivity {
+public class Address extends AppCompatActivity implements Serializable {
 
     private static final String TAG = "Address";
 
@@ -145,7 +147,7 @@ public class Address extends AppCompatActivity {
                 public void onClick(View v) {
                     setData(ptr);
                     if(isServicesOK()){
-                        openMap();
+                        openMap(v);
                     }
                 }
             });
@@ -161,7 +163,7 @@ public class Address extends AppCompatActivity {
         Log.d(TAG, "---------------------------- address: " + address + " ----------------------------");
     }
 
-    private void openMap(){
+    private void openMap(View v){
         Intent intent = new Intent(Address.this, MapActivity.class);
         intent.putExtra("orderNumber", order_num);
         intent.putExtra("orderString", address);
@@ -170,7 +172,6 @@ public class Address extends AppCompatActivity {
 
 
     private void staticList(){
-        ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
         Delivery_Item item1 = new Delivery_Item("0100100010", "1600 Pennsylvania Ave NW Washington, DC 20500 ");
         Delivery_Item item2 = new Delivery_Item("0002100034", "Seoul, South Korea");
         Delivery_Item item3 = new Delivery_Item("6112019555", "Champ de Mars, Paris, Ile de France 75007");
@@ -183,6 +184,8 @@ public class Address extends AppCompatActivity {
         Delivery_Item item10 = new Delivery_Item("9312341129", "〒150-8010東京都渋谷区");
         Delivery_Item item11 = new Delivery_Item("5512345555", "500 Staples Drive, Framingham, MA 01702");
         Delivery_Item item12 = new Delivery_Item("8888888888", "211 Arlington Street, Acton MA 01720");
+
+        ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
         newList.add(item1);
         newList.add(item2);
         newList.add(item3);
