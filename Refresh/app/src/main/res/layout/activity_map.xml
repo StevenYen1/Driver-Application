@@ -64,10 +64,9 @@
         android:layout_marginLeft="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="14dp"
-        android:text="#1062019"
+        android:text="Currently No Number"
         android:textColor="@color/black"
-
-        android:textSize="20dp"
+        android:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
 
@@ -101,9 +100,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="20dp"
-        android:text="49 Alton Street, Arlington MA 02474"
+        android:text="Currently No Address"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="@+id/map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -163,6 +162,8 @@
         android:layout_width="140dp"
         android:layout_height="47dp"
 
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="8dp"
         android:background="@color/satblue"
@@ -180,15 +181,10 @@
 
     <Button
         android:id="@+id/backbutton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="40dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/blueback"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/OrderscreenTitle"
         app:layout_constraintTop_toTopOf="parent" />
 

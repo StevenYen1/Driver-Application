@@ -67,7 +67,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Button geolocateButton;
     private Button myLocationButton;
     private Button backButton;
-    private TextView maplocation;
 
     private int mapLocation_value = DESTINATION;
 
@@ -77,6 +76,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         getLocationPermission();
+        Intent oldIntent = this.getIntent();
+        TextView display_order = (TextView) findViewById(R.id.input_order);
+        TextView display_address = (TextView) findViewById(R.id.input_address);
+
+
+        String orderString = oldIntent.getStringExtra("orderString");
+        String orderNumber = oldIntent.getStringExtra("orderNumber");
+        display_order.setText("#"+orderNumber);
+        display_address.setText(orderString);
+
 
         myLocationButton = (Button) findViewById(R.id.myLocationButton);
         myLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +221,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void geolocate() {
         Log.d(TAG, "geoLocate: geolocating");
 
-        String searchString = "49 Alton Street, Arlington MA 02474";
+        String orderString = this.getIntent().getStringExtra("orderString");
+        String searchString = orderString;
+
         Geocoder geocoder = new Geocoder(MapActivity.this);
         List<Address> list = new ArrayList<>();
         try{
