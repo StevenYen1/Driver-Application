@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -50,11 +51,12 @@ public class Address extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
         staticList();
-        Button go = (Button) findViewById(R.id.import_orders);
-        go.setOnClickListener(new View.OnClickListener() {
+        final Button importOrders = (Button) findViewById(R.id.import_orders);
+        importOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addRowFromList();
+                importOrders.setEnabled(false);
             }
         });
 
@@ -62,9 +64,37 @@ public class Address extends AppCompatActivity {
         for(int i = 0; i < num_columns; i++){
             t1.setColumnStretchable(i, true);
         }
+
+        makeTableHeader();
 //        if(isServicesOK()){
 //            init();
 //        }
+    }
+
+@TargetApi(26)
+    private void makeTableHeader(){
+        tr = new TableRow(this);
+        TextView delivery_num = new TextView(this);
+        delivery_num.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
+        delivery_num.setText("Delivery:");
+        delivery_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        delivery_num.setGravity(Gravity.CENTER);
+        tr.addView(delivery_num);
+
+        TextView order_num = new TextView(this);
+        order_num.setText("Order #:");
+        order_num.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
+        delivery_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        tr.addView(order_num);
+
+        TextView details = new TextView(this);
+        details.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
+        details.setText("More Details:");
+        details.setGravity(Gravity.CENTER);
+        details.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        tr.addView(details);
+
+        t1.addView(tr);
     }
 
 
@@ -104,7 +134,7 @@ public class Address extends AppCompatActivity {
             TextView order_num = new TextView(this);
             order_num.setText(x.getOrderNumber());
             delivery_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-            delivery_num.setGravity(Gravity.CENTER);
+//            delivery_num.setGravity(Gravity.END);
             tr.addView(order_num);
 
             final Delivery_Item ptr = x;
@@ -141,10 +171,30 @@ public class Address extends AppCompatActivity {
 
     private void staticList(){
         ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
-        Delivery_Item item1 = new Delivery_Item("01001000", "1600 Pennsylvania Ave NW Washington, DC 20500 ");
-        Delivery_Item item2 = new Delivery_Item("0002", "Seoul, South Korea");
+        Delivery_Item item1 = new Delivery_Item("0100100010", "1600 Pennsylvania Ave NW Washington, DC 20500 ");
+        Delivery_Item item2 = new Delivery_Item("0002100034", "Seoul, South Korea");
+        Delivery_Item item3 = new Delivery_Item("6112019555", "Champ de Mars, Paris, Ile de France 75007");
+        Delivery_Item item4 = new Delivery_Item("0101010101", "Los Angeles, California, United States");
+        Delivery_Item item5 = new Delivery_Item("5000000000", "50 Vassar St, Cambridge, Massachusetts 02139, United States");
+        Delivery_Item item6 = new Delivery_Item("1231231231", "924 Avenue J East, Grand Prairie, TX 75050");
+        Delivery_Item item7 = new Delivery_Item("5749403-21", "908 Massachusetts Ave, Arlington, MA 02476, United States");
+        Delivery_Item item8 = new Delivery_Item("1-342351-1", "65 Harrison Ave Ste 306, Boston, MA 02111");
+        Delivery_Item item9 = new Delivery_Item("6754456321", "124 Beach St, Ogunquit, ME 03907, United States");
+        Delivery_Item item10 = new Delivery_Item("9312341129", "〒150-8010東京都渋谷区");
+        Delivery_Item item11 = new Delivery_Item("5512345555", "500 Staples Drive, Framingham, MA 01702");
+        Delivery_Item item12 = new Delivery_Item("8888888888", "211 Arlington Street, Acton MA 01720");
         newList.add(item1);
         newList.add(item2);
+        newList.add(item3);
+        newList.add(item4);
+        newList.add(item5);
+        newList.add(item6);
+        newList.add(item7);
+        newList.add(item8);
+        newList.add(item9);
+        newList.add(item10);
+        newList.add(item11);
+        newList.add(item12);
         this.list = newList;
     }
 

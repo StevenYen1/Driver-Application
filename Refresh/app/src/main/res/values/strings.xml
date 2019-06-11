@@ -9,5 +9,8 @@
     <string name="Address">Address:</string>
     <string name="Order_Number">Order Number:</string>
     <string name="Delivery_Info"><u>Delivery Information:</u></string>
+    <string name="table_order_num"><bold>Order #:</bold></string>
+    <string name="table_deliver_num"><bold>Delivery #:</bold></string>
+    <string name="table_details"><bold>More Details:</bold></string>
 
 </resources>

@@ -8,59 +8,69 @@
     android:background="@color/white"
     tools:context=".Address">
 
-    <TableLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="30dp"
-        android:layout_marginHorizontal="10dp"
-        android:id="@+id/Table"
-        android:background="@color/skyblue">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/import_orders"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_gravity="center"
-            android:text="Import Orders"
-            android:background="@drawable/basic_button"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical" >
 
-        <TableRow
-            android:id="@+id/header">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <TableLayout
+                android:id="@+id/Table"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Delivery:"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_gravity="center"/>
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="30dp"
+                android:background="@color/skyblue">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Order #:"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_gravity="center"/>
+                <Button
+                    android:id="@+id/import_orders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="100dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/basic_button"
+                    android:text="Download"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="More Details:"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_gravity="center"/>
-        </TableRow>
-    </TableLayout>
+                <!--<TableRow android:id="@+id/header">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:text="Delivery:"-->
+                        <!--android:textStyle="bold" />-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:text="Order #:"-->
+                        <!--android:textStyle="bold" />-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:text="More Details:"-->
+                        <!--android:textStyle="bold" />-->
+                <!--</TableRow>-->
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
