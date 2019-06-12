@@ -78,8 +78,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         getLocationPermission();
         Intent oldIntent = this.getIntent();
-        TextView display_order = (TextView) findViewById(R.id.input_order);
-        TextView display_address = (TextView) findViewById(R.id.input_address);
+        TextView display_order = findViewById(R.id.input_order);
+        TextView display_address = findViewById(R.id.input_address);
 
 
         String orderString = oldIntent.getStringExtra("orderString");
@@ -88,7 +88,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         display_address.setText(orderString);
 
 
-        myLocationButton = (Button) findViewById(R.id.myLocationButton);
+        myLocationButton = findViewById(R.id.myLocationButton);
         myLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        geolocateButton = (Button) findViewById(R.id.geolocateButton);
+        geolocateButton = findViewById(R.id.geolocateButton);
         geolocateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
@@ -129,6 +129,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void openScanner(){
         Intent intent = new Intent(this, Scanner.class);
+        intent.putExtra("orderNumber", this.getIntent().getStringExtra("orderNumber"));
         startActivity(intent);
     }
 

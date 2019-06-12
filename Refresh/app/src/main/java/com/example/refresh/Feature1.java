@@ -83,8 +83,15 @@ public class Feature1 extends Activity {
                 } else {
                     Toast.makeText(Feature1.this, "Unable to store the SVG signature", Toast.LENGTH_SHORT).show();
                 }
+                returnToList();
+
             }
         });
+    }
+
+    public void returnToList(){
+        Intent intent = new Intent(this, Address.class);
+        startActivity(intent);
     }
 
     @Override

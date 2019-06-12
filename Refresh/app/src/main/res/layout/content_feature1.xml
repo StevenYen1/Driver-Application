@@ -35,7 +35,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="64dp"
-            android:text="Please Sign Above"
+            android:text="@string/please_sign"
             android:textColor="@android:color/darker_gray"
             android:textSize="17sp" />
 
