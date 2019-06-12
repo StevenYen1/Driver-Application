@@ -47,7 +47,8 @@
                 android:id="@+id/Table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/skyblue"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
                 android:stretchColumns="0,1,2">
 
             </TableLayout>
