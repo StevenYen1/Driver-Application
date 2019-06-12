@@ -148,8 +148,6 @@ public class Address extends AppCompatActivity implements Serializable {
         order_num = x.getOrderNumber();
         address = x.getOrderString();
         status = x.getStatus();
-        Log.d(TAG, "---------------------------- order_num: " + order_num + " ----------------------------");
-        Log.d(TAG, "---------------------------- address: " + address + " ----------------------------");
     }
 
     private void openMap(View v){
@@ -202,16 +200,6 @@ public class Address extends AppCompatActivity implements Serializable {
 
         this.list = newList;
     }
-
-//    private void init(){
-//        Button openMaps = (Button) findViewById(R.id.openMaps);
-//        openMaps.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMap();
-//            }
-//        });
-//    }
 
 
     //version issue
