@@ -117,6 +117,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    //MAYBE INSTEAD OF REMOVE, JUST MAKE IT SO THEY CAN'T CLICK THE BUTTON ANYMORE. PASSING A BUTTON MIGHT BE WAY EASIER.
 //    private void removeEntry(){
 //        Bundle bundle = this.getIntent().getBundleExtra("list");
 //        ArrayList<Delivery_Item> itemList = (ArrayList<Delivery_Item>) bundle.getSerializable("ARRAYLIST");
