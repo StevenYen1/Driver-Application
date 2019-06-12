@@ -110,8 +110,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
-//                removeEntry();
-                onBackPressed();
+                openScanner();
             }
         });
 
@@ -127,6 +126,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //            }
 //        }
 //    }
+
+    public void openScanner(){
+        Intent intent = new Intent(this, Scanner.class);
+        startActivity(intent);
+    }
 
     private void changeMapLocation(){
         TextView mapLocation = findViewById(R.id.maplocation);

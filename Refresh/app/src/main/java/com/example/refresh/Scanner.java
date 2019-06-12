@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
@@ -97,6 +98,12 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         }
     }
 
+    public void openFeature1(){
+        Intent intent = new Intent(this, Feature1.class);
+        startActivity(intent);
+    }
+
+
     @Override
     //release the camera using stop camera method
     public void onDestroy(){
@@ -118,19 +125,25 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         final String scanResult = result.getText();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan Result");
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Rescan", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 scannerView.resumeCameraPreview(Scanner.this);
             }
         });
-        builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Sign", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(scanResult));
-                startActivity(intent);
+            public void onClick(DialogInterface dialog, int which){
+                openFeature1();
             }
         });
+//        builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(scanResult));
+//                startActivity(intent);
+//            }
+//        });
         builder.setMessage(scanResult);
         AlertDialog alert = builder.create();
         alert.show();

@@ -39,14 +39,13 @@ public class Address extends AppCompatActivity implements Serializable {
 
     private static final String ORDER_NUMBER_DEFAULT = "0";
     private static final String ADDRESS_DEFAULT = "Massachusetts";
+    private static final String STATUS = "N/A";
     private ArrayList<Delivery_Item> list;
     private String order_num = ORDER_NUMBER_DEFAULT;
     private String address = ADDRESS_DEFAULT;
-    private int num_columns = 3;
+    private String status = STATUS;
     private TableLayout t1;
     private TableRow tr;
-    private TextView tv1, tv2, tv3;
-    private ArrayList<TextView> viewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,8 @@ public class Address extends AppCompatActivity implements Serializable {
             }
         });
 
-        t1 = (TableLayout) findViewById(R.id.Table);
+        int num_columns = 3;
+        t1 = findViewById(R.id.Table);
         for(int i = 0; i < num_columns; i++){
             t1.setColumnStretchable(i, true);
         }
@@ -76,22 +76,22 @@ public class Address extends AppCompatActivity implements Serializable {
 @TargetApi(26)
     private void makeTableHeader(){
         tr = new TableRow(this);
-        TextView delivery_num = new TextView(this);
-        delivery_num.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
-        delivery_num.setText("Delivery:");
-        delivery_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        delivery_num.setGravity(Gravity.CENTER);
-        tr.addView(delivery_num);
+        TextView status = new TextView(this);
+        status.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
+        status.setText(this.getString(R.string.status));
+        status.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        status.setGravity(Gravity.CENTER);
+        tr.addView(status);
 
         TextView order_num = new TextView(this);
-        order_num.setText("Order #:");
+        order_num.setText(this.getString(R.string.table_order_num));
         order_num.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
-        delivery_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        order_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         tr.addView(order_num);
 
         TextView details = new TextView(this);
         details.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
-        details.setText("More Details:");
+        details.setText(this.getString(R.string.table_details));
         details.setGravity(Gravity.CENTER);
         details.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         tr.addView(details);
@@ -123,25 +123,22 @@ public class Address extends AppCompatActivity implements Serializable {
 
 @TargetApi(26)
     public void addRowFromList() {
-        int i = 1;
         for (Delivery_Item x: list){
             tr = new TableRow(this);
-            TextView delivery_num = new TextView(this);
-            delivery_num.setText(""+i);
-            i++;
-            delivery_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-            delivery_num.setGravity(Gravity.CENTER);
-            tr.addView(delivery_num);
+            TextView status = new TextView(this);
+            status.setText(this.getString(R.string.incomplete));
+            status.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+            status.setGravity(Gravity.CENTER);
+            tr.addView(status);
 
             TextView order_num = new TextView(this);
             order_num.setText(x.getOrderNumber());
-            delivery_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-//            delivery_num.setGravity(Gravity.END);
+            order_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
             tr.addView(order_num);
 
             final Delivery_Item ptr = x;
             Button details_button = new Button(this);
-            details_button.setText("Open");
+            details_button.setText(this.getString(R.string.open));
             details_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -159,6 +156,7 @@ public class Address extends AppCompatActivity implements Serializable {
     private void setData(Delivery_Item x){
         order_num = x.getOrderNumber();
         address = x.getOrderString();
+        status = x.getStatus();
         Log.d(TAG, "---------------------------- order_num: " + order_num + " ----------------------------");
         Log.d(TAG, "---------------------------- address: " + address + " ----------------------------");
     }
@@ -167,6 +165,7 @@ public class Address extends AppCompatActivity implements Serializable {
         Intent intent = new Intent(Address.this, MapActivity.class);
         intent.putExtra("orderNumber", order_num);
         intent.putExtra("orderString", address);
+        intent.putExtra("status", status);
         startActivity(intent);
     }
 
