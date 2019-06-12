@@ -50,6 +50,8 @@ public class Address extends AppCompatActivity implements Serializable {
     private String order_num = ORDER_NUMBER_DEFAULT;
     private String address = ADDRESS_DEFAULT;
     private String status = STATUS;
+    private String item = "N/A";
+    private String recipient = "N/A";
     private TableLayout t1;
     private TableRow tr;
     private TextView tableTitle;
@@ -154,7 +156,12 @@ public class Address extends AppCompatActivity implements Serializable {
     private void setData(Delivery_Item x){
         order_num = x.getOrderNumber();
         address = x.getOrderString();
+        recipient = x.getRecipient();
         status = x.getStatus();
+        item = x.getItem();
+
+
+
     }
 
     private void openMap(View v){
@@ -162,13 +169,15 @@ public class Address extends AppCompatActivity implements Serializable {
         intent.putExtra("orderNumber", order_num);
         intent.putExtra("orderString", address);
         intent.putExtra("status", status);
+        intent.putExtra("item", item);
+        intent.putExtra("recipient", recipient);
         intent.putExtra("completedOrders", completedOrders);
         startActivity(intent);
     }
 
 
     private void staticList(){
-        Delivery_Item item1 = new Delivery_Item("0100100010", "1600 Pennsylvania Ave NW Washington, DC 20500 ");
+        Delivery_Item item1 = new Delivery_Item("0100100010", "1600 Pennsylvania Ave NW Washington, DC 20500 ", "President of the US", "How to Tweet 101");
         Delivery_Item item2 = new Delivery_Item("0002100034", "Seoul, South Korea");
         Delivery_Item item3 = new Delivery_Item("6112019555", "Champ de Mars, Paris, Ile de France 75007");
         Delivery_Item item4 = new Delivery_Item("0101010101", "Los Angeles, California, United States");
@@ -177,8 +186,8 @@ public class Address extends AppCompatActivity implements Serializable {
         Delivery_Item item7 = new Delivery_Item("5749403-21", "908 Massachusetts Ave, Arlington, MA 02476, United States");
         Delivery_Item item8 = new Delivery_Item("1-342351-1", "65 Harrison Ave Ste 306, Boston, MA 02111");
         Delivery_Item item9 = new Delivery_Item("6754456321", "124 Beach St, Ogunquit, ME 03907, United States");
-        Delivery_Item item10 = new Delivery_Item("9312341129", "〒150-8010東京都渋谷区");
-        Delivery_Item item11 = new Delivery_Item("5512345555", "500 Staples Drive, Framingham, MA 01702");
+        Delivery_Item item10 = new Delivery_Item("9312341129", "〒150-8010東京都渋谷区", "Tetsuya Nomura", "Final Fantasy 7 Remake");
+        Delivery_Item item11 = new Delivery_Item("5512345555", "500 Staples Drive, Framingham, MA 01702", "Saar Picker", "A Hardworking Intern");
         Delivery_Item item12 = new Delivery_Item("8888888888", "211 Arlington Street, Acton MA 01720");
 
         ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
@@ -200,7 +209,7 @@ public class Address extends AppCompatActivity implements Serializable {
         if(completedOrders != null) {
             for (Delivery_Item x : newList){
                 if(completedOrders.contains(x.getOrderNumber())){
-                    x.setStatus("Done");
+                    x.setStatus("Delivered");
                 }
             }
         }

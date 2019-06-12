@@ -120,9 +120,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void openScanner(){
         Intent intent = new Intent(this, Scanner.class);
         String orderNumber = this.getIntent().getStringExtra("orderNumber");
+        String recipient = this.getIntent().getStringExtra("recipient");
+        String item = this.getIntent().getStringExtra("item");
+
         ArrayList<String> completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
         intent.putExtra("orderNumber", orderNumber);
         intent.putExtra("completedOrders", completedOrders);
+        intent.putExtra("recipient", recipient);
+        intent.putExtra("item", item);
         if(completedOrders==null || !completedOrders.contains(orderNumber)) {
             startActivity(intent);
         }

@@ -17,6 +17,10 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class Scanner extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -122,31 +126,44 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
                 .show();
     }
 
+    private String returnDate(){
+        Date c = Calendar.getInstance().getTime();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
+
     @Override
     public void handleResult(final Result result) {
         final String scanResult = result.getText();
+        String orderNumber = this.getIntent().getStringExtra("orderNumber");
+        String recipient = this.getIntent().getStringExtra("recipient");
+        String item = this.getIntent().getStringExtra("item");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
+        builder.setTitle("Order Number: " + orderNumber);
         builder.setPositiveButton("Rescan", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 scannerView.resumeCameraPreview(Scanner.this);
             }
         });
-        builder.setNeutralButton("Sign", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                openFeature1();
-            }
-        });
-//        builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(scanResult));
-//                startActivity(intent);
-//            }
-//        });
-        builder.setMessage(scanResult);
+        if(scanResult.equals(orderNumber)){
+            builder.setNeutralButton("Proceed to Sign", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which){
+                    openFeature1();
+                }
+            });
+            String r = recipient;
+            String i = item;
+            String date = returnDate();
+            builder.setMessage("Recipient: " + recipient + "\n" + "Item Purchased: " + item + "\n" + "Date Received: " + date);
+        }
+        else{
+            builder.setMessage("This is not the correct item. \nPlease scan again.");
+        }
         AlertDialog alert = builder.create();
         alert.show();
     }
