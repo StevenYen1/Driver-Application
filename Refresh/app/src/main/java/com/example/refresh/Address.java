@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -29,7 +30,10 @@ import org.w3c.dom.Text;
 import java.io.Serializable;
 import java.lang.annotation.Target;
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Address extends AppCompatActivity implements Serializable {
 
@@ -48,27 +52,21 @@ public class Address extends AppCompatActivity implements Serializable {
     private String status = STATUS;
     private TableLayout t1;
     private TableRow tr;
+    private TextView tableTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
         staticList();
-        final Button importOrders = (Button) findViewById(R.id.import_orders);
-        importOrders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                addRowFromList();
-                importOrders.setEnabled(false);
-            }
-        });
 
-        int num_columns = 3;
+        Resources res = this.getResources();
+
+        tableTitle = findViewById(R.id.table_title);
+        tableTitle.setText(String.format(res.getString(R.string.DeliveriesDate), returnDate()));
+
+
         t1 = findViewById(R.id.Table);
-        for(int i = 0; i < num_columns; i++){
-            t1.setColumnStretchable(i, true);
-        }
-
         makeTableHeader();
         addRowFromList();
 
@@ -84,19 +82,19 @@ public class Address extends AppCompatActivity implements Serializable {
         status.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
         status.setText(this.getString(R.string.status));
         status.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        status.setGravity(Gravity.CENTER);
+        status.setGravity(Gravity.RIGHT);
         tr.addView(status);
 
         TextView order_num = new TextView(this);
         order_num.setText(this.getString(R.string.table_order_num));
         order_num.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
         order_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        order_num.setGravity(Gravity.CENTER);
         tr.addView(order_num);
 
         TextView details = new TextView(this);
         details.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
         details.setText(this.getString(R.string.table_details));
-        details.setGravity(Gravity.CENTER);
         details.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         tr.addView(details);
 
@@ -116,7 +114,7 @@ public class Address extends AppCompatActivity implements Serializable {
             TextView status = new TextView(this);
             status.setText(x.getStatus());
             status.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-            status.setGravity(Gravity.CENTER);
+            status.setGravity(Gravity.RIGHT);
             if(x.getStatus().equals(this.getString(R.string.Done))){
                 status.setTextColor(0xFF008C00);
             }
@@ -125,6 +123,7 @@ public class Address extends AppCompatActivity implements Serializable {
             TextView order_num = new TextView(this);
             order_num.setText(x.getOrderNumber());
             order_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+            order_num.setGravity(Gravity.CENTER);
             tr.addView(order_num);
 
             final Delivery_Item ptr = x;
@@ -142,6 +141,14 @@ public class Address extends AppCompatActivity implements Serializable {
             tr.addView(details_button);
             t1.addView(tr);
         }
+    }
+
+    private String returnDate(){
+        Date c = Calendar.getInstance().getTime();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c);
+        return formattedDate;
     }
 
     private void setData(Delivery_Item x){
