@@ -100,6 +100,8 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
     public void openFeature1(){
         Intent intent = new Intent(this, Feature1.class);
+        intent.putExtra("orderNumber", this.getIntent().getStringExtra("orderNumber"));
+        intent.putExtra("completedOrders", this.getIntent().getStringArrayListExtra("completedOrders"));
         startActivity(intent);
     }
 

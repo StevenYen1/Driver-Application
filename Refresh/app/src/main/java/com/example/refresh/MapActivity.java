@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -116,21 +117,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    //MAYBE INSTEAD OF REMOVE, JUST MAKE IT SO THEY CAN'T CLICK THE BUTTON ANYMORE. PASSING A BUTTON MIGHT BE WAY EASIER.
-//    private void removeEntry(){
-//        Bundle bundle = this.getIntent().getBundleExtra("list");
-//        ArrayList<Delivery_Item> itemList = (ArrayList<Delivery_Item>) bundle.getSerializable("ARRAYLIST");
-//        for (Delivery_Item x : itemList){
-//            if(x.getOrderNumber() == this.getIntent().getStringExtra("orderNumber")){
-//                itemList.remove(x);
-//            }
-//        }
-//    }
-
     public void openScanner(){
         Intent intent = new Intent(this, Scanner.class);
-        intent.putExtra("orderNumber", this.getIntent().getStringExtra("orderNumber"));
-        startActivity(intent);
+        String orderNumber = this.getIntent().getStringExtra("orderNumber");
+        ArrayList<String> completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
+        intent.putExtra("orderNumber", orderNumber);
+        intent.putExtra("completedOrders", completedOrders);
+        if(completedOrders==null || !completedOrders.contains(orderNumber)) {
+            startActivity(intent);
+        }
+        else{
+            Toast.makeText(this, "Already Completed Item", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void changeMapLocation(){

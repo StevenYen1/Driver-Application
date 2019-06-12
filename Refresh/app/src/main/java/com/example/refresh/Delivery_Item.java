@@ -19,6 +19,12 @@ public class Delivery_Item {
 
     }
 
+    public Delivery_Item(String orderNum, String orderStr, String status) {
+        this.orderNumber = orderNum;
+        this.orderString = orderStr;
+        this.status = "Done";
+    }
+
     public String getOrderNumber() {
         return orderNumber;
     }
@@ -28,4 +34,8 @@ public class Delivery_Item {
     }
 
     public String getStatus(){ return status; }
+
+    public void setStatus(String str){
+        status = str;
+    }
 }

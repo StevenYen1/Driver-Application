@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 public class Feature1 extends Activity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -91,7 +92,19 @@ public class Feature1 extends Activity {
 
     public void returnToList(){
         Intent intent = new Intent(this, Address.class);
+        intent.putExtra("orderComplete", this.getIntent().getStringExtra("orderNumber"));
+        intent.putExtra("completedOrders", updateCompletedOrders());
         startActivity(intent);
+    }
+
+    public ArrayList<String> updateCompletedOrders(){
+        ArrayList<String> completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
+        if(completedOrders==null) {
+            completedOrders = new ArrayList<String>();
+        }
+        completedOrders.add(this.getIntent().getStringExtra("orderNumber"));
+
+        return completedOrders;
     }
 
     @Override

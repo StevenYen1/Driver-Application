@@ -15,5 +15,6 @@
     <string name="incomplete">Incomplete</string>
     <string name="open">Open</string>
     <string name="please_sign">Please Sign Above</string>
+    <string name="Done">Done</string>
 
 </resources>

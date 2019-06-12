@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
@@ -41,6 +42,7 @@ public class Address extends AppCompatActivity implements Serializable {
     private static final String ADDRESS_DEFAULT = "Massachusetts";
     private static final String STATUS = "N/A";
     private ArrayList<Delivery_Item> list;
+    private ArrayList<String> completedOrders = new ArrayList<String>();
     private String order_num = ORDER_NUMBER_DEFAULT;
     private String address = ADDRESS_DEFAULT;
     private String status = STATUS;
@@ -56,7 +58,7 @@ public class Address extends AppCompatActivity implements Serializable {
         importOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addRowFromList();
+//                addRowFromList();
                 importOrders.setEnabled(false);
             }
         });
@@ -68,6 +70,8 @@ public class Address extends AppCompatActivity implements Serializable {
         }
 
         makeTableHeader();
+        addRowFromList();
+
 //        if(isServicesOK()){
 //            init();
 //        }
@@ -99,36 +103,23 @@ public class Address extends AppCompatActivity implements Serializable {
         t1.addView(tr);
     }
 
+    @Override
+    public void onBackPressed(){
 
-//@TargetApi(Build.VERSION_CODES.O)
-//    public void addRow(){
-//        tr = new TableRow(this);
-//        viewList = new ArrayList<TextView>();
-//        tv1 = new TextView(this);
-//        tv2 = new TextView(this);
-//        tv3 = new TextView(this);
-//        viewList.add(tv1);
-//        viewList.add(tv2);
-//        viewList.add(tv3);
-//
-//        for (TextView e : viewList){
-//            e.setText("DEFAULT");
-//            e.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-//            e.setGravity(Gravity.CENTER);
-//            tr.addView(e);
-//        }
-//        t1.addView(tr);
-//
-//    }
+    }
+
 
 @TargetApi(26)
     public void addRowFromList() {
         for (Delivery_Item x: list){
             tr = new TableRow(this);
             TextView status = new TextView(this);
-            status.setText(this.getString(R.string.incomplete));
+            status.setText(x.getStatus());
             status.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
             status.setGravity(Gravity.CENTER);
+            if(x.getStatus().equals(this.getString(R.string.Done))){
+                status.setTextColor(0xFF008C00);
+            }
             tr.addView(status);
 
             TextView order_num = new TextView(this);
@@ -166,6 +157,7 @@ public class Address extends AppCompatActivity implements Serializable {
         intent.putExtra("orderNumber", order_num);
         intent.putExtra("orderString", address);
         intent.putExtra("status", status);
+        intent.putExtra("completedOrders", completedOrders);
         startActivity(intent);
     }
 
@@ -185,6 +177,7 @@ public class Address extends AppCompatActivity implements Serializable {
         Delivery_Item item12 = new Delivery_Item("8888888888", "211 Arlington Street, Acton MA 01720");
 
         ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
+
         newList.add(item1);
         newList.add(item2);
         newList.add(item3);
@@ -197,6 +190,16 @@ public class Address extends AppCompatActivity implements Serializable {
         newList.add(item10);
         newList.add(item11);
         newList.add(item12);
+
+        completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
+        if(completedOrders != null) {
+            for (Delivery_Item x : newList){
+                if(completedOrders.contains(x.getOrderNumber())){
+                    x.setStatus("Done");
+                }
+            }
+        }
+
         this.list = newList;
     }
 
