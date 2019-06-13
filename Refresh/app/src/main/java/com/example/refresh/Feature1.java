@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,6 +36,7 @@ public class Feature1 extends Activity {
     private SignaturePad mSignaturePad;
     private Button mClearButton;
     private Button mSaveButton;
+    private String signatureImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +77,24 @@ public class Feature1 extends Activity {
             @Override
             public void onClick(View view) {
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
-                if (addJpgSignatureToGallery(signatureBitmap)) {
-                    Toast.makeText(Feature1.this, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Feature1.this, "Unable to store the signature", Toast.LENGTH_SHORT).show();
-                }
-                if (addSvgSignatureToGallery(mSignaturePad.getSignatureSvg())) {
-                    Toast.makeText(Feature1.this, "SVG Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Feature1.this, "Unable to store the SVG signature", Toast.LENGTH_SHORT).show();
-                }
-                returnToList();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] b = stream.toByteArray();
 
+                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                signatureImage = encodedImage;
+//                if (addJpgSignatureToGallery(signatureBitmap)) {
+//                    Toast.makeText(Feature1.this, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(Feature1.this, "Unable to store the signature", Toast.LENGTH_SHORT).show();
+//                }
+//                if (addSvgSignatureToGallery(mSignaturePad.getSignatureSvg())) {
+//                    Toast.makeText(Feature1.this, "SVG Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(Feature1.this, "Unable to store the SVG signature", Toast.LENGTH_SHORT).show();
+//                }
+                returnToList();
+                Toast.makeText(Feature1.this, signatureImage, Toast.LENGTH_LONG).show();
             }
         });
     }
