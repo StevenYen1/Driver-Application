@@ -25,12 +25,10 @@ import com.github.gcacace.signaturepad.views.SignaturePad;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 public class Feature1 extends Activity {
@@ -46,7 +44,7 @@ public class Feature1 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature1);
 
-        mSignaturePad = (SignaturePad) findViewById(R.id.signature_pad);
+        mSignaturePad = findViewById(R.id.signature_pad);
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
             @Override
             public void onStartSigning() {
@@ -66,8 +64,8 @@ public class Feature1 extends Activity {
             }
         });
 
-        mClearButton = (Button) findViewById(R.id.clear_button);
-        mSaveButton = (Button) findViewById(R.id.save_button);
+        mClearButton = findViewById(R.id.clear_button);
+        mSaveButton = findViewById(R.id.save_button);
 
         mClearButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +107,6 @@ public class Feature1 extends Activity {
             FileOutputStream fos = openFileOutput(file.getName(), Context.MODE_PRIVATE);
             fos.write(text.getBytes());
             fos.close();
-//            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + file, Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(this, "Fails1", Toast.LENGTH_SHORT).show();
@@ -173,42 +170,11 @@ public class Feature1 extends Activity {
         stream.close();
     }
 
-    public boolean addJpgSignatureToGallery(Bitmap signature) {
-        boolean result = false;
-        try {
-            File photo = new File(getAlbumStorageDir("SignaturePad"), String.format("Signature_%d.jpg", System.currentTimeMillis()));
-            saveBitmapToJPG(signature, photo);
-            scanMediaFile(photo);
-            result = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     private void scanMediaFile(File photo) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri contentUri = Uri.fromFile(photo);
         mediaScanIntent.setData(contentUri);
         Feature1.this.sendBroadcast(mediaScanIntent);
-    }
-
-    public boolean addSvgSignatureToGallery(String signatureSvg) {
-        boolean result = false;
-        try {
-            File svgFile = new File(getAlbumStorageDir("SignaturePad"), String.format("Signature_%d.svg", System.currentTimeMillis()));
-            OutputStream stream = new FileOutputStream(svgFile);
-            OutputStreamWriter writer = new OutputStreamWriter(stream);
-            writer.write(signatureSvg);
-            writer.close();
-            stream.flush();
-            stream.close();
-            scanMediaFile(svgFile);
-            result = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
     /**

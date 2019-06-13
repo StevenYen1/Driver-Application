@@ -68,9 +68,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private Button geolocateButton;
-    private Button myLocationButton;
-    private Button backButton;
 
     private int mapLocation_value = DESTINATION;
 
@@ -91,7 +88,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         display_address.setText(orderString);
 
 
-        myLocationButton = findViewById(R.id.myLocationButton);
+        Button myLocationButton = findViewById(R.id.myLocationButton);
         myLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
@@ -100,7 +97,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        geolocateButton = findViewById(R.id.geolocateButton);
+        Button geolocateButton = findViewById(R.id.geolocateButton);
         geolocateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
@@ -109,7 +106,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        backButton = (Button) findViewById(R.id.backbutton);
+        Button backButton = (Button) findViewById(R.id.backbutton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
