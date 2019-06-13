@@ -2,6 +2,7 @@ package com.example.refresh;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,7 +14,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -22,8 +22,11 @@ import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -82,27 +85,47 @@ public class Feature1 extends Activity {
                 byte[] b = stream.toByteArray();
 
                 String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                signatureImage = encodedImage;
-//                if (addJpgSignatureToGallery(signatureBitmap)) {
-//                    Toast.makeText(Feature1.this, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(Feature1.this, "Unable to store the signature", Toast.LENGTH_SHORT).show();
-//                }
-//                if (addSvgSignatureToGallery(mSignaturePad.getSignatureSvg())) {
-//                    Toast.makeText(Feature1.this, "SVG Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(Feature1.this, "Unable to store the SVG signature", Toast.LENGTH_SHORT).show();
-//                }
+                File directory = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+                File file = new File(directory, getIntent().getStringExtra("orderNumber")+"_sign.txt");
+
+                saveFile(file, encodedImage);
+                Toast.makeText(Feature1.this, "The string being written to file:\n"+encodedImage, Toast.LENGTH_LONG).show();
+                if(!file.exists()){
+                    try {
+                        file.createNewFile();
+                        saveFile(file, encodedImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                signatureImage = file.getName();
                 returnToList();
-                Toast.makeText(Feature1.this, signatureImage, Toast.LENGTH_LONG).show();
             }
         });
     }
+
+    public void saveFile(File file, String text){
+        try{
+            FileOutputStream fos = openFileOutput(file.getName(), Context.MODE_PRIVATE);
+            fos.write(text.getBytes());
+            fos.close();
+//            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + file, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Fails1", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Fails2", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     public void returnToList(){
         Intent intent = new Intent(this, Address.class);
         intent.putExtra("orderComplete", this.getIntent().getStringExtra("orderNumber"));
         intent.putExtra("completedOrders", updateCompletedOrders());
+        intent.putExtra("signature", signatureImage);
         startActivity(intent);
     }
 

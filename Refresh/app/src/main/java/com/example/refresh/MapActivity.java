@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -132,8 +134,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             startActivity(intent);
         }
         else{
-            Toast.makeText(this, "Already Completed Item", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Signature Collected:\n"+readFile(this.getIntent().getStringExtra("signature")), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String readFile(String file){
+        String text = "";
+
+        try{
+            FileInputStream fis = openFileInput(file);
+            int size = fis.available();
+            byte[] buffer = new byte[size];
+            fis.read(buffer);
+            fis.close();
+            text = new String(buffer);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text;
     }
 
     private void changeMapLocation(){

@@ -172,6 +172,7 @@ public class Address extends AppCompatActivity implements Serializable {
         intent.putExtra("item", item);
         intent.putExtra("recipient", recipient);
         intent.putExtra("completedOrders", completedOrders);
+        intent.putExtra("signature", this.getIntent().getStringExtra("signature"));
         startActivity(intent);
     }
 
