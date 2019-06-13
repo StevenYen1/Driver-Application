@@ -6,6 +6,7 @@ public class Delivery_Item {
     private String item;
     private String status;
     private String recipient;
+    private String signature;
 
     public Delivery_Item(){
         this.orderNumber = "N/A";
@@ -13,6 +14,7 @@ public class Delivery_Item {
         this.item = "N/A";
         this.status = "Incomplete";
         this.recipient = "N/A";
+        this.signature = "No Signature Yet";
 
     }
 
@@ -22,6 +24,7 @@ public class Delivery_Item {
         this.status = "Incomplete";
         this.recipient = recipient;
         this.item = item;
+        this.signature = "No Signature Yet";
 
     }
 
@@ -31,6 +34,7 @@ public class Delivery_Item {
         this.status = "Incomplete";
         this.recipient = "database.getRecipient()";
         this.item = "database.getItem()";
+        this.signature = "No Signature Yet";
 
     }
 
@@ -54,5 +58,12 @@ public class Delivery_Item {
 
     public String getItem() {
         return item;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+    public void setSignature(String signature){
+        this.signature = signature;
     }
 }

@@ -27,6 +27,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.w3c.dom.Text;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.annotation.Target;
 import java.lang.reflect.Array;
@@ -52,6 +55,7 @@ public class Address extends AppCompatActivity implements Serializable {
     private String status = STATUS;
     private String item = "N/A";
     private String recipient = "N/A";
+    private String signature = "No Signature Yet";
     private TableLayout t1;
     private TableRow tr;
     private TextView tableTitle;
@@ -159,6 +163,7 @@ public class Address extends AppCompatActivity implements Serializable {
         recipient = x.getRecipient();
         status = x.getStatus();
         item = x.getItem();
+        signature = x.getSignature();
 
 
 
@@ -206,16 +211,50 @@ public class Address extends AppCompatActivity implements Serializable {
         newList.add(item11);
         newList.add(item12);
 
+//        for(Delivery_Item x: newList){
+//            Log.d(TAG, "----- " + x.getSignature() + " -----");
+//        }
+
+        order_num = this.getIntent().getStringExtra("orderComplete");
+
         completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
         if(completedOrders != null) {
+//            Log.d(TAG, "-------------------------------------------- "+ readFile(this.getIntent().getStringExtra("signature")) + " --------------------------------------------");
             for (Delivery_Item x : newList){
+//                Log.d("OrderNumber", x.getOrderNumber());
+//                Log.d("orderComplete", this.getIntent().getStringExtra("orderComplete"));
+//                this doesn't actually work because I'm creating the list every freaking time I hope this activity.
+//                if(x.getOrderNumber().equals(this.getIntent().getStringExtra("orderComplete"))){
+//                    x.setSignature(readFile(this.getIntent().getStringExtra("signature")));
+//                }
                 if(completedOrders.contains(x.getOrderNumber())){
                     x.setStatus("Delivered");
                 }
+
             }
+
         }
 
+
         this.list = newList;
+    }
+
+    public String readFile(String file){
+        String text = "";
+
+        try{
+            FileInputStream fis = openFileInput(file);
+            int size = fis.available();
+            byte[] buffer = new byte[size];
+            fis.read(buffer);
+            fis.close();
+            text = new String(buffer);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text;
     }
 
 
