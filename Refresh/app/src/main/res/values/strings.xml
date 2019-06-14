@@ -9,7 +9,7 @@
     <string name="Address">Address:</string>
     <string name="Order_Number">Order Number:</string>
     <string name="Delivery_Info"><u>Delivery Information:</u></string>
-    <string name="table_order_num"><bold>Order #:</bold></string>
+    <string name="table_order_num"><bold>Order Information:</bold></string>
     <string name="status"><bold>Status:</bold></string>
     <string name="table_details"><bold>More Details:</bold></string>
     <string name="incomplete">Incomplete</string>
@@ -24,5 +24,8 @@
     <string name="Password">Password</string>
     <string name="welcome_text">Please click the button below to download your deliveries...</string>
     <string name="DeliveriesDate">Deliveries for %1$s</string>
+    <string name="orderInfo">#%s \n<font color="blue">%s</font></string>
+    <string name="orderNum"><b>%s</b></string>
+    <string name="add"><font color='blue'>\n%s</font></string>
 
 </resources>
