@@ -12,12 +12,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,10 +29,14 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
+    private ArrayList<String> orderList;
+    private ArrayList<String> completedOrders = new ArrayList<>();
+    DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myDb = new DatabaseHelper(this);
 
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
@@ -43,6 +49,22 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
                 requestPermission();
             }
         }
+    }
+    public void onBackPressed(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Are you done scanning?");
+        builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                scannerView.resumeCameraPreview(Scanner.this);
+            }
+        });
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                openScannedItems();
+            }
+        });
     }
 
     private boolean checkPermission(){
@@ -102,10 +124,9 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         }
     }
 
-    public void openFeature1(){
-        Intent intent = new Intent(this, Feature1.class);
-        intent.putExtra("orderNumber", this.getIntent().getStringExtra("orderNumber"));
-        intent.putExtra("completedOrders", this.getIntent().getStringArrayListExtra("completedOrders"));
+    public void openScannedItems(){
+        Intent intent = new Intent(this, scannedItems.class);
+        intent.putExtra("completedOrders", completedOrders);
         startActivity(intent);
     }
 
@@ -126,43 +147,40 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
                 .show();
     }
 
-    private String returnDate(){
-        Date c = Calendar.getInstance().getTime();
-
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        String formattedDate = df.format(c);
-        return formattedDate;
-    }
-
     @Override
     public void handleResult(final Result result) {
         final String scanResult = result.getText();
-        String orderNumber = this.getIntent().getStringExtra("orderNumber");
-        String recipient = this.getIntent().getStringExtra("recipient");
-        String item = this.getIntent().getStringExtra("item");
+        orderList = getIntent().getStringArrayListExtra("orderList");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Order Number: " + orderNumber);
-        builder.setPositiveButton("Rescan", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                scannerView.resumeCameraPreview(Scanner.this);
-            }
-        });
-        if(scanResult.equals(orderNumber)){
-            builder.setNeutralButton("Proceed to Sign", new DialogInterface.OnClickListener() {
+        if(orderList.contains(scanResult)){
+            builder.setTitle("Order Number: " + scanResult);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which){
-                    openFeature1();
+                    completedOrders.add(scanResult);
+                    scannerView.resumeCameraPreview(Scanner.this);
                 }
             });
-            String r = recipient;
-            String i = item;
-            String date = returnDate();
-            builder.setMessage("Recipient: " + recipient + "\n" + "Item Purchased: " + item + "\n" + "Date Received: " + date);
+            builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which){
+                    completedOrders.add(scanResult);
+                    openScannedItems();
+                }
+            });
+            builder.setMessage("Order Completed! Continue Scanning?");
         }
         else{
-            builder.setMessage("This is not the correct item. \nPlease scan again.");
+            builder.setTitle("Error: ");
+            builder.setMessage("Item is not on the order list. \nPlease scan again.");
+            builder.setNeutralButton("Rescan", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which){
+                    scannerView.resumeCameraPreview(Scanner.this);
+                }
+            });
+
         }
         AlertDialog alert = builder.create();
         alert.show();

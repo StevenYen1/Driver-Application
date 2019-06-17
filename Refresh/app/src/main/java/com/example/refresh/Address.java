@@ -3,13 +3,17 @@ package com.example.refresh;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -18,6 +22,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -51,10 +56,12 @@ public class Address extends AppCompatActivity implements Serializable {
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
 
+
     private static final String ORDER_NUMBER_DEFAULT = "0";
     private static final String ADDRESS_DEFAULT = "Massachusetts";
     private static final String STATUS = "N/A";
     private ArrayList<Delivery_Item> list;
+    private ArrayList<String> incompleteOrders = new ArrayList<>();
     private ArrayList<String> completedOrders = new ArrayList<String>();
     private String order_num = ORDER_NUMBER_DEFAULT;
     private String address = ADDRESS_DEFAULT;
@@ -65,12 +72,23 @@ public class Address extends AppCompatActivity implements Serializable {
     private TableLayout t1;
     private TableRow tr;
     private TextView tableTitle;
+    DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+        myDb = new DatabaseHelper(this);
+
         staticList();
+
+        Button button = findViewById(R.id.scan);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScanner();
+            }
+        });
 
         Resources res = this.getResources();
 
@@ -151,7 +169,7 @@ public class Address extends AppCompatActivity implements Serializable {
                 public void onClick(View v) {
                     setData(ptr);
                     if(isServicesOK()){
-                        openMap(v);
+                        viewInstance();
                     }
                 }
             });
@@ -162,7 +180,6 @@ public class Address extends AppCompatActivity implements Serializable {
 
     private String returnDate(){
         Date c = Calendar.getInstance().getTime();
-
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c);
         return formattedDate;
@@ -176,11 +193,9 @@ public class Address extends AppCompatActivity implements Serializable {
         item = x.getItem();
         signature = x.getSignature();
 
-
-
     }
 
-    private void openMap(View v){
+    private void openMap(){
         Intent intent = new Intent(Address.this, MapActivity.class);
         intent.putExtra("orderNumber", order_num);
         intent.putExtra("orderString", address);
@@ -192,20 +207,29 @@ public class Address extends AppCompatActivity implements Serializable {
         startActivity(intent);
     }
 
+    private void openScanner(){
+        Intent intent = new Intent(Address.this, Scanner.class);
+        for(String x: incompleteOrders){
+            Log.d("INCOMPLETE ORDERS: ", "------------------"+ x + "------------------");
+        }
+        intent.putExtra("orderList", incompleteOrders);
+        startActivity(intent);
+    }
+
 
     private void staticList(){
-        Delivery_Item item1 = new Delivery_Item("0100100010", "1600 Pennsylvania Ave NW Washington, DC", "President of the US", "How to Tweet 101");
-        Delivery_Item item2 = new Delivery_Item("0002100034", "Seoul, South Korea");
-        Delivery_Item item3 = new Delivery_Item("6112019555", "Champ de Mars, Paris");
-        Delivery_Item item4 = new Delivery_Item("0101010101", "Los Angeles, California");
-        Delivery_Item item5 = new Delivery_Item("5000000000", "50 Vassar St, Cambridge, MA");
-        Delivery_Item item6 = new Delivery_Item("1231231231", "924 Avenue J East, Grand Prairie, TX");
-        Delivery_Item item7 = new Delivery_Item("5749403-21", "908 Massachusetts Ave, Arlington, MA");
-        Delivery_Item item8 = new Delivery_Item("1-342351-1", "65 Harrison Ave Ste 306, Boston, MA");
-        Delivery_Item item9 = new Delivery_Item("6754456321", "124 Beach St, Ogunquit, ME");
-        Delivery_Item item10 = new Delivery_Item("9312341129", "〒150-8010東京都渋谷区", "Tetsuya Nomura", "Final Fantasy 7 Remake");
-        Delivery_Item item11 = new Delivery_Item("5512345555", "500 Staples Drive, Framingham, MA", "Saar Picker", "A Hardworking Intern");
-        Delivery_Item item12 = new Delivery_Item("8888888888", "211 Arlington Street, Acton MA");
+        Delivery_Item item1 = new Delivery_Item("1", "1600 Pennsylvania Ave, Washington, DC", "President of the US", "How to Tweet 101");
+        Delivery_Item item2 = new Delivery_Item("2", "Seoul, South Korea");
+        Delivery_Item item3 = new Delivery_Item("3", "Champ de Mars, Paris");
+        Delivery_Item item4 = new Delivery_Item("4", "Los Angeles, California");
+        Delivery_Item item5 = new Delivery_Item("5", "50 Vassar St, Cambridge, MA");
+        Delivery_Item item6 = new Delivery_Item("6", "924 Avenue J East, Grand Prairie, TX");
+        Delivery_Item item7 = new Delivery_Item("7", "908 Massachusetts Ave, Arlington, MA");
+        Delivery_Item item8 = new Delivery_Item("8", "65 Harrison Ave Ste 306, Boston, MA");
+        Delivery_Item item9 = new Delivery_Item("9", "124 Beach St, Ogunquit, ME");
+        Delivery_Item item10 = new Delivery_Item("10", "〒150-8010東京都渋谷区", "Tetsuya Nomura", "Final Fantasy 7 Remake");
+        Delivery_Item item11 = new Delivery_Item("11", "500 Staples Drive, Framingham, MA", "Saar Picker", "A Hardworking Intern");
+        Delivery_Item item12 = new Delivery_Item("12", "211 Arlington Street, Acton MA");
 
         ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
 
@@ -222,26 +246,91 @@ public class Address extends AppCompatActivity implements Serializable {
         newList.add(item11);
         newList.add(item12);
 
-
-        order_num = this.getIntent().getStringExtra("orderComplete");
-
-        completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
-        if(completedOrders != null) {
-            for (Delivery_Item x : newList){
-                if(completedOrders.contains(x.getOrderNumber())){
-                    x.setStatus("Delivered");
-                }
-
-            }
-
+        for(Delivery_Item x: newList){
+            incompleteOrders.add(x.getOrderNumber());
         }
 
+
+//        order_num = this.getIntent().getStringExtra("orderComplete");
+//
+//        completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
+//        if(completedOrders != null) {
+//            for (Delivery_Item x : newList){
+//                if(completedOrders.contains(x.getOrderNumber())){
+//                    x.setStatus("Delivered");
+//                }
+//
+//            }
+//
+//        }
 
         this.list = newList;
     }
 
-    public void openScan(View v){
+    public void viewAll(){
+        Cursor res = myDb.getAllData();
+        if(res.getCount() == 0){
+            showMessage("Error", "No Data Found");
+            return;
+        }
 
+        StringBuffer buffer = new StringBuffer();
+        while (res.moveToNext()) {
+            buffer.append("Order number: " + res.getString(0)+"\n");
+            buffer.append("Address: " + res.getString(1)+"\n");
+            buffer.append("Recipient: " + res.getString(2)+"\n");
+            buffer.append("Item: " + res.getString(3)+"\n");
+            buffer.append("Status: " + res.getString(4)+"\n");
+            buffer.append("Sign: " + res.getString(5)+"\n");
+            buffer.append("\n");
+        }
+
+        showMessage("Data", buffer.toString());
+    }
+
+    public void viewInstance(){
+        Log.d("ORDER NUMBER: ", order_num);
+        Cursor res = myDb.getInstance(order_num);
+        if(res.getCount() == 0){
+            showMessage("Error", "No Data Found");
+            return;
+        }
+
+        StringBuffer buffer = new StringBuffer();
+
+        while (res.moveToNext()) {
+            buffer.append("Order number: " + res.getString(0)+"\n");
+            buffer.append("Address: " + res.getString(1)+"\n");
+            buffer.append("Recipient: " + res.getString(2)+"\n");
+            buffer.append("Item: " + res.getString(3)+"\n");
+            buffer.append("Status: " + res.getString(4)+"\n");
+            buffer.append("Sign: " + res.getString(5)+"\n");
+            buffer.append("\n");
+        }
+
+        showMessage("Order Information", buffer.toString());
+
+    }
+
+
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setPositiveButton("Map", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                openMap();
+            }
+        });
+        builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onBackPressed();
+            }
+        });
+        builder.setMessage(message);
+        builder.show();
     }
 
     public String readFile(String file){

@@ -3,8 +3,10 @@ package com.example.refresh;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -38,11 +41,15 @@ public class Feature1 extends Activity {
     private Button mClearButton;
     private Button mSaveButton;
     private String signatureImage;
+    private ArrayList<String> completedOrders;
+    DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature1);
+
+        myDb = new DatabaseHelper(this);
 
         mSignaturePad = findViewById(R.id.signature_pad);
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
@@ -87,7 +94,7 @@ public class Feature1 extends Activity {
                 File file = new File(directory, getIntent().getStringExtra("orderNumber")+"_sign.txt");
 
                 saveFile(file, encodedImage);
-                Toast.makeText(Feature1.this, "The string being written to file:\n"+encodedImage, Toast.LENGTH_LONG).show();
+//                Toast.makeText(Feature1.this, "The string being written to file:\n"+encodedImage, Toast.LENGTH_LONG).show();
                 if(!file.exists()){
                     try {
                         file.createNewFile();
@@ -97,9 +104,58 @@ public class Feature1 extends Activity {
                     }
                 }
                 signatureImage = file.getName();
-                returnToList();
+                completedOrders = getIntent().getStringArrayListExtra("completedOrders");
+                for(String x: completedOrders){
+                    myDb.updateData(x, "Delivered", encodedImage);
+                    viewInstance(x);
+                }
+                //FIND A WAY TO RETURN TO SCANNED ITEMS WHILE UPDATING THE REMAINING COMPLETED ORDERS
+//                returnToList();
             }
         });
+    }
+
+    public void viewInstance(String order_num){
+        Log.d("ORDER NUMBER: ", order_num);
+        Cursor res = myDb.getInstance(order_num);
+        if(res.getCount() == 0){
+            showMessage("Error", "No Data Found");
+            return;
+        }
+
+        StringBuffer buffer = new StringBuffer();
+
+        while (res.moveToNext()) {
+            buffer.append("Order number: " + res.getString(0)+"\n");
+            buffer.append("Address: " + res.getString(1)+"\n");
+            buffer.append("Recipient: " + res.getString(2)+"\n");
+            buffer.append("Item: " + res.getString(3)+"\n");
+            buffer.append("Status: " + res.getString(4)+"\n");
+            buffer.append("Sign: " + res.getString(5)+"\n");
+            buffer.append("\n");
+        }
+
+        showMessage("Order Information", buffer.toString());
+
+    }
+
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setPositiveButton("Map", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+            }
+        });
+        builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onBackPressed();
+            }
+        });
+        builder.setMessage(message);
+        builder.show();
     }
 
     public void saveFile(File file, String text){
@@ -121,19 +177,9 @@ public class Feature1 extends Activity {
     public void returnToList(){
         Intent intent = new Intent(this, Address.class);
         intent.putExtra("orderComplete", this.getIntent().getStringExtra("orderNumber"));
-        intent.putExtra("completedOrders", updateCompletedOrders());
+//        intent.putExtra("completedOrders", updateCompletedOrders());
         intent.putExtra("signature", signatureImage);
         startActivity(intent);
-    }
-
-    public ArrayList<String> updateCompletedOrders(){
-        ArrayList<String> completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
-        if(completedOrders==null) {
-            completedOrders = new ArrayList<String>();
-        }
-        completedOrders.add(this.getIntent().getStringExtra("orderNumber"));
-
-        return completedOrders;
     }
 
     @Override

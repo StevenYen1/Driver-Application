@@ -77,16 +77,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         getLocationPermission();
-        Intent oldIntent = this.getIntent();
-        TextView display_order = findViewById(R.id.input_order);
-        TextView display_address = findViewById(R.id.input_address);
-
-
-        String orderString = oldIntent.getStringExtra("orderString");
-        String orderNumber = oldIntent.getStringExtra("orderNumber");
-        display_order.setText("#"+orderNumber);
-        display_address.setText(orderString);
-
 
         Button myLocationButton = findViewById(R.id.myLocationButton);
         myLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -106,51 +96,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        Button backButton = (Button) findViewById(R.id.backbutton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View w) {
-                openScanner();
-            }
-        });
-
-    }
-
-    public void openScanner(){
-        Intent intent = new Intent(this, Scanner.class);
-        String orderNumber = this.getIntent().getStringExtra("orderNumber");
-        String recipient = this.getIntent().getStringExtra("recipient");
-        String item = this.getIntent().getStringExtra("item");
-
-        ArrayList<String> completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
-        intent.putExtra("orderNumber", orderNumber);
-        intent.putExtra("completedOrders", completedOrders);
-        intent.putExtra("recipient", recipient);
-        intent.putExtra("item", item);
-        if(completedOrders==null || !completedOrders.contains(orderNumber)) {
-            startActivity(intent);
-        }
-        else{
-            Toast.makeText(this, "Signature Collected:\n"+readFile(this.getIntent().getStringExtra("signature")), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public String readFile(String file){
-        String text = "";
-
-        try{
-            FileInputStream fis = openFileInput(file);
-            int size = fis.available();
-            byte[] buffer = new byte[size];
-            fis.read(buffer);
-            fis.close();
-            text = new String(buffer);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return text;
     }
 
     private void changeMapLocation(){

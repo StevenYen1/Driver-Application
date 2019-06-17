@@ -17,9 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".scannedItems"
+            android:label="@string/title_activity_scanned_items"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".DownloadPage"
             android:label="@string/title_activity_download_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MapActivity"
             android:label="MapActivity"

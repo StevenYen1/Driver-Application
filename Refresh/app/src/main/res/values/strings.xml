@@ -27,5 +27,6 @@
     <string name="orderInfo">#%s \n<font color="blue">%s</font></string>
     <string name="orderNum"><b>%s</b></string>
     <string name="add"><font color='blue'>\n%s</font></string>
+    <string name="title_activity_scanned_items">scannedItems</string>
 
 </resources>
