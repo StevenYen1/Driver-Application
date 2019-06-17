@@ -155,7 +155,6 @@ public class Address extends AppCompatActivity implements Serializable {
                     }
                 }
             });
-//            tr.setMinimumHeight(100);
 
             t1.addView(tr);
         }
@@ -239,6 +238,10 @@ public class Address extends AppCompatActivity implements Serializable {
 
 
         this.list = newList;
+    }
+
+    public void openScan(View v){
+
     }
 
     public String readFile(String file){
