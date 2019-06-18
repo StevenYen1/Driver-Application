@@ -36,6 +36,7 @@ public class DownloadPage extends AppCompatActivity {
         myDb = new DatabaseHelper(this);
         layout = findViewById(R.id.layout);
         staticList();
+        myDb.clear();
         for(Delivery_Item x: list){
             myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature());
         }
@@ -106,11 +107,20 @@ public class DownloadPage extends AppCompatActivity {
         list = newList;
     }
 
+    public ArrayList<String> createOrderList(ArrayList<Delivery_Item> itemlist){
+        ArrayList<String> orderList = new ArrayList<>();
+        for(Delivery_Item x: itemlist){
+            orderList.add(x.getOrderNumber());
+        }
+        return orderList;
+    }
+
 
 
 
     public void openDeliveries(){
         Intent intent = new Intent(this, Address.class);
+        intent.putExtra("remainingOrders", createOrderList(list));
         startActivity(intent);
     }
 

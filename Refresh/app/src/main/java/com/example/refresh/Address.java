@@ -61,8 +61,9 @@ public class Address extends AppCompatActivity implements Serializable {
     private static final String ADDRESS_DEFAULT = "Massachusetts";
     private static final String STATUS = "N/A";
     private ArrayList<Delivery_Item> list;
-    private ArrayList<String> incompleteOrders = new ArrayList<>();
-    private ArrayList<String> completedOrders = new ArrayList<String>();
+    private ArrayList<String> incompleteOrders;
+    private ArrayList<String> completedOrders;
+    private ArrayList<String> allOrders = new ArrayList<>();
     private String order_num = ORDER_NUMBER_DEFAULT;
     private String address = ADDRESS_DEFAULT;
     private String status = STATUS;
@@ -80,7 +81,16 @@ public class Address extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_address);
         myDb = new DatabaseHelper(this);
 
-        staticList();
+        incompleteOrders = getIntent().getStringArrayListExtra("remainingOrders");
+        completedOrders = getIntent().getStringArrayListExtra("completedOrders");
+        if(completedOrders == null){
+            completedOrders = new ArrayList<>();
+        }
+        if(incompleteOrders == null){
+            incompleteOrders = new ArrayList<>();
+        }
+        allOrders.addAll(incompleteOrders);
+        allOrders.addAll(completedOrders);
 
         Button button = findViewById(R.id.scan);
         button.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +108,8 @@ public class Address extends AppCompatActivity implements Serializable {
 
         t1 = findViewById(R.id.Table);
         makeTableHeader();
-        addRowFromList();
+        addRowFromListNew();
 
-//        if(isServicesOK()){
-//            init();
-//        }
     }
 
 @TargetApi(26)
@@ -120,7 +127,6 @@ public class Address extends AppCompatActivity implements Serializable {
         order_num.setText(this.getString(R.string.table_order_num));
         order_num.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
         order_num.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-//        order_num.setGravity(Gravity.CENTER);
         tr.addView(order_num);
 
         t1.addView(tr);
@@ -131,31 +137,28 @@ public class Address extends AppCompatActivity implements Serializable {
 
     }
 
-
-@TargetApi(26)
-    public void addRowFromList() {
-        for (Delivery_Item x: list){
-            final Delivery_Item ptr = x;
+    @TargetApi(26)
+    public void addRowFromListNew() {
+        for (final String x: allOrders){
             tr = new TableRow(this);
-
 
             TextView status = new TextView(this);
             status.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
             status.setGravity(Gravity.CENTER);
-            if(x.getStatus().equals(this.getString(R.string.Done))){
-                status.setTextColor(0xFF008C00);
-                status.setText("O");
-            }
-            else{
+            if(incompleteOrders.contains(x)){
                 status.setText("X");
                 status.setTextColor(0xFFa70000);
+            }
+            else{
+                status.setTextColor(0xFF008C00);
+                status.setText("O");
             }
             tr.addView(status);
 
             TextView order_num = new TextView(this);
-
+            final String address_id = getAddress(x);
             String order_info = String.format(
-                    this.getResources().getString(R.string.orderInfo), x.getOrderNumber(), x.getOrderString());
+                    this.getResources().getString(R.string.orderInfo), x, address_id);
 
             order_num.setText(order_info);
             order_num.setWidth(MATCH_PARENT);
@@ -167,9 +170,8 @@ public class Address extends AppCompatActivity implements Serializable {
             tr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setData(ptr);
                     if(isServicesOK()){
-                        viewInstance();
+                        viewInstance(x,address_id);
                     }
                 }
             });
@@ -185,112 +187,21 @@ public class Address extends AppCompatActivity implements Serializable {
         return formattedDate;
     }
 
-    private void setData(Delivery_Item x){
-        order_num = x.getOrderNumber();
-        address = x.getOrderString();
-        recipient = x.getRecipient();
-        status = x.getStatus();
-        item = x.getItem();
-        signature = x.getSignature();
-
-    }
-
-    private void openMap(){
+    private void openMap(String id){
         Intent intent = new Intent(Address.this, MapActivity.class);
-        intent.putExtra("orderNumber", order_num);
-        intent.putExtra("orderString", address);
-        intent.putExtra("status", status);
-        intent.putExtra("item", item);
-        intent.putExtra("recipient", recipient);
-        intent.putExtra("completedOrders", completedOrders);
-        intent.putExtra("signature", this.getIntent().getStringExtra("signature"));
+        intent.putExtra("orderString", id);
         startActivity(intent);
     }
 
     private void openScanner(){
         Intent intent = new Intent(Address.this, Scanner.class);
-        for(String x: incompleteOrders){
-            Log.d("INCOMPLETE ORDERS: ", "------------------"+ x + "------------------");
-        }
-        intent.putExtra("orderList", incompleteOrders);
+        intent.putExtra("remainingOrders", incompleteOrders);
+        intent.putExtra("completedOrders", completedOrders);
         startActivity(intent);
     }
 
-
-    private void staticList(){
-        Delivery_Item item1 = new Delivery_Item("1", "1600 Pennsylvania Ave, Washington, DC", "President of the US", "How to Tweet 101");
-        Delivery_Item item2 = new Delivery_Item("2", "Seoul, South Korea");
-        Delivery_Item item3 = new Delivery_Item("3", "Champ de Mars, Paris");
-        Delivery_Item item4 = new Delivery_Item("4", "Los Angeles, California");
-        Delivery_Item item5 = new Delivery_Item("5", "50 Vassar St, Cambridge, MA");
-        Delivery_Item item6 = new Delivery_Item("6", "924 Avenue J East, Grand Prairie, TX");
-        Delivery_Item item7 = new Delivery_Item("7", "908 Massachusetts Ave, Arlington, MA");
-        Delivery_Item item8 = new Delivery_Item("8", "65 Harrison Ave Ste 306, Boston, MA");
-        Delivery_Item item9 = new Delivery_Item("9", "124 Beach St, Ogunquit, ME");
-        Delivery_Item item10 = new Delivery_Item("10", "〒150-8010東京都渋谷区", "Tetsuya Nomura", "Final Fantasy 7 Remake");
-        Delivery_Item item11 = new Delivery_Item("11", "500 Staples Drive, Framingham, MA", "Saar Picker", "A Hardworking Intern");
-        Delivery_Item item12 = new Delivery_Item("12", "211 Arlington Street, Acton MA");
-
-        ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
-
-        newList.add(item1);
-        newList.add(item2);
-        newList.add(item3);
-        newList.add(item4);
-        newList.add(item5);
-        newList.add(item6);
-        newList.add(item7);
-        newList.add(item8);
-        newList.add(item9);
-        newList.add(item10);
-        newList.add(item11);
-        newList.add(item12);
-
-        for(Delivery_Item x: newList){
-            incompleteOrders.add(x.getOrderNumber());
-        }
-
-
-//        order_num = this.getIntent().getStringExtra("orderComplete");
-//
-//        completedOrders = this.getIntent().getStringArrayListExtra("completedOrders");
-//        if(completedOrders != null) {
-//            for (Delivery_Item x : newList){
-//                if(completedOrders.contains(x.getOrderNumber())){
-//                    x.setStatus("Delivered");
-//                }
-//
-//            }
-//
-//        }
-
-        this.list = newList;
-    }
-
-    public void viewAll(){
-        Cursor res = myDb.getAllData();
-        if(res.getCount() == 0){
-            showMessage("Error", "No Data Found");
-            return;
-        }
-
-        StringBuffer buffer = new StringBuffer();
-        while (res.moveToNext()) {
-            buffer.append("Order number: " + res.getString(0)+"\n");
-            buffer.append("Address: " + res.getString(1)+"\n");
-            buffer.append("Recipient: " + res.getString(2)+"\n");
-            buffer.append("Item: " + res.getString(3)+"\n");
-            buffer.append("Status: " + res.getString(4)+"\n");
-            buffer.append("Sign: " + res.getString(5)+"\n");
-            buffer.append("\n");
-        }
-
-        showMessage("Data", buffer.toString());
-    }
-
-    public void viewInstance(){
-        Log.d("ORDER NUMBER: ", order_num);
-        Cursor res = myDb.getInstance(order_num);
+    public void viewInstance(String id, String address){
+        Cursor res = myDb.getInstance(id);
         if(res.getCount() == 0){
             showMessage("Error", "No Data Found");
             return;
@@ -308,19 +219,47 @@ public class Address extends AppCompatActivity implements Serializable {
             buffer.append("\n");
         }
 
-        showMessage("Order Information", buffer.toString());
+        showMessageMap("Order Information", buffer.toString(), address);
 
     }
 
+    public String getAddress(String id){
+        Cursor res = myDb.getInstance(id);
+        String returnString = "";
+        if(res.getCount() == 0){
+            showMessage("Error", "No Data Found");
+            return "";
+        }
+        while (res.moveToNext()) {
+            returnString=res.getString(1);
+
+        }
+        return returnString;
+    }
 
     public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onBackPressed();
+            }
+        });
+        builder.setMessage(message);
+        builder.show();
+    }
+
+
+    public void showMessageMap(String title, String message, final String id){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle(title);
         builder.setPositiveButton("Map", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                openMap();
+                openMap(id);
             }
         });
         builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
@@ -333,23 +272,23 @@ public class Address extends AppCompatActivity implements Serializable {
         builder.show();
     }
 
-    public String readFile(String file){
-        String text = "";
-
-        try{
-            FileInputStream fis = openFileInput(file);
-            int size = fis.available();
-            byte[] buffer = new byte[size];
-            fis.read(buffer);
-            fis.close();
-            text = new String(buffer);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return text;
-    }
+//    public String readFile(String file){
+//        String text = "";
+//
+//        try{
+//            FileInputStream fis = openFileInput(file);
+//            int size = fis.available();
+//            byte[] buffer = new byte[size];
+//            fis.read(buffer);
+//            fis.close();
+//            text = new String(buffer);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return text;
+//    }
 
 
     //version issue

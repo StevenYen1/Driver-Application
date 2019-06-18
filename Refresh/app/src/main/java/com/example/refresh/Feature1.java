@@ -42,6 +42,9 @@ public class Feature1 extends Activity {
     private Button mSaveButton;
     private String signatureImage;
     private ArrayList<String> completedOrders;
+    private ArrayList<String> incompleteOrders;
+    private ArrayList<String> currentOrders;
+    private ArrayList<String> scannedOrders;
     DatabaseHelper myDb;
 
     @Override
@@ -71,6 +74,12 @@ public class Feature1 extends Activity {
             }
         });
 
+        completedOrders = getIntent().getStringArrayListExtra("completedOrders");
+        incompleteOrders = getIntent().getStringArrayListExtra("remainingOrders");
+        currentOrders = getIntent().getStringArrayListExtra("selectedOrders");
+        scannedOrders = getIntent().getStringArrayListExtra("scannedOrders");
+
+
         mClearButton = findViewById(R.id.clear_button);
         mSaveButton = findViewById(R.id.save_button);
 
@@ -94,7 +103,6 @@ public class Feature1 extends Activity {
                 File file = new File(directory, getIntent().getStringExtra("orderNumber")+"_sign.txt");
 
                 saveFile(file, encodedImage);
-//                Toast.makeText(Feature1.this, "The string being written to file:\n"+encodedImage, Toast.LENGTH_LONG).show();
                 if(!file.exists()){
                     try {
                         file.createNewFile();
@@ -104,15 +112,41 @@ public class Feature1 extends Activity {
                     }
                 }
                 signatureImage = file.getName();
-                completedOrders = getIntent().getStringArrayListExtra("completedOrders");
-                for(String x: completedOrders){
+
+                for(String x: currentOrders){
                     myDb.updateData(x, "Delivered", encodedImage);
-                    viewInstance(x);
+                    incompleteOrders.remove(x);
+                    completedOrders.add(x);
                 }
-                //FIND A WAY TO RETURN TO SCANNED ITEMS WHILE UPDATING THE REMAINING COMPLETED ORDERS
-//                returnToList();
+                returnToPrev();
             }
         });
+    }
+
+    public void onBackPressed(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Would you like to return to the previous page?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                reopenItems();
+            }
+        });
+        builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+            }
+        });
+        builder.show();
+    }
+
+    public void reopenItems(){
+        Intent intent = new Intent(this, scannedItems.class);
+        intent.putExtra("scannedOrders", scannedOrders);
+        intent.putExtra("selectedOrders", currentOrders);
+        intent.putExtra("remainingOrders", incompleteOrders);
+        intent.putExtra("completedOrders", completedOrders);
+        startActivity(intent);
     }
 
     public void viewInstance(String order_num){
@@ -137,6 +171,14 @@ public class Feature1 extends Activity {
 
         showMessage("Order Information", buffer.toString());
 
+    }
+
+    public void returnToPrev(){
+        Intent intent = new Intent(this, scannedItems.class);
+        intent.putExtra("scannedOrders", scannedOrders);
+        intent.putExtra("remainingOrders", incompleteOrders);
+        intent.putExtra("completedOrders", completedOrders);
+        startActivity(intent);
     }
 
     public void showMessage(String title, String message){
@@ -172,16 +214,6 @@ public class Feature1 extends Activity {
         }
     }
 
-
-
-    public void returnToList(){
-        Intent intent = new Intent(this, Address.class);
-        intent.putExtra("orderComplete", this.getIntent().getStringExtra("orderNumber"));
-//        intent.putExtra("completedOrders", updateCompletedOrders());
-        intent.putExtra("signature", signatureImage);
-        startActivity(intent);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -194,33 +226,6 @@ public class Feature1 extends Activity {
                 }
             }
         }
-    }
-
-    public File getAlbumStorageDir(String albumName) {
-        // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), albumName);
-        if (!file.mkdirs()) {
-            Log.e("SignaturePad", "Directory not created");
-        }
-        return file;
-    }
-
-    public void saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
-        Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(newBitmap);
-        canvas.drawColor(Color.WHITE);
-        canvas.drawBitmap(bitmap, 0, 0, null);
-        OutputStream stream = new FileOutputStream(photo);
-        newBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-        stream.close();
-    }
-
-    private void scanMediaFile(File photo) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(photo);
-        mediaScanIntent.setData(contentUri);
-        Feature1.this.sendBroadcast(mediaScanIntent);
     }
 
     /**

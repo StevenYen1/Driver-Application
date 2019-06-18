@@ -31,6 +31,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void clear(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        onCreate(db);
+    }
+
     //MIGHT WANT TO DELETE ALL DATABASE INFO BEFOREHAND. IF NOT, IT MAKE CAUSE PROBLEMS
     public boolean insertData(String num, String addr, String recip, String item, String status, String sign){
         SQLiteDatabase db = this.getWritableDatabase();
