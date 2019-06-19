@@ -16,10 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".RecyclerView"></activity>
         <activity
             android:name=".scannedItems"
             android:label="@string/title_activity_scanned_items"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DownloadPage"
             android:label="@string/title_activity_download_page"

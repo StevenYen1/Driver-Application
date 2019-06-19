@@ -64,12 +64,6 @@ public class Address extends AppCompatActivity implements Serializable {
     private ArrayList<String> incompleteOrders;
     private ArrayList<String> completedOrders;
     private ArrayList<String> allOrders = new ArrayList<>();
-    private String order_num = ORDER_NUMBER_DEFAULT;
-    private String address = ADDRESS_DEFAULT;
-    private String status = STATUS;
-    private String item = "N/A";
-    private String recipient = "N/A";
-    private String signature = "No Signature Yet";
     private TableLayout t1;
     private TableRow tr;
     private TextView tableTitle;
@@ -180,20 +174,20 @@ public class Address extends AppCompatActivity implements Serializable {
         }
     }
 
-    private String returnDate(){
+    public String returnDate(){
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c);
         return formattedDate;
     }
 
-    private void openMap(String id){
-        Intent intent = new Intent(Address.this, MapActivity.class);
+    public void openMap(String id){
+        Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("orderString", id);
         startActivity(intent);
     }
 
-    private void openScanner(){
+    public void openScanner(){
         Intent intent = new Intent(Address.this, Scanner.class);
         intent.putExtra("remainingOrders", incompleteOrders);
         intent.putExtra("completedOrders", completedOrders);

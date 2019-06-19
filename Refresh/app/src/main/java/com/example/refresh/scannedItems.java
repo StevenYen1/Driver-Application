@@ -156,7 +156,7 @@ public class scannedItems extends AppCompatActivity {
     }
 
     public void gotoOrders(){
-        Intent intent = new Intent(this, Address.class);
+        Intent intent = new Intent(this, RecyclerView.class);
         intent.putExtra("completedOrders", completedOrders);
         intent.putExtra("remainingOrders", incompleteOrders);
         startActivity(intent);

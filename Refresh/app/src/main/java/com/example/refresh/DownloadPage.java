@@ -119,7 +119,7 @@ public class DownloadPage extends AppCompatActivity {
 
 
     public void openDeliveries(){
-        Intent intent = new Intent(this, Address.class);
+        Intent intent = new Intent(this, RecyclerView.class);
         intent.putExtra("remainingOrders", createOrderList(list));
         startActivity(intent);
     }
