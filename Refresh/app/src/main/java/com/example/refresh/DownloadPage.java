@@ -37,8 +37,10 @@ public class DownloadPage extends AppCompatActivity {
         layout = findViewById(R.id.layout);
         staticList();
         myDb.clear();
+        int i = 0;
         for(Delivery_Item x: list){
-            myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature());
+            myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i);
+            i++;
         }
         createWelcome();
 

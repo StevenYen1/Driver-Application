@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.strictmode.SqliteObjectLeakedViolation;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Order.db";
@@ -15,6 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_4 = "Item";
     public static final String COL_5 = "Status";
     public static final String COL_6 = "Signature";
+    public static final String COL_7 = "idx";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -22,7 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS TEXT, SIGNATURE TEXT) ");
+        db.execSQL("create table " + TABLE_NAME + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS TEXT, SIGNATURE TEXT, IDX INTEGER) ");
+
     }
 
     @Override
@@ -37,16 +42,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    //MIGHT WANT TO DELETE ALL DATABASE INFO BEFOREHAND. IF NOT, IT MAKE CAUSE PROBLEMS
-    public boolean insertData(String num, String addr, String recip, String item, String status, String sign){
+
+    public boolean insertData(String num, String addr, String recip, String item, String status, String sign, int i){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"')");
+        db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"')");
         return true;
     }
 
     public Cursor getAllData(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" order by idx",null);
         return res;
     }
 
@@ -66,7 +71,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public Integer deleteData (String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_NAME, "OrderNumber = ?", new String[] {id});
+    }
+
+    public ArrayList<String> returnData(Cursor data){
+        ArrayList<String> dataList = new ArrayList<>();
+        while (data.moveToNext()) {
+            dataList.add(data.getString(0));
+            dataList.add(data.getString(1));
+            dataList.add(data.getString(2));
+            dataList.add(data.getString(3));
+            dataList.add(data.getString(4));
+            dataList.add(data.getString(5));
+        }
+        return dataList;
+    }
+
+    public ArrayList<String> removeIndex(String id, int remove){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where IDX > "+remove +" order by idx", null);
+        if(res.getCount() == 0){
+            Cursor data = getInstance(id);
+            ArrayList<String> returnString = returnData(data);
+            deleteData(id);
+            return returnString;
+        }
+        int i = remove;
+        while (res.moveToNext()) {
+            String key = res.getString(0);
+            ContentValues cv = new ContentValues();
+            cv.put(COL_7, i++);
+            db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { key });
+        }
+        Cursor data = getInstance(id);
+        ArrayList<String> returnString = returnData(data);
+        deleteData(id);
+        return returnString;
+
+    }
+
+    public boolean pushIndex(String id, int insert){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where idx >= "+insert+" order by idx", null);
+        if(res.getCount() != 0){
+            int i = insert;
+            while (res.moveToNext()) {
+                String key = res.getString(0);
+                ContentValues cv = new ContentValues();
+                cv.put(COL_7, ++i);
+                db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { key });
+            }
+            return true;
+        }
+        return true;
+    }
 
 
+
+    public void updateIndex(String id, int remove, int insert){
+        ArrayList<String> info = removeIndex(id, remove);
+        pushIndex(id, insert);
+        insertData(id, info.get(1), info.get(2), info.get(3), info.get(4), info.get(5), insert);
+    }
 
 }

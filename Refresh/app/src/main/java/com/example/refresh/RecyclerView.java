@@ -50,8 +50,6 @@ public class RecyclerView extends AppCompatActivity {
         if(getIntent().getStringArrayListExtra("completedOrders")!=null){
             completedOrders = getIntent().getStringArrayListExtra("completedOrders");
         }
-        allOrders.addAll(remainingOrders);
-        allOrders.addAll(completedOrders);
 
         Resources res = this.getResources();
         TextView title = findViewById(R.id.table_title);
@@ -97,30 +95,29 @@ public class RecyclerView extends AppCompatActivity {
     private void initImageBitmaps(){
         Log.d(TAG, "initImageBitmaps: preparing bitmaps");
 
-        for(String x: allOrders){
-            Cursor cursor = myDb.getInstance(x);
-            if(cursor.getCount() == 0){
-                return;
-            }
+        Cursor cursor = myDb.getAllData();
+        if(cursor.getCount() == 0){
+            return;
+        }
+        while (cursor.moveToNext()) {
             StringBuffer buffer = new StringBuffer();
-            while (cursor.moveToNext()) {
-                if(remainingOrders.contains(x)) {
-                    mImageUrls.add("https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png");
-                }
-                else{
-                    mImageUrls.add("https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Tick_Mark_Dark-512.png");
-                }
-                mNames.add("#"+cursor.getString(0)+'\n'+cursor.getString(1));
-                buffer.append("Order number: " + cursor.getString(0)+"\n");
-                buffer.append("Address: " + cursor.getString(1)+"\n");
-                buffer.append("Recipient: " + cursor.getString(2)+"\n");
-                buffer.append("Item: " + cursor.getString(3)+"\n");
-                buffer.append("Status: " + cursor.getString(4)+"\n");
-                buffer.append("Sign: " + cursor.getString(5)+"\n");
-                buffer.append("\n");
-                mDetails.add(buffer.toString());
-                mAddress.add(cursor.getString(1));
+            if(remainingOrders.contains(cursor.getString(0))) {
+                mImageUrls.add("https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png");
             }
+            else{
+                mImageUrls.add("https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Tick_Mark_Dark-512.png");
+            }
+            allOrders.add(cursor.getString(0));
+            mNames.add("#"+cursor.getString(0)+'\n'+cursor.getString(1));
+            buffer.append("Order number: " + cursor.getString(0)+"\n");
+            buffer.append("Address: " + cursor.getString(1)+"\n");
+            buffer.append("Recipient: " + cursor.getString(2)+"\n");
+            buffer.append("Item: " + cursor.getString(3)+"\n");
+            buffer.append("Status: " + cursor.getString(4)+"\n");
+            buffer.append("Sign: " + cursor.getString(5)+"\n");
+            buffer.append("\n");
+            mDetails.add(buffer.toString());
+            mAddress.add(cursor.getString(1));
         }
 
         initRecyclerView();
@@ -150,8 +147,27 @@ public class RecyclerView extends AppCompatActivity {
                         int position_dragged = dragged.getAdapterPosition();
                         int position_target = target.getAdapterPosition();
 
-                        Collections.swap(mImageUrls, position_dragged, position_target);
-                        Collections.swap(mNames, position_dragged, position_target);
+//                        Collections.swap(mImageUrls, position_dragged, position_target);
+//                        Collections.swap(mNames, position_dragged, position_target);
+
+
+                        myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
+//                        Log.d(TAG, "order moved: "+mNames.get(position_dragged));
+//                        Log.d(TAG, "what is actually being dragged: "+allOrders.get(position_dragged));
+                        mImageUrls.add(position_target, mImageUrls.remove(position_dragged));
+                        mNames.add(position_target, mNames.remove(position_dragged));
+                        allOrders.add(position_target, allOrders.remove(position_dragged));
+
+//                        Log.d(TAG, "from index: "+position_dragged);
+//                        Log.d(TAG, "to index: "+position_target);
+//                        Cursor x = myDb.getAllData();
+//                        Log.d(TAG, "-------------------------------------------");
+//
+//                        while(x.moveToNext()){
+//                            Log.d(TAG, "order: #"+x.getString(0)+" | index: " + x.getInt(6));
+//                        }
+//
+//                        Log.d(TAG, "-------------------------------------------");
 
                         adapter.notifyItemMoved(position_dragged,position_target);
 
