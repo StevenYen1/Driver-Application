@@ -1,22 +1,17 @@
 package com.example.refresh;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -52,7 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         Log.d(TAG, "onBindViewHolder: called");
         com.example.refresh.RecyclerView recyclerView = (com.example.refresh.RecyclerView) mContext;
-        final ArrayList<String> addressList = recyclerView.getmAddress();
+        final ArrayList<String> addressList = recyclerView.getAddresses();
 
         Glide.with(mContext)
                 .asBitmap()

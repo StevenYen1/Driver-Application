@@ -20,21 +20,23 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
+
+import static com.example.refresh.Delivery_Item.INCOMPLETE;
 
 public class RecyclerView extends AppCompatActivity {
 
     private static final String TAG = "RecyclerView";
+    private static final String INCOMPLETE_ICON = "https://cdn3.iconfinder.com/data/status_icons/flat-actions-status_icons-9/792/Close_Icon_Dark-512.png";
+    private static final String COMPLETE_ICON ="https://cdn3.iconfinder.com/data/status_icons/flat-actions-status_icons-9/792/Tick_Mark_Dark-512.png";
 
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
-    private ArrayList<String> mDetails = new ArrayList<>();
-    private ArrayList<String> mAddress = new ArrayList<>();
+    private ArrayList<String> display_details = new ArrayList<>();
+    private ArrayList<String> status_icons = new ArrayList<>();
+    private ArrayList<String> more_details = new ArrayList<>();
+    private ArrayList<String> addresses = new ArrayList<>();
     private ArrayList<String> remainingOrders = new ArrayList<>();
     private ArrayList<String> completedOrders = new ArrayList<>();
     private ArrayList<String> allOrders = new ArrayList<>();
@@ -46,13 +48,42 @@ public class RecyclerView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
         myDb = new DatabaseHelper(this);
-        if(getIntent().getStringArrayListExtra("remainingOrders")!=null){
-            remainingOrders = getIntent().getStringArrayListExtra("remainingOrders");
-        }
-        if(getIntent().getStringArrayListExtra("completedOrders")!=null){
-            completedOrders = getIntent().getStringArrayListExtra("completedOrders");
-        }
+        setOrderInformation();
+        setToolbarActivities();
+        initRecyclerView();
 
+
+
+    }
+
+
+    public void setOrderInformation(){
+        Cursor rawOrders = myDb.getAllData();
+        if(rawOrders.getCount() == 0){
+            return;
+        }
+        while(rawOrders.moveToNext()){
+            String ordernumber = rawOrders.getString(0);
+            String address = rawOrders.getString(1);
+            int status = rawOrders.getInt(5);
+            String details = formatDetails(rawOrders);
+
+            more_details.add(details);
+            allOrders.add(ordernumber);
+            display_details.add("#"+ordernumber+'\n'+address);
+            addresses.add(address);
+            if(status == INCOMPLETE){
+                remainingOrders.add(ordernumber);
+                status_icons.add(INCOMPLETE_ICON);
+            }
+            else{
+                completedOrders.add(ordernumber);
+                status_icons.add(COMPLETE_ICON);
+            }
+        }
+    }
+
+    public void setToolbarActivities(){
         Resources res = this.getResources();
         TextView title = findViewById(R.id.table_title);
         title.setText(String.format(res.getString(R.string.DeliveriesDate), returnDate()));
@@ -64,12 +95,6 @@ public class RecyclerView extends AppCompatActivity {
                 openScanner();
             }
         });
-
-        Log.d(TAG,"onCreate: started");
-        initImageBitmaps();
-
-
-
     }
 
     public String returnDate(){
@@ -86,45 +111,26 @@ public class RecyclerView extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public ArrayList<String> getmAddress() {
-        return mAddress;
+    public ArrayList<String> getAddresses() {
+        return addresses;
     }
 
     @Override
     public void onBackPressed() {
     }
 
-    private void initImageBitmaps(){
-        Log.d(TAG, "initImageBitmaps: preparing bitmaps");
-
-        Cursor cursor = myDb.getAllData();
-        if(cursor.getCount() == 0){
-            return;
-        }
-        while (cursor.moveToNext()) {
-            StringBuffer buffer = new StringBuffer();
-            if(remainingOrders.contains(cursor.getString(0))) {
-                mImageUrls.add("https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png");
-            }
-            else{
-                mImageUrls.add("https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Tick_Mark_Dark-512.png");
-            }
-            allOrders.add(cursor.getString(0));
-            mNames.add("#"+cursor.getString(0)+'\n'+cursor.getString(1));
-            buffer.append("Order number: " + cursor.getString(0)+"\n");
-            buffer.append("Address: " + cursor.getString(1)+"\n");
-            buffer.append("Recipient: " + cursor.getString(2)+"\n");
-            buffer.append("Item: " + cursor.getString(3)+"\n");
-            buffer.append("Status: " + cursor.getString(4)+"\n");
-            buffer.append("Sign: " + cursor.getString(5)+"\n");
-            buffer.append("\n");
-            mDetails.add(buffer.toString());
-            mAddress.add(cursor.getString(1));
-        }
-
-        initRecyclerView();
-
+    public String formatDetails(Cursor cursor){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Order number: " + cursor.getString(0)+"\n");
+        buffer.append("Address: " + cursor.getString(1)+"\n");
+        buffer.append("Recipient: " + cursor.getString(2)+"\n");
+        buffer.append("Item: " + cursor.getString(3)+"\n");
+        buffer.append("Status: " + cursor.getString(4)+"\n");
+        buffer.append("Sign: " + cursor.getString(5)+"\n");
+        buffer.append("\n");
+        return buffer.toString();
     }
+
 
     public void openMap(String id){
         Intent intent = new Intent(this, MapActivity.class);
@@ -133,9 +139,8 @@ public class RecyclerView extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
-        Log.d(TAG, "initRecyclerView");
         android.support.v7.widget.RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(mNames, mImageUrls, mDetails, this);
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(display_details, status_icons, more_details, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -150,13 +155,18 @@ public class RecyclerView extends AppCompatActivity {
                         int position_target = target.getAdapterPosition();
 
                         myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
+<<<<<<< Updated upstream
                         mImageUrls.add(position_target, mImageUrls.remove(position_dragged));
                         mNames.add(position_target, mNames.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
 
 
+=======
+                        status_icons.add(position_target, status_icons.remove(position_dragged));
+                        display_details.add(position_target, display_details.remove(position_dragged));
+                        allOrders.add(position_target, allOrders.remove(position_dragged));
+>>>>>>> Stashed changes
                         adapter.notifyItemMoved(position_dragged,position_target);
-
 
                         return false;
                     }

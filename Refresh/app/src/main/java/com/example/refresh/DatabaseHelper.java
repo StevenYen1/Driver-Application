@@ -9,6 +9,8 @@ import android.os.strictmode.SqliteObjectLeakedViolation;
 
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Order.db";
     public static final String TABLE_NAME = "order_table";
@@ -26,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS TEXT, SIGNATURE TEXT, IDX INTEGER) ");
+        db.execSQL("create table " + TABLE_NAME + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER) ");
 
     }
 
@@ -43,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertData(String num, String addr, String recip, String item, String status, String sign, int i){
+    public boolean insertData(String num, String addr, String recip, String item, int status, String sign, int i){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"')");
         return true;
@@ -61,7 +63,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public boolean updateData(String num, String status, String sign){
+    public Cursor getRemainingOrders(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where Status = 0", null);
+        return res;
+    }
+
+
+    public boolean updateData(String num, int status, String sign){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_5, status);
@@ -83,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             dataList.add(data.getString(1));
             dataList.add(data.getString(2));
             dataList.add(data.getString(3));
-            dataList.add(data.getString(4));
+            dataList.add(""+data.getInt(4));
             dataList.add(data.getString(5));
         }
         return dataList;
@@ -133,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void updateIndex(String id, int remove, int insert){
         ArrayList<String> info = removeIndex(id, remove);
         pushIndex(id, insert);
-        insertData(id, info.get(1), info.get(2), info.get(3), info.get(4), info.get(5), insert);
+        insertData(id, info.get(1), info.get(2), info.get(3), parseInt(info.get(4)), info.get(5), insert);
     }
 
 }
