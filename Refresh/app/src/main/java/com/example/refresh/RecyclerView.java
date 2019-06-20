@@ -1,11 +1,10 @@
 package com.example.refresh;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.drm.DrmStore;
-import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,23 +24,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
+import static java.lang.Integer.parseInt;
 
 public class RecyclerView extends AppCompatActivity {
 
     private static final String TAG = "RecyclerView";
-    private static final String INCOMPLETE_ICON = "https://cdn3.iconfinder.com/data/status_icons/flat-actions-status_icons-9/792/Close_Icon_Dark-512.png";
-    private static final String COMPLETE_ICON ="https://cdn3.iconfinder.com/data/status_icons/flat-actions-status_icons-9/792/Tick_Mark_Dark-512.png";
+    private static final int INCOMPLETE_ICON = R.drawable.x_mark;
+    private static final int COMPLETE_ICON = R.drawable.check;
 
-    private ArrayList<String> display_details = new ArrayList<>();
-    private ArrayList<String> status_icons = new ArrayList<>();
+    private ArrayList<String> simple_displays = new ArrayList<>();
+    private ArrayList<Integer> status_icons = new ArrayList<>();
     private ArrayList<String> more_details = new ArrayList<>();
     private ArrayList<String> addresses = new ArrayList<>();
     private ArrayList<String> remainingOrders = new ArrayList<>();
     private ArrayList<String> completedOrders = new ArrayList<>();
     private ArrayList<String> allOrders = new ArrayList<>();
     DatabaseHelper myDb;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +51,7 @@ public class RecyclerView extends AppCompatActivity {
         setOrderInformation();
         setToolbarActivities();
         initRecyclerView();
-
-
-
     }
-
 
     public void setOrderInformation(){
         Cursor rawOrders = myDb.getAllData();
@@ -65,13 +61,14 @@ public class RecyclerView extends AppCompatActivity {
         while(rawOrders.moveToNext()){
             String ordernumber = rawOrders.getString(0);
             String address = rawOrders.getString(1);
-            int status = rawOrders.getInt(5);
+            int status = rawOrders.getInt(4);
             String details = formatDetails(rawOrders);
 
             more_details.add(details);
             allOrders.add(ordernumber);
-            display_details.add("#"+ordernumber+'\n'+address);
+            simple_displays.add("#"+ordernumber+'\n'+address);
             addresses.add(address);
+            Log.d(TAG, "Status: "+ status);
             if(status == INCOMPLETE){
                 remainingOrders.add(ordernumber);
                 status_icons.add(INCOMPLETE_ICON);
@@ -106,8 +103,6 @@ public class RecyclerView extends AppCompatActivity {
 
     public void openScanner(){
         Intent intent = new Intent(this, Scanner.class);
-        intent.putExtra("remainingOrders", remainingOrders);
-        intent.putExtra("completedOrders", completedOrders);
         startActivity(intent);
     }
 
@@ -140,7 +135,7 @@ public class RecyclerView extends AppCompatActivity {
 
     private void initRecyclerView(){
         android.support.v7.widget.RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(display_details, status_icons, more_details, this);
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(simple_displays, status_icons, more_details, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -151,69 +146,65 @@ public class RecyclerView extends AppCompatActivity {
                                           @NonNull android.support.v7.widget.RecyclerView.ViewHolder dragged,
                                           @NonNull android.support.v7.widget.RecyclerView.ViewHolder target) {
 
+                        Cursor cursor = myDb.getAllData();
+                        Log.d(TAG, "-------------------Before:--------------------------");
+                        Log.d(TAG, "----------------------------------------------------");
+                        while(cursor.moveToNext()){
+                            Log.d(TAG, "order#: " + cursor.getString(0) + " | index: " + cursor.getInt(6));
+                        }
+
                         int position_dragged = dragged.getAdapterPosition();
                         int position_target = target.getAdapterPosition();
 
                         myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                        mImageUrls.add(position_target, mImageUrls.remove(position_dragged));
-                        mNames.add(position_target, mNames.remove(position_dragged));
-                        allOrders.add(position_target, allOrders.remove(position_dragged));
-
-
-=======
                         status_icons.add(position_target, status_icons.remove(position_dragged));
-                        display_details.add(position_target, display_details.remove(position_dragged));
+                        simple_displays.add(position_target, simple_displays.remove(position_dragged));
+                        more_details.add(position_target, more_details.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
->>>>>>> Stashed changes
-=======
-                        status_icons.add(position_target, status_icons.remove(position_dragged));
-                        display_details.add(position_target, display_details.remove(position_dragged));
-                        allOrders.add(position_target, allOrders.remove(position_dragged));
->>>>>>> Stashed changes
-=======
-                        status_icons.add(position_target, status_icons.remove(position_dragged));
-                        display_details.add(position_target, display_details.remove(position_dragged));
-                        allOrders.add(position_target, allOrders.remove(position_dragged));
->>>>>>> Stashed changes
                         adapter.notifyItemMoved(position_dragged,position_target);
+
+
+                        Cursor cursora = myDb.getAllData();
+                        Log.d(TAG, "-------------------After:--------------------------");
+                        Log.d(TAG, "----------------------------------------------------");
+                        while(cursora.moveToNext()){
+                            Log.d(TAG, "order#: " + cursora.getString(0) + " | index: " + cursora.getInt(6));
+                        }
+
+
 
                         return false;
                     }
 
                     @Override
                     public void onSwiped(@NonNull android.support.v7.widget.RecyclerView.ViewHolder viewHolder, int i) {
-                        int position = viewHolder.getAdapterPosition();
-                        Log.d(TAG, "getAdapterPosition: " + position);
-                        Log.d(TAG, "Item moved: " + allOrders.get(position));
-                        Log.d(TAG, "Before: ---------------------------------------------------------");
-                        Cursor x = myDb.getAllData();
-                        while(x.moveToNext()){
-                            Log.d(TAG, "order: #"+x.getString(0)+" | index: "+x.getInt(6));
+
+                        Cursor cursor = myDb.getAllData();
+                        Log.d(TAG, "-------------------Before:--------------------------");
+                        Log.d(TAG, "----------------------------------------------------");
+                        while(cursor.moveToNext()){
+                            Log.d(TAG, "order#: " + cursor.getString(0) + " | index: " + cursor.getInt(6));
                         }
-                        Log.d(TAG, "\n");
+
+                        int position = viewHolder.getAdapterPosition();
                         ArrayList<String> deletedItem = myDb.removeIndex(allOrders.get(position), position);
                         adapter.notifyItemRemoved(position);
-                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),deletedItem.get(4),deletedItem.get(5), allOrders.size()-1);
+                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),parseInt(deletedItem.get(4)),deletedItem.get(5), allOrders.size()-1);
+
                         adapter.notifyItemInserted(allOrders.size()-1);
 
-                        mImageUrls.add(mImageUrls.remove(position));
-                        mNames.add(mNames.remove(position));
+                        status_icons.add(status_icons.remove(position));
+                        simple_displays.add(simple_displays.remove(position));
                         allOrders.add(allOrders.remove(position));
-                        mDetails.add(mDetails.remove(position));
-                        mAddress.add(mAddress.remove(position));
+                        more_details.add(more_details.remove(position));
+                        addresses.add(addresses.remove(position));
 
-                        Cursor y = myDb.getAllData();
-                        Log.d(TAG, "After: ---------------------------------------------------------");
-                        while(y.moveToNext()){
-                            Log.d(TAG, "order: #"+y.getString(0)+" | index: "+y.getInt(6));
+                        Cursor cursora = myDb.getAllData();
+                        Log.d(TAG, "-------------------After:--------------------------");
+                        Log.d(TAG, "----------------------------------------------------");
+                        while(cursora.moveToNext()){
+                            Log.d(TAG, "order#: " + cursora.getString(0) + " | index: " + cursora.getInt(6));
                         }
-                        Log.d(TAG, "\n");
-                        Log.d(TAG, "num image urls: "+mImageUrls.size());
-                        Log.d(TAG, "num names: "+mNames.size());
-                        Log.d(TAG, "num orders: "+allOrders.size());
                     }
                 });
         helper.attachToRecyclerView(recyclerView);

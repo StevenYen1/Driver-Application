@@ -2,6 +2,7 @@ package com.example.refresh;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -25,40 +26,25 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.refresh.Delivery_Item.INCOMPLETE;
+import static com.example.refresh.Delivery_Item.SCANNED;
+import static com.example.refresh.Delivery_Item.SELECTED;
+
 public class scannedItems extends AppCompatActivity {
 
-    ArrayList<String> orders;
-    ArrayList<String> incompleteOrders;
-    ArrayList<String> completedOrders;
     LinearLayout layout;
     ListView view;
+    ArrayList<String> orders = new ArrayList<>();
     ArrayList<String> selectedItems = new ArrayList<>();
+    DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_items);
-
-        layout = findViewById(R.id.order_area);
-        TextView title = new TextView(this);
-        title.setText("Scanned Orders:");
-        title.setTextSize(20);
-        title.setGravity(Gravity.CENTER);
-
-        view = findViewById(R.id.list);
-        view.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        view.addHeaderView(title);
-
-        orders = getIntent().getStringArrayListExtra("scannedOrders");
-        incompleteOrders = getIntent().getStringArrayListExtra("remainingOrders");
-        completedOrders = getIntent().getStringArrayListExtra("completedOrders");
-        if(getIntent().getStringArrayListExtra("selectedOrders")!=null){
-            selectedItems = getIntent().getStringArrayListExtra("selectedOrders");
-            for(String x: selectedItems){
-                orders.remove(x);
-            }
-        }
-        orders.addAll(selectedItems);
+        myDb = new DatabaseHelper(this);
+        layoutSetup();
+        setOrderInformation();
 
         Button sign = findViewById(R.id.goto_sign);
         sign.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +58,38 @@ public class scannedItems extends AppCompatActivity {
         }
         else{
             noOrders();
+        }
+    }
+
+
+
+    public void layoutSetup(){
+        layout = findViewById(R.id.order_area);
+        TextView title = new TextView(this);
+        title.setText("Scanned Orders:");
+        title.setTextSize(20);
+        title.setGravity(Gravity.CENTER);
+
+        view = findViewById(R.id.list);
+        view.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        view.addHeaderView(title);
+    }
+
+    public void setOrderInformation(){
+        Cursor rawOrders = myDb.getAllData();
+        if(rawOrders.getCount() == 0){
+            return;
+        }
+        while(rawOrders.moveToNext()){
+            String ordernumber = rawOrders.getString(0);
+            int status = rawOrders.getInt(4);
+            if(status == SCANNED || status == SELECTED){
+                orders.add(ordernumber);
+                if(status == SELECTED){
+                    selectedItems.add(ordernumber);
+                }
+            }
+
         }
     }
 
@@ -107,20 +125,30 @@ public class scannedItems extends AppCompatActivity {
     public void createView(){
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.rowlayout, R.id.checklist, orders);
         view.setAdapter(adapter);
-        for(int i = 0; i < selectedItems.size(); i++){
-            view.setItemChecked(orders.size()-i, true);
+
+        for (String x : selectedItems){
+            int index = orders.indexOf(x)+1;
+            view.setItemChecked(index, true);
         }
+
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem =((TextView)view).getText().toString();
                 if(selectedItems.contains(selectedItem)){
                     selectedItems.remove(selectedItem);
+                    myDb.updateStatus(selectedItem, SCANNED);
                 }
                 else{
                     selectedItems.add(selectedItem);
+                    myDb.updateStatus(selectedItem, SELECTED);
+                    Cursor cursor = myDb.getInstance(selectedItem);
+                    while(cursor.moveToNext()){
+                        Toast.makeText(scannedItems.this, ""+ cursor.getInt(4), Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-                showSelectedItems();
+//                showSelectedItems();
 
             }
         });
@@ -136,29 +164,16 @@ public class scannedItems extends AppCompatActivity {
             builder.show();
             return;
         }
-        for(String x: selectedItems){
-            orders.remove(x);
-        }
-        intent.putExtra("selectedOrders", selectedItems);
-        intent.putExtra("completedOrders", completedOrders);
-        intent.putExtra("scannedOrders", orders);
-        intent.putExtra("remainingOrders", incompleteOrders);
         startActivity(intent);
     }
 
     public void openScan(){
         Intent intent = new Intent(this, Scanner.class);
-        intent.putExtra("completedOrders", completedOrders);
-        intent.putExtra("remainingOrders", incompleteOrders);
-        intent.putExtra("scannedOrders", orders);
-        intent.putExtra("selectedOrders", selectedItems);
         startActivity(intent);
     }
 
     public void gotoOrders(){
         Intent intent = new Intent(this, RecyclerView.class);
-        intent.putExtra("completedOrders", completedOrders);
-        intent.putExtra("remainingOrders", incompleteOrders);
         startActivity(intent);
     }
 

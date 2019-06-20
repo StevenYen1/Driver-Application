@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import com.google.zxing.Result;
 
 import java.text.SimpleDateFormat;
@@ -27,28 +28,31 @@ import java.util.Date;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static com.example.refresh.Delivery_Item.COMPLETE;
+import static com.example.refresh.Delivery_Item.INCOMPLETE;
+import static com.example.refresh.Delivery_Item.SCANNED;
+import static com.example.refresh.Delivery_Item.SELECTED;
+
 public class Scanner extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
-    private ArrayList<String> incompleteOrders = new ArrayList<>();
-    private ArrayList<String> completedOrders = new ArrayList<>();
-    private ArrayList<String> scannedOrders = new ArrayList<>();
+    String orders_status;
     DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDb = new DatabaseHelper(this);
+        setupScanner();
+        setOrderInformation();
 
+
+    }
+
+    public void setupScanner(){
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
-
-        incompleteOrders = getIntent().getStringArrayListExtra("remainingOrders");
-        completedOrders = getIntent().getStringArrayListExtra("completedOrders");
-        if(getIntent().getStringArrayListExtra("scannedOrders")!=null){
-            scannedOrders = getIntent().getStringArrayListExtra("scannedOrders");
-        }
 
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -59,6 +63,36 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
                 requestPermission();
             }
         }
+    }
+
+    public void setOrderInformation(){
+        Cursor rawOrders = myDb.getAllData();
+        if(rawOrders.getCount() == 0){
+            return;
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        while (rawOrders.moveToNext()) {
+            int status = rawOrders.getInt(4);
+            if(status == COMPLETE){
+                buffer.append("Current Status: COMPLETED\n");
+            }
+            else if(status == SCANNED){
+                buffer.append("Current Status: SCANNED\n");
+            }
+            else{
+                buffer.append("Current Status: INCOMPLETE\n");
+            }
+            buffer.append("--------------------------------------------------------\n");
+            buffer.append("Order number: " + rawOrders.getString(0)+"\n");
+            buffer.append("Address: " + rawOrders.getString(1)+"\n");
+            buffer.append("Recipient: " + rawOrders.getString(2)+"\n");
+            buffer.append("Item: " + rawOrders.getString(3)+"\n");
+            buffer.append("--------------------------------------------------------\n");
+            buffer.append("\n");
+            buffer.append("\n");
+        }
+        orders_status = buffer.toString();
     }
 
     @Override
@@ -169,53 +203,57 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
     public void openScannedItems(){
         Intent intent = new Intent(this, scannedItems.class);
-        intent.putExtra("completedOrders", completedOrders);
-        intent.putExtra("remainingOrders", incompleteOrders);
-        intent.putExtra("scannedOrders", scannedOrders);
-        if(getIntent().getStringArrayListExtra("selectedOrders")!=null){
-            intent.putExtra("selectedOrders", getIntent().getStringArrayListExtra("selectedOrders"));
-        }
         startActivity(intent);
     }
 
     public void goBack(){
         Intent intent = new Intent(this, RecyclerView.class);
-        intent.putExtra("completedOrders", completedOrders);
-        intent.putExtra("remainingOrders", incompleteOrders);
+        Cursor rawOrders = myDb.getAllData();
+        if(rawOrders.getCount() == 0){
+            return;
+        }
+        while(rawOrders.moveToNext()){
+            String id = rawOrders.getString(0);
+            int status = rawOrders.getInt(4);
+            if(status == SCANNED){
+                myDb.updateStatus(id, INCOMPLETE);
+            }
+        }
         startActivity(intent);
     }
 
     public void viewAll(){
-        Cursor res = myDb.getAllData();
-        if(res.getCount() == 0){
-            showMessage("Error", "No Data Found");
+        Cursor rawOrders = myDb.getAllData();
+        if(rawOrders.getCount() == 0){
             return;
         }
 
         StringBuffer buffer = new StringBuffer();
-
-        while (res.moveToNext()) {
-            if(completedOrders!=null && completedOrders.contains(res.getString(0))){
+        while (rawOrders.moveToNext()) {
+            int status = rawOrders.getInt(4);
+            if(status == COMPLETE){
                 buffer.append("Current Status: COMPLETED\n");
             }
-            else if(scannedOrders.contains(res.getString(0))){
+            else if(status == SCANNED){
                 buffer.append("Current Status: SCANNED\n");
+            }
+            else if(status == SELECTED){
+                buffer.append("Current Status: SELECTED\n");
             }
             else{
                 buffer.append("Current Status: INCOMPLETE\n");
             }
             buffer.append("--------------------------------------------------------\n");
-            buffer.append("Order number: " + res.getString(0)+"\n");
-            buffer.append("Address: " + res.getString(1)+"\n");
-            buffer.append("Recipient: " + res.getString(2)+"\n");
-            buffer.append("Item: " + res.getString(3)+"\n");
+            buffer.append("Order number: " + rawOrders.getString(0)+"\n");
+            buffer.append("Address: " + rawOrders.getString(1)+"\n");
+            buffer.append("Recipient: " + rawOrders.getString(2)+"\n");
+            buffer.append("Item: " + rawOrders.getString(3)+"\n");
             buffer.append("--------------------------------------------------------\n");
             buffer.append("\n");
             buffer.append("\n");
         }
-
-        showMessage("Order Information", buffer.toString());
-
+        orders_status = buffer.toString();
+        showMessage("Order Information", orders_status);
     }
 
     public void showMessage(String title, String message){
@@ -251,10 +289,11 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
     @Override
     public void handleResult(final Result result) {
-        final String scanResult = result.getText();
+        String scanResult = result.getText();
+        int status = myDb.getStatus(scanResult);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if(completedOrders.contains(scanResult) || scannedOrders.contains(scanResult)){
+        if(status == COMPLETE || status == SCANNED || status == SELECTED){
             builder.setTitle("Error: ");
             builder.setMessage("You have already scanned that item. \nWould you like to continue scanning?");
             builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
@@ -270,19 +309,18 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
                 }
             });
         }
-        else if(incompleteOrders.contains(scanResult)){
+        else if(status == INCOMPLETE){
+            myDb.updateStatus(scanResult, SCANNED);
             builder.setTitle("Order Number: " + scanResult);
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which){
-                    scannedOrders.add(scanResult);
                     scannerView.resumeCameraPreview(Scanner.this);
                 }
             });
             builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which){
-                    scannedOrders.add(scanResult);
                     openScannedItems();
                 }
             });

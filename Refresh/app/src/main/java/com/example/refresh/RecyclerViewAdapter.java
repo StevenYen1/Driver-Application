@@ -3,6 +3,7 @@ package com.example.refresh;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +24,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
     private ArrayList<String> mImageNames = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
+    private ArrayList<Integer> mImages = new ArrayList<>();
     private ArrayList<String> mDetails = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(ArrayList<String> imageNames, ArrayList<String> images, ArrayList<String> details, Context context){
+    public RecyclerViewAdapter(ArrayList<String> imageNames, ArrayList<Integer> images, ArrayList<String> details, Context context){
         mImageNames = imageNames;
         mImages = images;
         mContext = context;
@@ -49,18 +50,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         com.example.refresh.RecyclerView recyclerView = (com.example.refresh.RecyclerView) mContext;
         final ArrayList<String> addressList = recyclerView.getAddresses();
 
-        Glide.with(mContext)
-                .asBitmap()
-                .load(mImages.get(i))
-                .into(viewHolder.image);
-
+        viewHolder.image.setImageResource(mImages.get(i));
         viewHolder.imageName.setText(mImageNames.get(i));
+        viewHolder.moreDetails = mDetails.get(i);
+        viewHolder.address = addressList.get(i);
 
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewHolder.itemView.setBackgroundResource(R.drawable.rowclick);
-                showMessageMap("Order Information", mDetails.get(i), addressList.get(i));
+                showMessageMap("Order Information", viewHolder.moreDetails, viewHolder.address);
             }
         });
 
@@ -98,12 +97,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CircleImageView image;
         TextView imageName;
         RelativeLayout parentLayout;
+        String moreDetails;
+        String address;
 
         public ViewHolder(View itemView){
             super(itemView);
             image = itemView.findViewById(R.id.image);
             imageName = itemView.findViewById(R.id.image_name);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+            moreDetails = "";
+            address = "";
         }
 
 

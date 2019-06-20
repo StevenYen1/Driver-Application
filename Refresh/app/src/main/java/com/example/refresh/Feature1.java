@@ -34,6 +34,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import static com.example.refresh.Delivery_Item.SCANNED;
+import static com.example.refresh.Delivery_Item.SELECTED;
+
 public class Feature1 extends Activity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -41,10 +44,8 @@ public class Feature1 extends Activity {
     private Button mClearButton;
     private Button mSaveButton;
     private String signatureImage;
-    private ArrayList<String> completedOrders;
-    private ArrayList<String> incompleteOrders;
-    private ArrayList<String> currentOrders;
-    private ArrayList<String> scannedOrders;
+    private String recipient = "No Recipient Yet";
+    private ArrayList<String> currentOrders = new ArrayList<>();
     DatabaseHelper myDb;
 
     @Override
@@ -53,7 +54,39 @@ public class Feature1 extends Activity {
         setContentView(R.layout.activity_feature1);
 
         myDb = new DatabaseHelper(this);
+        setOrderInformation();
+        setupSignaturePad();
 
+
+    }
+
+    public void setOrderInformation(){
+        Cursor rawOrders = myDb.getAllData();
+        if(rawOrders.getCount() == 0){
+            return;
+        }
+        while(rawOrders.moveToNext()){
+            String ordernumber = rawOrders.getString(0);
+            String orderRecipient = rawOrders.getString(2);
+            int status = rawOrders.getInt(4);
+            if(status == SELECTED){
+                currentOrders.add(ordernumber);
+                if (recipient=="No Recipient Yet") {
+                    recipient = orderRecipient;
+                }
+                else if(recipient != rawOrders.getString( 2)){
+                    showMessage("Error: ", "Recipients are different. Please re-select orders.");
+//                    returnToPrev();
+                }
+                else{
+                    //do nothing?
+                }
+
+            }
+        }
+    }
+
+    public void setupSignaturePad(){
         mSignaturePad = findViewById(R.id.signature_pad);
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
             @Override
@@ -74,12 +107,6 @@ public class Feature1 extends Activity {
             }
         });
 
-        completedOrders = getIntent().getStringArrayListExtra("completedOrders");
-        incompleteOrders = getIntent().getStringArrayListExtra("remainingOrders");
-        currentOrders = getIntent().getStringArrayListExtra("selectedOrders");
-        scannedOrders = getIntent().getStringArrayListExtra("scannedOrders");
-
-
         mClearButton = findViewById(R.id.clear_button);
         mSaveButton = findViewById(R.id.save_button);
 
@@ -93,34 +120,53 @@ public class Feature1 extends Activity {
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] b = stream.toByteArray();
 
-                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                File directory = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-                File file = new File(directory, getIntent().getStringExtra("orderNumber")+"_sign.txt");
-
-                saveFile(file, encodedImage);
-                if(!file.exists()){
-                    try {
-                        file.createNewFile();
-                        saveFile(file, encodedImage);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                signatureImage = file.getName();
+                String image_string = convertImageToString();
+                saveToFile(image_string);
 
                 for(String x: currentOrders){
-                    myDb.updateData(x, "Delivered", encodedImage);
-                    incompleteOrders.remove(x);
-                    completedOrders.add(x);
+                    myDb.updateData(x, 2, signatureImage);
                 }
-                returnToPrev();
+                AlertDialog.Builder builder = new AlertDialog.Builder(Feature1.this);
+                builder.setCancelable(true);
+                builder.setTitle("Successfully Completed Order:");
+                builder.setMessage("Signatures have been saved, and orders have been marked as complete.");
+                builder.setCancelable(false);
+                builder.setNeutralButton("Return to Scanned Orders", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        returnToPrev();
+                    }
+                });
+                builder.show();
             }
         });
+    }
+
+    public String convertImageToString(){
+        Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] b = stream.toByteArray();
+
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+    public void saveToFile(String encodedImage){
+        File directory = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(directory, getIntent().getStringExtra("orderNumber")+"_sign.txt");
+
+        saveFile(file, encodedImage);
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+                saveFile(file, encodedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        signatureImage = file.getName();
     }
 
     public void onBackPressed(){
@@ -129,55 +175,20 @@ public class Feature1 extends Activity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                reopenItems();
+                returnToPrev();
             }
         });
         builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
+                dialog.dismiss();
             }
         });
         builder.show();
     }
 
-    public void reopenItems(){
-        Intent intent = new Intent(this, scannedItems.class);
-        intent.putExtra("scannedOrders", scannedOrders);
-        intent.putExtra("selectedOrders", currentOrders);
-        intent.putExtra("remainingOrders", incompleteOrders);
-        intent.putExtra("completedOrders", completedOrders);
-        startActivity(intent);
-    }
-
-    public void viewInstance(String order_num){
-        Log.d("ORDER NUMBER: ", order_num);
-        Cursor res = myDb.getInstance(order_num);
-        if(res.getCount() == 0){
-            showMessage("Error", "No Data Found");
-            return;
-        }
-
-        StringBuffer buffer = new StringBuffer();
-
-        while (res.moveToNext()) {
-            buffer.append("Order number: " + res.getString(0)+"\n");
-            buffer.append("Address: " + res.getString(1)+"\n");
-            buffer.append("Recipient: " + res.getString(2)+"\n");
-            buffer.append("Item: " + res.getString(3)+"\n");
-            buffer.append("Status: " + res.getString(4)+"\n");
-            buffer.append("Sign: " + res.getString(5)+"\n");
-            buffer.append("\n");
-        }
-
-        showMessage("Order Information", buffer.toString());
-
-    }
-
     public void returnToPrev(){
         Intent intent = new Intent(this, scannedItems.class);
-        intent.putExtra("scannedOrders", scannedOrders);
-        intent.putExtra("remainingOrders", incompleteOrders);
-        intent.putExtra("completedOrders", completedOrders);
         startActivity(intent);
     }
 
@@ -185,17 +196,6 @@ public class Feature1 extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle(title);
-        builder.setPositiveButton("Map", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-            }
-        });
-        builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onBackPressed();
-            }
-        });
         builder.setMessage(message);
         builder.show();
     }

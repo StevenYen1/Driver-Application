@@ -4,6 +4,7 @@ public class Delivery_Item {
     public final static int INCOMPLETE = 0;
     public final static int SCANNED = 1;
     public final static int COMPLETE = 2;
+    public final static int SELECTED = 3;
     private String orderNumber;
     private String orderString;
     private String item;

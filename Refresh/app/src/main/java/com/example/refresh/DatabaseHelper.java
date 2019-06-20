@@ -63,10 +63,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public Cursor getRemainingOrders(){
+    public int getStatus(String num){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where Status = 0", null);
-        return res;
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where OrderNumber = ?", new String[] { num });
+        while(res.moveToNext()){
+            return res.getInt(4);
+        }
+        return -1;
+    }
+
+    public void updateStatus(String num, int status){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_5, status);
+        db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { num });
     }
 
 
