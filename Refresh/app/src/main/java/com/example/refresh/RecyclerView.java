@@ -157,11 +157,17 @@ public class RecyclerView extends AppCompatActivity {
                         myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         mImageUrls.add(position_target, mImageUrls.remove(position_dragged));
                         mNames.add(position_target, mNames.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
 
 
+=======
+                        status_icons.add(position_target, status_icons.remove(position_dragged));
+                        display_details.add(position_target, display_details.remove(position_dragged));
+                        allOrders.add(position_target, allOrders.remove(position_dragged));
+>>>>>>> Stashed changes
 =======
                         status_icons.add(position_target, status_icons.remove(position_dragged));
                         display_details.add(position_target, display_details.remove(position_dragged));
