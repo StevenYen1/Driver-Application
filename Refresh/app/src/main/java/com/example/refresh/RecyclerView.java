@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.drm.DrmStore;
+import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -138,7 +140,7 @@ public class RecyclerView extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ItemTouchHelper helper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
                     public boolean onMove(@NonNull android.support.v7.widget.RecyclerView recyclerView,
                                           @NonNull android.support.v7.widget.RecyclerView.ViewHolder dragged,
@@ -147,27 +149,11 @@ public class RecyclerView extends AppCompatActivity {
                         int position_dragged = dragged.getAdapterPosition();
                         int position_target = target.getAdapterPosition();
 
-//                        Collections.swap(mImageUrls, position_dragged, position_target);
-//                        Collections.swap(mNames, position_dragged, position_target);
-
-
                         myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
-//                        Log.d(TAG, "order moved: "+mNames.get(position_dragged));
-//                        Log.d(TAG, "what is actually being dragged: "+allOrders.get(position_dragged));
                         mImageUrls.add(position_target, mImageUrls.remove(position_dragged));
                         mNames.add(position_target, mNames.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
 
-//                        Log.d(TAG, "from index: "+position_dragged);
-//                        Log.d(TAG, "to index: "+position_target);
-//                        Cursor x = myDb.getAllData();
-//                        Log.d(TAG, "-------------------------------------------");
-//
-//                        while(x.moveToNext()){
-//                            Log.d(TAG, "order: #"+x.getString(0)+" | index: " + x.getInt(6));
-//                        }
-//
-//                        Log.d(TAG, "-------------------------------------------");
 
                         adapter.notifyItemMoved(position_dragged,position_target);
 
@@ -177,7 +163,35 @@ public class RecyclerView extends AppCompatActivity {
 
                     @Override
                     public void onSwiped(@NonNull android.support.v7.widget.RecyclerView.ViewHolder viewHolder, int i) {
+                        int position = viewHolder.getAdapterPosition();
+                        Log.d(TAG, "getAdapterPosition: " + position);
+                        Log.d(TAG, "Item moved: " + allOrders.get(position));
+                        Log.d(TAG, "Before: ---------------------------------------------------------");
+                        Cursor x = myDb.getAllData();
+                        while(x.moveToNext()){
+                            Log.d(TAG, "order: #"+x.getString(0)+" | index: "+x.getInt(6));
+                        }
+                        Log.d(TAG, "\n");
+                        ArrayList<String> deletedItem = myDb.removeIndex(allOrders.get(position), position);
+                        adapter.notifyItemRemoved(position);
+                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),deletedItem.get(4),deletedItem.get(5), allOrders.size()-1);
+                        adapter.notifyItemInserted(allOrders.size()-1);
 
+                        mImageUrls.add(mImageUrls.remove(position));
+                        mNames.add(mNames.remove(position));
+                        allOrders.add(allOrders.remove(position));
+                        mDetails.add(mDetails.remove(position));
+                        mAddress.add(mAddress.remove(position));
+
+                        Cursor y = myDb.getAllData();
+                        Log.d(TAG, "After: ---------------------------------------------------------");
+                        while(y.moveToNext()){
+                            Log.d(TAG, "order: #"+y.getString(0)+" | index: "+y.getInt(6));
+                        }
+                        Log.d(TAG, "\n");
+                        Log.d(TAG, "num image urls: "+mImageUrls.size());
+                        Log.d(TAG, "num names: "+mNames.size());
+                        Log.d(TAG, "num orders: "+allOrders.size());
                     }
                 });
         helper.attachToRecyclerView(recyclerView);

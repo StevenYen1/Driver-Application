@@ -28,7 +28,7 @@
         <activity
             android:name=".MapActivity"
             android:label="MapActivity"
-            android:parentActivityName=".Address"
+            android:parentActivityName=".RecyclerView"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -38,10 +38,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".Address"
-            android:label="Address"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Scanner" />
         <activity
             android:name=".Feature1"
