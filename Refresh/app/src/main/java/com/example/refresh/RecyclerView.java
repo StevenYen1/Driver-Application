@@ -1,6 +1,5 @@
 package com.example.refresh;
 
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
 import static java.lang.Integer.parseInt;
 
@@ -85,11 +83,21 @@ public class RecyclerView extends AppCompatActivity {
         TextView title = findViewById(R.id.table_title);
         title.setText(String.format(res.getString(R.string.DeliveriesDate), returnDate()));
 
-        Button button = findViewById(R.id.scan1);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button scan = findViewById(R.id.scan1);
+        scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScanner();
+                Intent intent = new Intent(RecyclerView.this, Scanner.class);
+                startActivity(intent);
+            }
+        });
+
+        Button rest = findViewById(R.id.rest);
+        rest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecyclerView.this, RestCalls.class);
+                startActivity(intent);
             }
         });
     }
@@ -99,11 +107,6 @@ public class RecyclerView extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c);
         return formattedDate;
-    }
-
-    public void openScanner(){
-        Intent intent = new Intent(this, Scanner.class);
-        startActivity(intent);
     }
 
     public ArrayList<String> getAddresses() {

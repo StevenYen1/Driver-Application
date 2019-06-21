@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:autoSizeTextType="uniform"
-            android:layout_gravity="center"
             android:text="Placeholder Title"
             android:textColor="@color/white"
             android:textStyle="bold" />
@@ -31,13 +30,21 @@
 
         <Button
             android:id="@+id/scan1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="right"
             android:layout_marginRight="30dp"
             android:background="@drawable/basic_button"
             android:textColor="@color/white"
             android:text="Scan" />
+
+        <Button
+            android:id="@+id/rest"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/basic_button"
+            android:textColor="@color/white"
+            android:text="Rest" />
 
     </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
