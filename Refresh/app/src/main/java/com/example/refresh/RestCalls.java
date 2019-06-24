@@ -87,7 +87,7 @@ public class RestCalls extends AppCompatActivity {
                     RestCalls.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(RestCalls.this, ""+response.code(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RestCalls.this, "HTTP Status: "+response.code(), Toast.LENGTH_SHORT).show();
                             textViewResult.setText(""+myResponse);
                         }
                     });
@@ -97,7 +97,7 @@ public class RestCalls extends AppCompatActivity {
                 }
             }
         });
-        
+
 //        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
 //        getPosts();
