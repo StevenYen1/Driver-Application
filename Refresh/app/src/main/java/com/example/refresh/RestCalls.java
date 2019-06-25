@@ -1,70 +1,67 @@
 package com.example.refresh;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import java.io.File;
+import java.io.StringWriter;
 
 public class RestCalls extends AppCompatActivity {
 
     final static String url = "http://eptsperf.staples.com/TrackIt/package/track/v3/shipment/";
     public static final MediaType xml = MediaType.parse("application/xml; charset=utf-8");
+    public String bigresponse = "";
     TextView textViewResult;
-    JsonPlaceHolderApi jsonPlaceHolderApi;
-    JsonPlaceHolderApi xmlRequest;
+//    String myXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+//            "\n" +
+//            "<ShipmentTrackingRequest>\n" +
+//            "\n" +
+//            "<RequestInfo BusinessUnit=\"SBD_US\" ClientChannel=\"web\" ByPassLocal=\"false\" depthRequested=\"HEAD\" readSkus=\"false\">\n" +
+//            "<ReferenceID RequestType=\"ORD\">9743946803</ReferenceID>\n" +
+//            "<Shipment ShipmentNumber=\"\">\n" +
+//            "<Container>\n" +
+//            "<TrackingID></TrackingID>\n" +
+//            "<SCAC></SCAC>\n" +
+//            "<DestZipCode></DestZipCode>\n" +
+//            "<ShippedDate></ShippedDate>\n" +
+//            "</Container>\n" +
+//            "</Shipment>\n" +
+//            "</RequestInfo>\n" +
+//            "\n" +
+//            "</ShipmentTrackingRequest>";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rest_calls);
         textViewResult = findViewById(R.id.rest_results);
+        sendPostRequest(create_XML());
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    }
 
-        Retrofit xmlPart1 = new Retrofit.Builder()
-                .baseUrl("http://eptsperf.staples.com/")
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .build();
-
-        this.xmlRequest = xmlPart1.create(JsonPlaceHolderApi.class);
-
-        String myXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                "\n" +
-                "<ShipmentTrackingRequest>\n" +
-                "\n" +
-                "<RequestInfo BusinessUnit=\"SBD_US\" ClientChannel=\"web\" ByPassLocal=\"false\" depthRequested=\"HEAD\" readSkus=\"false\">\n" +
-                "<ReferenceID RequestType=\"ORD\">9743946803</ReferenceID>\n" +
-                "<Shipment ShipmentNumber=\"\">\n" +
-                "<Container>\n" +
-                "<TrackingID></TrackingID>\n" +
-                "<SCAC></SCAC>\n" +
-                "<DestZipCode></DestZipCode>\n" +
-                "<ShippedDate></ShippedDate>\n" +
-                "</Container>\n" +
-                "</Shipment>\n" +
-                "</RequestInfo>\n" +
-                "\n" +
-                "</ShipmentTrackingRequest>";
-
+    private void sendPostRequest(String myXML){
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(xml, myXML);
@@ -83,12 +80,22 @@ public class RestCalls extends AppCompatActivity {
             public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String myResponse = response.body().string();
+                    for (char x : myResponse.toCharArray()){
+
+                        bigresponse+=x;
+                        if(x=='>'){
+                            bigresponse+="\n";
+                        }
+                        Log.d("TAG", bigresponse);
+                    }
 
                     RestCalls.this.runOnUiThread(new Runnable() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void run() {
                             Toast.makeText(RestCalls.this, "HTTP Status: "+response.code(), Toast.LENGTH_SHORT).show();
-                            textViewResult.setText(""+myResponse);
+                            textViewResult.setText(""+bigresponse);
+                            textViewResult.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
                         }
                     });
                 }
@@ -97,120 +104,103 @@ public class RestCalls extends AppCompatActivity {
                 }
             }
         });
-
-//        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-//        getPosts();
-//        getComments();
-//        createPost();
-
     }
 
-        private void getPosts() {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("userId", "1");
-        parameters.put("_sort", "id");
-        parameters.put("_order", "desc");
+    public String create_XML(){
+        try {
+            DocumentBuilderFactory dbFactory =
+                    DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
 
-        Call<List<Post>> call = jsonPlaceHolderApi.getPosts(parameters);
+            // root element
+            Element rootElement = doc.createElement("ShipmentTrackingRequest");
+            doc.appendChild(rootElement);
 
-        call.enqueue(new Callback<List<Post>>() {
-            @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                if(!response.isSuccessful()){
-                    textViewResult.setText("Error: "+response.code());
-                    return;
-                }
+            // requestinfo element
+            Element requestInfo = doc.createElement("RequestInfo");
+            rootElement.appendChild(requestInfo);
 
-                List<Post> posts = response.body();
-                String text_content = "";
-                for(Post post: posts){
-                    text_content += "------------------------NEW POST------------------------\n";
-                    text_content += "Id: " + post.getId() + "\n";
-                    text_content += "UserId: " + post.getUserId() + "\n";
-                    text_content += "\n";
-                    text_content += "Title:\n" + post.getTitle() + "\n";
-                    text_content += "\n";
-                    text_content += "Body:\n" + post.getText() + "\n";
-                    text_content += "\n";
-                    text_content += "\n";
-                }
+                // setting attribute to element
+                Attr businessUnit = doc.createAttribute("BusinessUnit");
+                businessUnit.setValue("SBD_US");
+                requestInfo.setAttributeNode(businessUnit);
 
-                textViewResult.setText(text_content);
-            }
+                Attr clientChannel = doc.createAttribute("ClientChannel");
+                clientChannel.setValue("web");
+                requestInfo.setAttributeNode(clientChannel);
 
-            @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                textViewResult.setText(t.getMessage());
-            }
-        });
+                Attr byPassLocal = doc.createAttribute("ByPassLocal");
+                byPassLocal.setValue("false");
+                requestInfo.setAttributeNode(byPassLocal);
+
+                Attr depthRequested = doc.createAttribute("depthRequested");
+                depthRequested.setValue("HEAD");
+                requestInfo.setAttributeNode(depthRequested);
+
+                Attr readSkus = doc.createAttribute("readSkus");
+                readSkus.setValue("false");
+                requestInfo.setAttributeNode(readSkus);
+
+            //reference_id element
+            Element referenceId = doc.createElement("ReferenceID");
+            referenceId.appendChild(doc.createTextNode("9743946803"));
+            requestInfo.appendChild(referenceId);
+
+                Attr requestType = doc.createAttribute("RequestType");
+                requestType.setValue("ORD");
+                referenceId.setAttributeNode(requestType);
+
+            //shipment element
+            Element shipment = doc.createElement("Shipment");
+            requestInfo.appendChild(shipment);
+
+                Attr shipmentNumber = doc.createAttribute("ShipmentNumber");
+                shipmentNumber.setValue("");
+                shipment.setAttributeNode(shipmentNumber);
+
+            //container element
+            Element container = doc.createElement("Container");
+            shipment.appendChild(container);
+
+            //tracking_id element
+            Element trackingId = doc.createElement("TrackingID");
+            container.appendChild(trackingId);
+
+            //scac element
+            Element scac = doc.createElement("SCAC");
+            container.appendChild(scac);
+
+            //destination zip code element
+            Element destZip = doc.createElement("DestZipCode");
+            container.appendChild(destZip);
+
+            //date shipped element
+            Element shippedDate = doc.createElement("ShippedDate");
+            container.appendChild(shippedDate);
+
+            return xmltoString(doc);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
-    private void getComments(){
-        Call<List<Comment>> call = jsonPlaceHolderApi.getComments(3);
+    public static String xmltoString(Document doc){
+        try {
+            StringWriter sw = new StringWriter();
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-        call.enqueue(new Callback<List<Comment>>() {
-            @Override
-            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
-                if(!response.isSuccessful()){
-                    textViewResult.setText("Code: " + response.code());
-                    return;
-                }
-
-                List<Comment> comments = response.body();
-                String text_content = "";
-
-                for (Comment comment : comments) {
-                    text_content += "------------------------NEW POST------------------------\n";
-                    text_content += "Post Id: " + comment.getPostId() + "\n";
-                    text_content += "Id: " + comment.getId() + "\n";
-                    text_content += "\n";
-                    text_content += "Name:\n" + comment.getName() + "\n";
-                    text_content += "\n";
-                    text_content += "Email:\n" + comment.getEmail() + "\n";
-                    text_content += "\n";
-                    text_content += "Text:\n" + comment.getText() + "\n";
-                    text_content += "\n";
-                    text_content += "\n";
-                }
-                textViewResult.setText(text_content);
-            }
-
-            @Override
-            public void onFailure(Call<List<Comment>> call, Throwable t) {
-                textViewResult.setText(t.getMessage());
-            }
-        });
-    }
-
-    private void createPost() {
-        Post post = new Post(23, "New Title", "Next Text");
-
-        Call<Post> call = jsonPlaceHolderApi.createPost(post);
-
-        call.enqueue(new Callback<Post>() {
-            @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
-                if(!response.isSuccessful()){
-                    textViewResult.setText("Code: " + response.code());
-                    return;
-                }
-                Post postResponse = response.body();
-
-                String content = "";
-                content += "Code: " + response.code() + "\n";
-                content += "Id: " + postResponse.getId() + "\n";
-                content += "User id: " + postResponse.getUserId() + "\n";
-                content += "Title: " + postResponse.getTitle() + "\n";
-                content += "Text: " + postResponse.getText() + "\n\n";
-
-                textViewResult.setText(content);
-            }
-
-            @Override
-            public void onFailure(Call<Post> call, Throwable t) {
-
-            }
-        });
+            transformer.transform(new DOMSource(doc), new StreamResult(sw));
+            return sw.toString();
+        } catch (Exception ex) {
+            throw new RuntimeException("Error converting to String", ex);
+        }
     }
 }
