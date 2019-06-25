@@ -63,7 +63,7 @@ public class DownloadPage extends AppCompatActivity {
         welcome.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
         String username = this.getIntent().getStringExtra("username");
         welcome.setText("Welcome, " + username);
-        welcome.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//        welcome.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         welcome.setGravity(Gravity.CENTER);
         welcome.setLayoutParams(params);
         layout.addView(welcome, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));

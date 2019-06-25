@@ -72,7 +72,7 @@ public class scannedItems extends AppCompatActivity {
 
         view = findViewById(R.id.list);
         view.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        view.addHeaderView(title);
+        view.addHeaderView(title, "Scanned Orders: ", false);
     }
 
     public void setOrderInformation(){
@@ -111,15 +111,6 @@ public class scannedItems extends AppCompatActivity {
             }
         });
         builder.show();
-    }
-
-    public void showSelectedItems(){
-        String items="";
-        for(String item: selectedItems){
-            items+="-"+item+"\n";
-
-        }
-        Toast.makeText(this, "Your current list is :\n"+items,Toast.LENGTH_SHORT).show();
     }
 
     public void createView(){
