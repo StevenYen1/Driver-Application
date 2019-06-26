@@ -154,6 +154,7 @@ public class External_Scanner extends AppCompatActivity {
 
     public void openScannedItems(){
         Intent intent = new Intent(this, scannedItems.class);
+        intent.putExtra("previousActivity", "e");
         startActivity(intent);
     }
 

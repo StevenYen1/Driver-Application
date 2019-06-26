@@ -203,6 +203,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
 
     public void openScannedItems(){
         Intent intent = new Intent(this, scannedItems.class);
+        intent.putExtra("previousActivity", "c");
         startActivity(intent);
     }
 

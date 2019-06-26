@@ -189,6 +189,7 @@ public class Feature1 extends Activity {
 
     public void returnToPrev(){
         Intent intent = new Intent(this, scannedItems.class);
+        intent.putExtra("previousActivity", getIntent().getStringExtra("previousActivity"));
         startActivity(intent);
     }
 

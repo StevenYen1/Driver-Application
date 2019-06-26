@@ -146,16 +146,23 @@ public class scannedItems extends AppCompatActivity {
             builder.show();
             return;
         }
+        intent.putExtra("previousActivity", getIntent().getStringExtra("previousActivity"));
         startActivity(intent);
     }
 
     public void openScan(){
-        Intent intent = new Intent(this, External_Scanner.class);
+        Intent intent;
+        if(getIntent().getStringExtra("previousActivity").equals("e")){
+            intent = new Intent(this, External_Scanner.class);
+        }
+        else{
+            intent = new Intent(this, Scanner.class);
+        }
         startActivity(intent);
     }
 
     public void gotoOrders(){
-        Intent intent = new Intent(this, RecyclerView.class);
+        Intent intent = new Intent(this, Menu.class);
         startActivity(intent);
     }
 
