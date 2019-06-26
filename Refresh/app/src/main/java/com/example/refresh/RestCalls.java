@@ -58,6 +58,7 @@ public class RestCalls extends AppCompatActivity {
         setContentView(R.layout.activity_rest_calls);
         textViewResult = findViewById(R.id.rest_results);
         sendPostRequest(create_XML());
+        onBackPressed();
 
     }
 
@@ -93,9 +94,10 @@ public class RestCalls extends AppCompatActivity {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void run() {
-                            Toast.makeText(RestCalls.this, "HTTP Status: "+response.code(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RestCalls.this, "Response:\n"+bigresponse, Toast.LENGTH_SHORT).show();
                             textViewResult.setText(""+bigresponse);
                             textViewResult.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
                         }
                     });
                 }
