@@ -82,24 +82,6 @@ public class RecyclerView extends AppCompatActivity {
         Resources res = this.getResources();
         TextView title = findViewById(R.id.table_title);
         title.setText(String.format(res.getString(R.string.DeliveriesDate), returnDate()));
-
-        Button scan = findViewById(R.id.scan1);
-        scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RecyclerView.this, External_Scanner.class);
-                startActivity(intent);
-            }
-        });
-
-        Button rest = findViewById(R.id.rest);
-        rest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RecyclerView.this, RestCalls.class);
-                startActivity(intent);
-            }
-        });
     }
 
     public String returnDate(){
@@ -111,10 +93,6 @@ public class RecyclerView extends AppCompatActivity {
 
     public ArrayList<String> getAddresses() {
         return addresses;
-    }
-
-    @Override
-    public void onBackPressed() {
     }
 
     public String formatDetails(Cursor cursor){

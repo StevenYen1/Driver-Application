@@ -109,20 +109,11 @@ public class DownloadPage extends AppCompatActivity {
         list = newList;
     }
 
-    public ArrayList<String> createOrderList(ArrayList<Delivery_Item> itemlist){
-        ArrayList<String> orderList = new ArrayList<>();
-        for(Delivery_Item x: itemlist){
-            orderList.add(x.getOrderNumber());
-        }
-        return orderList;
-    }
-
 
 
 
     public void openDeliveries(){
-        Intent intent = new Intent(this, RecyclerView.class);
-        intent.putExtra("remainingOrders", createOrderList(list));
+        Intent intent = new Intent(this, Menu.class);
         startActivity(intent);
     }
 
