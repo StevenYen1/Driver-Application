@@ -72,7 +72,7 @@ public class scannedItems extends AppCompatActivity {
 
         view = findViewById(R.id.list);
         view.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        view.addHeaderView(title);
+        view.addHeaderView(title, "Scanned Orders: ", false);
     }
 
     public void setOrderInformation(){
