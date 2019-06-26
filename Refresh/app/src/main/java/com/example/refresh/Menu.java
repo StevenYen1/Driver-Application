@@ -16,6 +16,8 @@ public class Menu extends AppCompatActivity {
         Button openExternal = findViewById(R.id.external_btn);
         Button viewOrders = findViewById(R.id.button4);
         Button restCall = findViewById(R.id.button5);
+        Button add = findViewById(R.id.addOrder);
+        Button transfer = findViewById(R.id.transfer_orders);
 
         openCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +50,22 @@ public class Menu extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Menu.this, AddOrders.class);
+                startActivity(intent);
+            }
+        });
+
+        transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     //cannot go back to the download page

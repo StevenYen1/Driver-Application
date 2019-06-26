@@ -161,7 +161,7 @@ public class scannedItems extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void gotoOrders(){
+    public void gotoMenu(){
         Intent intent = new Intent(this, Menu.class);
         startActivity(intent);
     }
@@ -176,10 +176,10 @@ public class scannedItems extends AppCompatActivity {
                 openScan();
             }
         });
-        builder.setNeutralButton("Orders", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Menu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                gotoOrders();
+                gotoMenu();
             }
         });
         builder.show();

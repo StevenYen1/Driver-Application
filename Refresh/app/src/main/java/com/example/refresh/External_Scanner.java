@@ -29,6 +29,7 @@ public class External_Scanner extends AppCompatActivity {
     EditText input;
     String details ="Nothing scanned yet";
     String id ="No id yet";
+    boolean canUndo = false;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -66,12 +67,14 @@ public class External_Scanner extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(External_Scanner.this);
         builder.setCancelable(true);
         builder.setMessage(details);
-        builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                unscanItem(id);
-            }
-        });
+        if(canUndo){
+            builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    unscanItem(id);
+                }
+            });
+        }
         builder.show();
     }
 
@@ -276,11 +279,19 @@ public class External_Scanner extends AppCompatActivity {
     public void handleResult(String scanResult) {
         int status = myDb.getStatus(scanResult);
 
-        if(status == COMPLETE || status == SCANNED || status == SELECTED){
+        if(status == COMPLETE){
+            results.setTextColor(Color.parseColor("#fa5555"));
+            results.setText("COMPLETED ITEM");
+            id = scanResult;
+            details = viewInstance(scanResult);
+            canUndo = false;
+        }
+        else if(status == SCANNED || status == SELECTED){
             results.setTextColor(Color.parseColor("#fa5555"));
             results.setText("ALREADY SCANNED");
             id = scanResult;
             details = viewInstance(scanResult);
+            canUndo = true;
 
         }
         else if(status == INCOMPLETE){
@@ -289,12 +300,14 @@ public class External_Scanner extends AppCompatActivity {
             results.setText("SUCCESS");
             id = scanResult;
             details = viewInstance(scanResult);
+            canUndo = true;
         }
         else{
             results.setTextColor(Color.parseColor("#fa5555"));
             results.setText("INVALID ITEM");
             id = "Not a valid ID";
             details = "There are no details for an invalid item.";
+            canUndo = false;
         }
     }
 }

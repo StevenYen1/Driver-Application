@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -59,7 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getInstance(String ORDER_NUMBER){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" WHERE OrderNumber = "+ORDER_NUMBER,null);
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" WHERE OrderNumber = ?",new String[] { ORDER_NUMBER });
         return res;
     }
 
@@ -112,8 +113,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where IDX > "+remove +" order by idx", null);
         if(res.getCount() == 0){
-            Cursor data = getInstance(id);
-            ArrayList<String> returnString = returnData(data);
+
+            //Wrote this code instead of calling getInstance and returnData, because kept causing a crash for some reason.
+            Cursor res1 = db.rawQuery("select * from "+TABLE_NAME+" where OrderNumber = ?", new String[] { id });
+            ArrayList<String> returnString = new ArrayList<>();
+            while(res1.moveToNext()){
+                returnString.add(res1.getString(0));
+                returnString.add(res1.getString(1));
+                returnString.add(res1.getString(2));
+                returnString.add(res1.getString(3));
+                returnString.add(res1.getString(4));
+                returnString.add(res1.getString(5));
+            }
+
             deleteData(id);
             return returnString;
         }
@@ -153,6 +165,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> info = removeIndex(id, remove);
         pushIndex(id, insert);
         insertData(id, info.get(1), info.get(2), info.get(3), parseInt(info.get(4)), info.get(5), insert);
+    }
+
+    public int returnSize(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" order by idx",null);
+        int size = 0;
+        while(res.moveToNext()){ size++; }
+        return size;
     }
 
 }
