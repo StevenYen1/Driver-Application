@@ -39,7 +39,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".Scanner" />
+        <activity android:name=".External_Scanner" />
         <activity
             android:name=".Feature1"
             android:label="@string/title_activity_feature1"

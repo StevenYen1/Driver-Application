@@ -1,49 +1,27 @@
 package com.example.refresh;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Camera;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
-import com.google.zxing.Result;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
 
-public class Scanner extends AppCompatActivity {
+public class External_Scanner extends AppCompatActivity {
 
-    private static final int REQUEST_CAMERA = 1;
-    private ZXingScannerView scannerView;
     String orders_status;
     DatabaseHelper myDb;
     String Barcode="";
@@ -57,7 +35,7 @@ public class Scanner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDb = new DatabaseHelper(this);
-        setContentView(R.layout.activity_scanner);
+        setContentView(R.layout.activity_external_scanner);
         results = findViewById(R.id.scan_results);
         setOrderInformation();
         setInput();
@@ -85,7 +63,7 @@ public class Scanner extends AppCompatActivity {
 
     public void displayDetails(View v){
         TextView textView = findViewById(R.id.scan_results);
-        AlertDialog.Builder builder = new AlertDialog.Builder(Scanner.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(External_Scanner.this);
         builder.setCancelable(true);
         builder.setMessage(details);
         builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
@@ -278,7 +256,7 @@ public class Scanner extends AppCompatActivity {
 
 
     public void displayAlertMessage(String message, DialogInterface.OnClickListener listener){
-        new AlertDialog.Builder(Scanner.this)
+        new AlertDialog.Builder(External_Scanner.this)
                 .setMessage(message)
                 .setPositiveButton("Ok", listener)
                 .setNegativeButton("Cancel", null)
@@ -295,30 +273,13 @@ public class Scanner extends AppCompatActivity {
 
 
     public void handleResult(String scanResult) {
-//        String scanResult = result.getText();
         int status = myDb.getStatus(scanResult);
 
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if(status == COMPLETE || status == SCANNED || status == SELECTED){
             results.setTextColor(Color.parseColor("#fa5555"));
             results.setText("ALREADY SCANNED");
             id = scanResult;
             details = viewInstance(scanResult);
-
-//            builder.setTitle("Error: ");
-//            builder.setMessage("You have already scanned that item. \nWould you like to continue scanning?");
-//            builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which){
-//                    openScannedItems();
-//                }
-//            });
-//            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which){
-//                    dialog.dismiss();
-//                }
-//            });
 
         }
         else if(status == INCOMPLETE){
@@ -327,37 +288,12 @@ public class Scanner extends AppCompatActivity {
             results.setText("SUCCESS");
             id = scanResult;
             details = viewInstance(scanResult);
-//            builder.setTitle("Order Number: " + scanResult);
-//            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which){
-//                    dialog.dismiss();
-//                }
-//            });
-//            builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which){
-//                    openScannedItems();
-//                }
-//            });
-//            builder.setMessage("Order Completed! Continue Scanning?");
         }
         else{
             results.setTextColor(Color.parseColor("#fa5555"));
             results.setText("INVALID ITEM");
             id = "Not a valid ID";
             details = "There are no details for an invalid item.";
-//            builder.setTitle("Error: ");
-//            builder.setMessage("Item is not on the order list. \nPlease scan again.");
-//            builder.setNeutralButton("Rescan", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which){
-//                    dialog.cancel();
-//                }
-//            });
-
         }
-//        AlertDialog alert = builder.create();
-//        alert.show();
     }
 }

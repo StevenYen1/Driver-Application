@@ -4,29 +4,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static com.example.refresh.Delivery_Item.INCOMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
 
@@ -159,7 +150,7 @@ public class scannedItems extends AppCompatActivity {
     }
 
     public void openScan(){
-        Intent intent = new Intent(this, Scanner.class);
+        Intent intent = new Intent(this, External_Scanner.class);
         startActivity(intent);
     }
 

@@ -87,7 +87,7 @@ public class RecyclerView extends AppCompatActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RecyclerView.this, Scanner.class);
+                Intent intent = new Intent(RecyclerView.this, External_Scanner.class);
                 startActivity(intent);
             }
         });
