@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -116,9 +117,19 @@ public class RecyclerView extends AppCompatActivity {
 
     private void initRecyclerView(){
         android.support.v7.widget.RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
+
+
+
         final RecyclerViewAdapter adapter = new RecyclerViewAdapter(simple_displays, status_icons, more_details, this);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
+
+        recyclerView.setLayoutManager(layoutmanager);
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(recyclerView.getContext(), layoutmanager.getOrientation());
+        recyclerView.addItemDecoration(itemDecor);
+
 
         ItemTouchHelper helper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -168,15 +179,7 @@ public class RecyclerView extends AppCompatActivity {
                         }
 
                         int position = viewHolder.getAdapterPosition();
-                        Log.d("allOrders.size: ", "allOrders.size BEFORE: " + allOrders.size());
-                        Log.d(TAG, "Position: " + position);
-                        Log.d(TAG, "what is being moved: " + allOrders.get(position));
                         ArrayList<String> deletedItem = myDb.removeIndex(allOrders.get(position), position);
-                        Log.d("allOrders.size: ", "allOrders.size AFTER: " + allOrders.size());
-                        Log.d("checkDeletedItem", "------------------Checking Deleted Item---------------------");
-                        for (String x : deletedItem){
-                            Log.d(TAG, "onSwiped: "+x);
-                        }
                         adapter.notifyItemRemoved(position);
                         myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),parseInt(deletedItem.get(4)),deletedItem.get(5), allOrders.size()-1);
 

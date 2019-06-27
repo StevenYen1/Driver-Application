@@ -16,7 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddOrders"></activity>
+        <activity android:name=".TransferOrders"></activity>
+        <activity android:name=".ReopenOrders" />
+        <activity android:name=".CloseOrders" />
+        <activity android:name=".AddOrders" />
         <activity android:name=".Scanner" />
         <activity android:name=".Menu" />
         <activity android:name=".RestCalls" />

@@ -1,6 +1,7 @@
 package com.example.refresh;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,10 +41,16 @@ public class AddOrders extends AppCompatActivity {
                     String newRecip = recipient.getText().toString();
                     String newItem = item.getText().toString();
 
-                    myDb.insertData(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize());
-                    Toast.makeText(AddOrders.this, "A new order has been created.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddOrders.this, Menu.class);
-                    startActivity(intent);
+                    Cursor cursor = myDb.getInstance(newNo);
+                    if(cursor.getCount()==0) {
+                        myDb.insertData(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize(DatabaseHelper.TABLE_NAME));
+                        Toast.makeText(AddOrders.this, "A new order has been created.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddOrders.this, Menu.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(AddOrders.this, "Item with that order number already exists", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

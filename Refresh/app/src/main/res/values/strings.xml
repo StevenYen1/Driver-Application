@@ -23,7 +23,7 @@
     <string name="Username">Username</string>
     <string name="Password">Password</string>
     <string name="welcome_text">Please click the button below to download your deliveries...</string>
-    <string name="DeliveriesDate">Deliveries for %1$s</string>
+    <string name="DeliveriesDate">Deliveries for \"%1$s\"</string>
     <string name="orderInfo">#%s \n<font color="blue">%s</font></string>
     <string name="orderNum"><b>%s</b></string>
     <string name="add"><font color='blue'>\n%s</font></string>
