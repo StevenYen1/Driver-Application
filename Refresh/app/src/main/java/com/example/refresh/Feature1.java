@@ -122,6 +122,7 @@ public class Feature1 extends Activity {
             public void onClick(View view) {
 
                 String image_string = convertImageToString();
+                Log.d("TAG", "onClick: " +image_string);
                 saveToFile(image_string);
 
                 for(String x: currentOrders){

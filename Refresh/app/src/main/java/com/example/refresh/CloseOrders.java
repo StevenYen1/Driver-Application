@@ -3,6 +3,8 @@ package com.example.refresh;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +26,6 @@ import static java.lang.Integer.parseInt;
 
 public class CloseOrders extends AppCompatActivity {
 
-    //NOT WORKING PROPERLY RN
     private static final String TAG = "CloseOrders";
     ListView listView;
     TextView detail_display;
@@ -60,33 +61,33 @@ public class CloseOrders extends AppCompatActivity {
 
         final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, display);
         listView.setAdapter(arrayAdapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem =((TextView)view).getText().toString();
                 if(selectedItems.contains(selectedItem)){
                     selectedItems.remove(selectedItem);
-                    view.setBackgroundColor(Color.WHITE);
                     detail_display.setText(details.get(position));
 
                 }
                 else{
                     selectedItems.add(selectedItem);
-                    view.setBackgroundColor(getResources().getColor(R.color.skyblue));
                     detail_display.setText(details.get(position));
-
                 }
-
+                String results = "Items Selected: \n";
+                for(String item : selectedItems){
+                    results += "[.] "+item+"\n";
+                }
+                Toast.makeText(CloseOrders.this, results, Toast.LENGTH_SHORT).show();
             }
         });
 
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: -------------------------------------------------------SIZE OF SELECTED ITEMS LIST: " + selectedItems.size());
                 for(String x : selectedItems){
                     myDb.close_order(x, display.indexOf(x));
-                    Log.d(TAG, "onClick: -------------------------------------------------- Order number: " + x + " | indexOf: "+display.indexOf(x));
                     display.remove(x);
                 }
                 Intent intent = new Intent(CloseOrders.this, Menu.class);

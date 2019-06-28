@@ -190,19 +190,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = getInstance(id);
         ArrayList<String> item_data = new ArrayList<>();
         item_data = returnData(cursor);
-        insert_closed(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE));
+        insert_closed(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
+                parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE));
         removeIndex(id, index);
         db.close();
     }
 
-    public Cursor get_closed(){
+    public void reopen_order(String id, int index) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = get_closed_instance(id);
+        ArrayList<String> item_data = new ArrayList<>();
+        item_data = returnData(cursor);
+        insertData(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
+                parseInt(item_data.get(4)),item_data.get(5), returnSize(TABLE_NAME));
+        remove_index_closed(id, index);
+        db.close();
+
+    }
+
+    public Cursor get_closed_all(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from "+CLOSED_TABLE+" order by idx",null);
         return res;
     }
 
-    public void reopen_closed(String id){
-//        SQLiteDatabase db
+    public Cursor get_closed_instance(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+CLOSED_TABLE+" where OrderNumber = ?",new String[] { id });
+        return res;
+    }
+
+    public ArrayList<String> remove_index_closed(String id, int remove){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+CLOSED_TABLE+" where IDX > "+remove +" order by idx", null);
+
+        if(res.getCount() == 0){
+            ArrayList<String> returnString;
+
+            Cursor res1 = get_closed_instance(id);
+            returnString = returnData(res1);
+            db.delete(CLOSED_TABLE, "OrderNumber = ?", new String[] {id});
+            db.close();
+            return returnString;
+        }
+        int i = remove;
+        while (res.moveToNext()) {
+            String key = res.getString(0);
+            ContentValues cv = new ContentValues();
+            cv.put(COL_7, i++);
+            db.update(CLOSED_TABLE, cv, "OrderNumber = ?", new String[] { key });
+        }
+        Cursor data = get_closed_instance(id);
+        ArrayList<String> returnString = returnData(data);
+        db.delete(CLOSED_TABLE, "OrderNumber = ?", new String[] {id});
+        db.close();
+        return returnString;
     }
 
 }
