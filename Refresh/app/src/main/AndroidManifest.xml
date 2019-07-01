@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TransferOrders"></activity>
+        <activity android:name=".AdjustOrders"></activity>
+        <activity android:name=".VoidOrder" />
+        <activity android:name=".TransferOrders" />
         <activity android:name=".ReopenOrders" />
         <activity android:name=".CloseOrders" />
         <activity android:name=".AddOrders" />

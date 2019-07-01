@@ -20,6 +20,10 @@ public class Menu extends AppCompatActivity {
         Button transfer = findViewById(R.id.transfer_orders);
         Button close = findViewById(R.id.close);
         Button reopen = findViewById(R.id.reopen);
+        Button button = (Button) findViewById(R.id.adjust_orders);
+        Button void_order = findViewById(R.id.void_orders);
+
+
 
         openCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +79,22 @@ public class Menu extends AppCompatActivity {
                 openActivity(ReopenOrders.class);
             }
         });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(AdjustOrders.class);
+            }
+        });
+
+        void_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(VoidOrder.class);
+            }
+        });
+
+
 
     }
 

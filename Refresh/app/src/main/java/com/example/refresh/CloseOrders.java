@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.view.menu.MenuView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
 import static java.lang.Integer.parseInt;
@@ -50,17 +52,20 @@ public class CloseOrders extends AppCompatActivity {
 
         Cursor cursor = myDb.getAllData();
         while(cursor.moveToNext()){
-            String details_string = "";
-            details_string += "Order Number: "+cursor.getString(0);
-            details_string += "\nShipment Address: "+cursor.getString(1);
-            details_string += "\nRecipient: "+cursor.getString(2);
-            details_string += "\nItem Name: "+cursor.getString(3);
-            display.add(cursor.getString(0));
-            details.add(details_string);
+            if(cursor.getInt(4)!=COMPLETE){
+                String details_string = "";
+                details_string += "Order Number: "+cursor.getString(0);
+                details_string += "\nShipment Address: "+cursor.getString(1);
+                details_string += "\nRecipient: "+cursor.getString(2);
+                details_string += "\nItem Name: "+cursor.getString(3);
+                display.add(cursor.getString(0));
+                details.add(details_string);
+            }
         }
 
-        final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, display);
+        final ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.check_listview, display);
         listView.setAdapter(arrayAdapter);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,11 +80,6 @@ public class CloseOrders extends AppCompatActivity {
                     selectedItems.add(selectedItem);
                     detail_display.setText(details.get(position));
                 }
-                String results = "Items Selected: \n";
-                for(String item : selectedItems){
-                    results += "[.] "+item+"\n";
-                }
-                Toast.makeText(CloseOrders.this, results, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -88,7 +88,6 @@ public class CloseOrders extends AppCompatActivity {
             public void onClick(View v) {
                 for(String x : selectedItems){
                     myDb.close_order(x, display.indexOf(x));
-                    display.remove(x);
                 }
                 Intent intent = new Intent(CloseOrders.this, Menu.class);
                 startActivity(intent);

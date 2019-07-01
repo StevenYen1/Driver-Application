@@ -7,6 +7,7 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -48,21 +49,21 @@ public class ReopenOrders extends AppCompatActivity {
             details.add(details_string);
         }
 
-        final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, display);
+        final ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.check_listview, display);
         listView.setAdapter(arrayAdapter);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem =((TextView)view).getText().toString();
                 if(selectedItems.contains(selectedItem)){
                     selectedItems.remove(selectedItem);
-                    view.setBackgroundColor(Color.WHITE);
                     detail_display.setText(details.get(position));
 
                 }
                 else{
                     selectedItems.add(selectedItem);
-                    view.setBackgroundColor(getResources().getColor(R.color.skyblue));
                     detail_display.setText(details.get(position));
 
                 }

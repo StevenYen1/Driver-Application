@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VoidOrder">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/void_layout1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/display_details_void"
+            android:text="Order Number: \nShipment Address: \nRecipient: \nItem Description:"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/close_list_layout"
+        android:layout_below="@id/void_layout1"
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/void_list_view" />
+
+    </LinearLayout>
+
+</RelativeLayout>

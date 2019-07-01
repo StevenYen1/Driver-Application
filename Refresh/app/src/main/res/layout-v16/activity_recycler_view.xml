@@ -9,7 +9,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardElevation="3dp"
+        app:cardElevation="0dp"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
         >
@@ -45,12 +45,13 @@
                 android:id="@+id/recycler_layout2"
                 android:layout_below="@id/recycler_layout1"
                 android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp">
+                android:background="#c7d7f2"
+                >
 
                 <TextView
                     android:id="@+id/text_status"
                     android:layout_width="0.0dip"
+                    android:layout_marginLeft="10dp"
                     android:layout_weight="1.0"
                     android:layout_height="wrap_content"
                     android:gravity="center"
