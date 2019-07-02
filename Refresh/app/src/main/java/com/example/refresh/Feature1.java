@@ -52,12 +52,9 @@ public class Feature1 extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feature1);
-
         myDb = new DatabaseHelper(this);
         setOrderInformation();
         setupSignaturePad();
-
-
     }
 
     public void setOrderInformation(){
