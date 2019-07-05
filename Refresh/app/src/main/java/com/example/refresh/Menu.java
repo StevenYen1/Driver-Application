@@ -48,7 +48,7 @@ public class Menu extends AppCompatActivity {
         restCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity(RestCalls.class);
+                openActivity(RestList.class);
             }
         });
 

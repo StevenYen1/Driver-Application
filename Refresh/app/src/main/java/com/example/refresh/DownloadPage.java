@@ -90,6 +90,7 @@ public class DownloadPage extends AppCompatActivity {
         Delivery_Item item10 = new Delivery_Item("10", "〒150-8010東京都渋谷区", "Tetsuya Nomura", "Final Fantasy 7 Remake");
         Delivery_Item item11 = new Delivery_Item("11", "500 Staples Drive, Framingham, MA", "Saar Picker", "A Hardworking Intern");
         Delivery_Item item12 = new Delivery_Item("12", "211 Arlington Street, Acton MA");
+        Delivery_Item item13 = new Delivery_Item("1112", "address", "recipient", "item", Delivery_Item.SCANNED);
 
         ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
 
@@ -105,6 +106,7 @@ public class DownloadPage extends AppCompatActivity {
         newList.add(item10);
         newList.add(item11);
         newList.add(item12);
+        newList.add(item13);
 
         list = newList;
     }

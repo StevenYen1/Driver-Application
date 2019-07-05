@@ -32,6 +32,14 @@ public class Delivery_Item {
 
     }
 
+    public Delivery_Item(String o, String a, String r, String i, int s){
+        this.orderNumber = o;
+        this.orderString = a;
+        this.recipient = r;
+        this.item = i;
+        this.status = s;
+    }
+
     public Delivery_Item(String orderNum, String orderStr) {
         this.orderNumber = orderNum;
         this.orderString = orderStr;
