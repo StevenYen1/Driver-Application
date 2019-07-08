@@ -9,11 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dd.processbutton.FlatButton;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -21,6 +24,8 @@ public class DownloadPage extends AppCompatActivity {
     private FancyButton download_btn;
     private ConstraintLayout layout;
     DatabaseHelper myDb;
+    ProgressBar progressBar;
+    int counter = 0;
     ArrayList<Delivery_Item> list;
 
     @Override
@@ -42,10 +47,31 @@ public class DownloadPage extends AppCompatActivity {
         download_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-                openDeliveries();
+                progress();
             }
         });
 
+    }
+
+    public void progress(){
+
+        progressBar = findViewById(R.id.progressbar_download);
+
+        final Timer t = new Timer();
+        TimerTask tt = new TimerTask() {
+            @Override
+            public void run(){
+                counter+=2;
+                progressBar.setProgress(counter);
+
+                if(counter == 100){
+                    t.cancel();
+                    openDeliveries();
+                }
+            }
+        };
+
+        t.schedule(tt, 0, 100);
     }
 
     @TargetApi(26)
