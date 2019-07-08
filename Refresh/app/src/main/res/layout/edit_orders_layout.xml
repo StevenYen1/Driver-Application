@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#2a69b5">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,8 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Select one of the following methods"
+            android:textStyle="bold"
             android:gravity="center"
-            android:textColor="#000"
+            android:textColor="#FFF"
             />
 
     </LinearLayout>
@@ -31,21 +33,35 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp">
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/addOrder"
-            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:layout_marginRight="10dip"
-            android:text="ADD \nORDERS"
-            />
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#2ecc71"
+            fancy:fb_radius="2dp"
+            fancy:fb_text="ADD \nORDERS" />
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/transfer_orders"
-            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:layout_marginLeft="10dip"
-            android:text="TRANSFER \nORDERS"
-            />
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#2ecc71"
+            fancy:fb_radius="2dp"
+            fancy:fb_text="TRANSFER \nORDERS" />
 
     </LinearLayout>
 
@@ -58,21 +74,35 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp">
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/close"
-            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:layout_marginRight="10dip"
-            android:text="CLOSE \nORDERS"
-            />
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#2ecc71"
+            fancy:fb_radius="2dp"
+            fancy:fb_text="CLOSE \nORDERS" />
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/reopen"
-            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:layout_marginLeft="10dip"
-            android:text="REOPEN \nORDERS"
-            />
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#2ecc71"
+            fancy:fb_radius="2dp"
+            fancy:fb_text="REOPEN \nORDERS" />
 
     </LinearLayout>
 
@@ -84,21 +114,35 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp">
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/adjust_orders"
-            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:layout_marginRight="10dip"
-            android:text="ADJUST \nORDERS"
-            />
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#2ecc71"
+            fancy:fb_radius="2dp"
+            fancy:fb_text="ADJUST \nORDERS" />
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/void_orders"
-            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:layout_marginLeft="10dip"
-            android:text="VOID \nORDERS"
-            />
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#2ecc71"
+            fancy:fb_radius="2dp"
+            fancy:fb_text="VOID \nORDERS" />
 
     </LinearLayout>
 

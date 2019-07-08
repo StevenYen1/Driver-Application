@@ -32,8 +32,8 @@ public class Menu extends AppCompatActivity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
                 builder.setCancelable(true);
                 View mView = getLayoutInflater().inflate(R.layout.choose_scan_layout, null);
-                Button openCamera = mView.findViewById(R.id.camera_btn);
-                Button openExternal = mView.findViewById(R.id.external_btn);
+                FancyButton openCamera = mView.findViewById(R.id.camera_btn);
+                FancyButton openExternal = mView.findViewById(R.id.external_btn);
                 openCamera.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -64,12 +64,12 @@ public class Menu extends AppCompatActivity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
                 builder.setCancelable(true);
                 View mView = getLayoutInflater().inflate(R.layout.edit_orders_layout, null);
-                Button add = mView.findViewById(R.id.addOrder);
-                Button transfer = mView.findViewById(R.id.transfer_orders);
-                Button close = mView.findViewById(R.id.close);
-                Button reopen = mView.findViewById(R.id.reopen);
-                Button adjust = mView.findViewById(R.id.adjust_orders);
-                Button void_order = mView.findViewById(R.id.void_orders);
+                FancyButton add = mView.findViewById(R.id.addOrder);
+                FancyButton transfer = mView.findViewById(R.id.transfer_orders);
+                FancyButton close = mView.findViewById(R.id.close);
+                FancyButton reopen = mView.findViewById(R.id.reopen);
+                FancyButton adjust = mView.findViewById(R.id.adjust_orders);
+                FancyButton void_order = mView.findViewById(R.id.void_orders);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

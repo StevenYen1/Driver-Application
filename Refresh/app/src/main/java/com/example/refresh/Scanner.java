@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
@@ -102,7 +103,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         builder.setCancelable(false);
         View mView = getLayoutInflater().inflate(R.layout.scanner_done, null);
 
-        Button exit = mView.findViewById(R.id.Exit);
+        FancyButton exit = mView.findViewById(R.id.Exit);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +116,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
             }
         });
 
-        Button orders = mView.findViewById(R.id.orders);
+        FancyButton orders = mView.findViewById(R.id.orders);
         orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +124,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
             }
         });
 
-        Button done = mView.findViewById(R.id.Done);
+        FancyButton done = mView.findViewById(R.id.Done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +134,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         builder.setView(mView);
         final AlertDialog dialog = builder.show();
 
-        Button continueB = mView.findViewById(R.id.Continue);
+        FancyButton continueB = mView.findViewById(R.id.Continue);
         continueB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

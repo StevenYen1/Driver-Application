@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
@@ -28,6 +30,7 @@ public class External_Scanner extends AppCompatActivity {
     TextView results;
     EditText input;
     String details ="Nothing scanned yet";
+    String title="No title";
     String id ="No id yet";
     boolean canUndo = false;
 
@@ -65,16 +68,21 @@ public class External_Scanner extends AppCompatActivity {
     public void displayDetails(View v){
         TextView textView = findViewById(R.id.scan_results);
         AlertDialog.Builder builder = new AlertDialog.Builder(External_Scanner.this);
+        View mView = getLayoutInflater().inflate(R.layout.order_details_layout, null);
+        TextView title = mView.findViewById(R.id.details_title);
+        title.setText(this.title);
+        TextView body = mView.findViewById(R.id.details_body);
+        body.setText(this.details);
         builder.setCancelable(true);
-        builder.setMessage(details);
-        if(canUndo){
-            builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    unscanItem(id);
-                }
-            });
-        }
+//        if(canUndo){
+//            builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    unscanItem(id);
+//                }
+//            });
+//        }
+        builder.setView(mView);
         builder.show();
     }
 
@@ -114,7 +122,7 @@ public class External_Scanner extends AppCompatActivity {
         builder.setCancelable(false);
         View mView = getLayoutInflater().inflate(R.layout.scanner_done, null);
 
-        Button exit = mView.findViewById(R.id.Exit);
+        FancyButton exit = mView.findViewById(R.id.Exit);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +135,7 @@ public class External_Scanner extends AppCompatActivity {
             }
         });
 //
-        Button orders = mView.findViewById(R.id.orders);
+        FancyButton orders = mView.findViewById(R.id.orders);
         orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +143,7 @@ public class External_Scanner extends AppCompatActivity {
             }
         });
 
-        Button done = mView.findViewById(R.id.Done);
+        FancyButton done = mView.findViewById(R.id.Done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,7 +153,7 @@ public class External_Scanner extends AppCompatActivity {
         builder.setView(mView);
         final AlertDialog dialog = builder.show();
 
-        Button continueB = mView.findViewById(R.id.Continue);
+        FancyButton continueB = mView.findViewById(R.id.Continue);
         continueB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,16 +229,16 @@ public class External_Scanner extends AppCompatActivity {
         while (rawOrders.moveToNext()) {
             int status = rawOrders.getInt(4);
             if(status == COMPLETE){
-                buffer.append("Current Status: COMPLETED\n");
+                title = "Current Status: COMPLETED";
             }
             else if(status == SCANNED){
-                buffer.append("Current Status: SCANNED\n");
+                title = "Current Status: SCANNED";
             }
             else if(status == SELECTED){
-                buffer.append("Current Status: SELECTED\n");
+                title = "Current Status: SELECTED";
             }
             else{
-                buffer.append("Current Status: INCOMPLETE\n");
+                title = "Current Status: INCOMPLETE";
             }
             buffer.append("--------------------------------------------------------\n");
             buffer.append("Order number: " + rawOrders.getString(0)+"\n");

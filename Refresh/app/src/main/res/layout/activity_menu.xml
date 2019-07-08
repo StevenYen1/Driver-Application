@@ -64,6 +64,7 @@
                 fancy:fb_defaultColor="#BEBEBE"
                 fancy:fb_focusColor="@color/satblue"
                 fancy:fb_textColor="#000"
+                fancy:fb_radius="2dp"
                 fancy:fb_text="Scan Packages"
                 fancy:fb_fontIconResource="&#xf02a;"
                 fancy:fb_iconPosition="left"
@@ -96,18 +97,10 @@
                 fancy:fb_defaultColor="#BEBEBE"
                 fancy:fb_focusColor="@color/satblue"
                 fancy:fb_textColor="#000"
+                fancy:fb_radius="2dp"
                 fancy:fb_text="View Route"
                 fancy:fb_fontIconResource="&#xf0d1;"
                 fancy:fb_iconPosition="left"
-                />
-
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginLeft="10dip"
-                android:padding="10dp"
-                android:text="REST CALL"
                 />
 
         </LinearLayout>
@@ -137,6 +130,7 @@
                 fancy:fb_defaultColor="#BEBEBE"
                 fancy:fb_focusColor="@color/satblue"
                 fancy:fb_textColor="#000"
+                fancy:fb_radius="2dp"
                 fancy:fb_text="Edit Orders"
                 fancy:fb_fontIconResource="&#xf044;"
                 fancy:fb_iconPosition="left"
@@ -169,6 +163,7 @@
                 fancy:fb_defaultColor="#BEBEBE"
                 fancy:fb_focusColor="@color/satblue"
                 fancy:fb_textColor="#000"
+                fancy:fb_radius="2dp"
                 fancy:fb_text="Call Server"
                 fancy:fb_fontIconResource="&#xf0c2;"
                 fancy:fb_iconPosition="left"
