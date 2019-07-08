@@ -137,7 +137,7 @@ public class scannedItems extends AppCompatActivity {
     }
 
     public void openSign(){
-        Intent intent = new Intent(this, Feature1.class);
+        Intent intent = new Intent(this, Signature.class);
         if(selectedItems.isEmpty()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Error: ");

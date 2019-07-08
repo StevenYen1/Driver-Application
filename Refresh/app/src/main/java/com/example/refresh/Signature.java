@@ -5,15 +5,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
@@ -39,7 +36,7 @@ import java.util.ArrayList;
 import static android.support.constraint.Constraints.TAG;
 import static com.example.refresh.Delivery_Item.SELECTED;
 
-public class Feature1 extends Activity {
+public class Signature extends Activity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private SignaturePad mSignaturePad;
@@ -54,7 +51,7 @@ public class Feature1 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feature1);
+        setContentView(R.layout.activity_signature);
         myDb = new DatabaseHelper(this);
         setOrderInformation();
         setupSignaturePad();
@@ -98,7 +95,7 @@ public class Feature1 extends Activity {
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
             @Override
             public void onStartSigning() {
-                Toast.makeText(Feature1.this, "OnStartSigning", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Signature.this, "OnStartSigning", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -129,12 +126,12 @@ public class Feature1 extends Activity {
             @Override
             public void onClick(View view) {
 
-                TextView async = new TextView(Feature1.this);
+                TextView async = new TextView(Signature.this);
                 startAsycTask(async);
                 for(String x: currentOrders){
                     myDb.updateData(x, 2, signatureImage);
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder(Feature1.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
                 builder.setCancelable(true);
                 builder.setTitle("Successfully Completed Order:");
                 builder.setMessage("Signatures have been saved, and orders have been marked as complete.");
@@ -151,7 +148,7 @@ public class Feature1 extends Activity {
     }
 
     public File convertImageToFile() throws IOException {
-        File f = new File(Feature1.this.getCacheDir(), "signature");
+        File f = new File(Signature.this.getCacheDir(), "signature");
         f.createNewFile();
 
         Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();

@@ -53,7 +53,7 @@
 
         <activity android:name=".External_Scanner" />
         <activity
-            android:name=".Feature1"
+            android:name=".Signature"
             android:label="@string/title_activity_feature1"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
