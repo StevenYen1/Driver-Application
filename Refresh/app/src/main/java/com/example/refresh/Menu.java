@@ -1,40 +1,53 @@
 package com.example.refresh;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class Menu extends AppCompatActivity {
+
+    private FancyButton scan_btn;
+    private FancyButton viewOrders;
+    private FancyButton editOrders;
+    private FancyButton restCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Button openCamera = findViewById(R.id.camera_btn);
-        Button openExternal = findViewById(R.id.external_btn);
-        Button viewOrders = findViewById(R.id.button4);
-        final Button restCall = findViewById(R.id.button5);
-        Button add = findViewById(R.id.addOrder);
-        Button transfer = findViewById(R.id.transfer_orders);
-        Button close = findViewById(R.id.close);
-        Button reopen = findViewById(R.id.reopen);
-        Button button = (Button) findViewById(R.id.adjust_orders);
-        Button void_order = findViewById(R.id.void_orders);
+        scan_btn = findViewById(R.id.scan_btn_open);
+        viewOrders = findViewById(R.id.view_route_btn);
+        editOrders = findViewById(R.id.edit_orders_btn);
+        restCall = findViewById(R.id.call_server_btn);
 
 
-
-        openCamera.setOnClickListener(new View.OnClickListener() {
+        scan_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity(Scanner.class);
-            }
-        });
+                final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
+                builder.setCancelable(true);
+                View mView = getLayoutInflater().inflate(R.layout.choose_scan_layout, null);
+                Button openCamera = mView.findViewById(R.id.camera_btn);
+                Button openExternal = mView.findViewById(R.id.external_btn);
+                openCamera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(Scanner.class);
+                    }
+                });
 
-        openExternal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { openActivity(External_Scanner.class);
+                openExternal.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) { openActivity(External_Scanner.class);
+                    }
+                });
+                builder.setView(mView);
+                builder.show();
             }
         });
 
@@ -45,57 +58,70 @@ public class Menu extends AppCompatActivity {
             }
         });
 
+        editOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
+                builder.setCancelable(true);
+                View mView = getLayoutInflater().inflate(R.layout.edit_orders_layout, null);
+                Button add = mView.findViewById(R.id.addOrder);
+                Button transfer = mView.findViewById(R.id.transfer_orders);
+                Button close = mView.findViewById(R.id.close);
+                Button reopen = mView.findViewById(R.id.reopen);
+                Button adjust = mView.findViewById(R.id.adjust_orders);
+                Button void_order = mView.findViewById(R.id.void_orders);
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(AddOrders.class);
+                    }
+                });
+
+                transfer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(TransferOrders.class);
+                    }
+                });
+
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(CloseOrders.class);
+                    }
+                });
+
+                reopen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(ReopenOrders.class);
+                    }
+                });
+
+                adjust.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(AdjustOrders.class);
+                    }
+                });
+
+                void_order.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openActivity(VoidOrder.class);
+                    }
+                });
+                builder.setView(mView);
+                builder.show();
+            }
+        });
+
         restCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openActivity(RestList.class);
             }
         });
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity(AddOrders.class);
-            }
-        });
-
-        transfer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity(TransferOrders.class);
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity(CloseOrders.class);
-            }
-        });
-
-        reopen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity(ReopenOrders.class);
-            }
-        });
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity(AdjustOrders.class);
-            }
-        });
-
-        void_order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity(VoidOrder.class);
-            }
-        });
-
-
-
     }
 
     public void openActivity(Class nextView){

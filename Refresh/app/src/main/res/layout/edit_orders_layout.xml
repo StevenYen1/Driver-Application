@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select one of the following methods"
+            android:gravity="center"
+            android:textColor="#000"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:id="@+id/addOrder"
+            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:layout_marginRight="10dip"
+            android:text="ADD \nORDERS"
+            />
+
+        <Button
+            android:id="@+id/transfer_orders"
+            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dip"
+            android:text="TRANSFER \nORDERS"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:id="@+id/close"
+            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:layout_marginRight="10dip"
+            android:text="CLOSE \nORDERS"
+            />
+
+        <Button
+            android:id="@+id/reopen"
+            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dip"
+            android:text="REOPEN \nORDERS"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:id="@+id/adjust_orders"
+            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:layout_marginRight="10dip"
+            android:text="ADJUST \nORDERS"
+            />
+
+        <Button
+            android:id="@+id/void_orders"
+            android:layout_width="0.0dip" android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dip"
+            android:text="VOID \nORDERS"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

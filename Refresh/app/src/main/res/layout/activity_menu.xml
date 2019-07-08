@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -44,30 +45,29 @@
             android:layout_height="wrap_content"
             android:id="@+id/linearlayout1"
             android:layout_below="@+id/linearlayout_title"
-            android:orientation="horizontal"
             android:paddingLeft="20dip"
             android:paddingTop="20dip"
             android:paddingRight="20dip"
             android:paddingBottom="1.0dip">
 
-            <Button
-                android:id="@+id/camera_btn"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginRight="10dip"
-                android:padding="10dp"
-                android:text="CAMERA SCAN"
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/scan_btn_open"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_textGravity="center"
+                fancy:fb_defaultColor="#BEBEBE"
+                fancy:fb_focusColor="@color/satblue"
+                fancy:fb_textColor="#000"
+                fancy:fb_text="Scan Packages"
+                fancy:fb_fontIconResource="&#xf02a;"
+                fancy:fb_iconPosition="left"
                 />
-
-            <Button
-                android:id="@+id/external_btn"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginLeft="10dip"
-                android:padding="10dp"
-                android:text="EXTERNAL SCAN"
-                />
-
 
         </LinearLayout>
 
@@ -82,13 +82,23 @@
             android:paddingRight="20dip"
             android:paddingBottom="1.0dip">
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginRight="10dip"
-                android:padding="10dp"
-                android:text="CHECK ORDERS"
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_route_btn"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_textGravity="center"
+                fancy:fb_defaultColor="#BEBEBE"
+                fancy:fb_focusColor="@color/satblue"
+                fancy:fb_textColor="#000"
+                fancy:fb_text="View Route"
+                fancy:fb_fontIconResource="&#xf0d1;"
+                fancy:fb_iconPosition="left"
                 />
 
             <Button
@@ -99,7 +109,6 @@
                 android:padding="10dp"
                 android:text="REST CALL"
                 />
-
 
         </LinearLayout>
 
@@ -114,20 +123,23 @@
             android:paddingRight="20dip"
             android:paddingBottom="1.0dip">
 
-            <Button
-                android:id="@+id/addOrder"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginRight="10dip"
-                android:text="ADD ORDERS"
-                />
-
-            <Button
-                android:id="@+id/transfer_orders"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginLeft="10dip"
-                android:text="TRANSFER"
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_orders_btn"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_textGravity="center"
+                fancy:fb_defaultColor="#BEBEBE"
+                fancy:fb_focusColor="@color/satblue"
+                fancy:fb_textColor="#000"
+                fancy:fb_text="Edit Orders"
+                fancy:fb_fontIconResource="&#xf044;"
+                fancy:fb_iconPosition="left"
                 />
 
         </LinearLayout>
@@ -143,20 +155,23 @@
             android:paddingRight="20dip"
             android:paddingBottom="1.0dip">
 
-            <Button
-                android:id="@+id/close"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginRight="10dip"
-                android:text="CLOSE ORDERS"
-                />
-
-            <Button
-                android:id="@+id/reopen"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginLeft="10dip"
-                android:text="REOPEN ORDERS"
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/call_server_btn"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_textGravity="center"
+                fancy:fb_defaultColor="#BEBEBE"
+                fancy:fb_focusColor="@color/satblue"
+                fancy:fb_textColor="#000"
+                fancy:fb_text="Call Server"
+                fancy:fb_fontIconResource="&#xf0c2;"
+                fancy:fb_iconPosition="left"
                 />
 
         </LinearLayout>
@@ -172,21 +187,7 @@
             android:paddingRight="20dip"
             android:paddingBottom="1.0dip">
 
-            <Button
-                android:id="@+id/adjust_orders"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginRight="10dip"
-                android:text="ADJUST ORDERS"
-                />
 
-            <Button
-                android:id="@+id/void_orders"
-                android:layout_width="0.0dip" android:layout_height="fill_parent"
-                android:layout_weight="1.0"
-                android:layout_marginLeft="10dip"
-                android:text="VOID ORDERS"
-                />
 
         </LinearLayout>
 
