@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Signature"
     tools:showIn="@layout/activity_signature">
@@ -13,8 +14,6 @@
         android:id="@+id/signature_pad_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-
-        android:layout_above="@+id/buttons_container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,10 +30,9 @@
             android:id="@+id/signature_pad_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="64dp"
+            android:layout_above="@id/buttons_container"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
             android:text="@string/please_sign"
             android:textColor="@android:color/darker_gray"
             android:textSize="17sp" />
@@ -55,43 +53,57 @@
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginBottom="-16dp" />
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/clear_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="20dp"
+                android:padding="16dp"
+                fancy:fb_text="Clear"
+                fancy:fb_textColor="#5377ed"
+                fancy:fb_textGravity="center"
+                fancy:fb_defaultColor="#5377ed"
+                fancy:fb_focusColor="#73ffa6"
+                fancy:fb_borderWidth="1dp"
+                fancy:fb_borderColor="#5377ed"
+                fancy:fb_radius="2dp"
+                fancy:fb_ghost="true"
+
+                />
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/save_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
+                android:padding="16dp"
+                fancy:fb_text="Save"
+                fancy:fb_textColor="@color/white"
+                fancy:fb_textGravity="center"
+                fancy:fb_defaultColor="#5377ed"
+                fancy:fb_focusColor="#73ffa6"
+                fancy:fb_borderWidth="1dp"
+                fancy:fb_borderColor="#5377ed"
+                fancy:fb_radius="2dp"
+                />
+
+        </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/buttons_container"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/signature_pad_container"
-        app:layout_constraintEnd_toEndOf="@+id/signature_pad_container"
-        app:layout_constraintStart_toStartOf="@+id/signature_pad_container">
 
-        <Button
-            android:id="@+id/clear_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:background="@color/satblue"
-            android:textColor="@color/white"
-            android:layout_margin="10dp"
-            android:text="@string/clear_pad" />
-
-        <Button
-            android:id="@+id/save_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:background="@color/satblue"
-            android:textColor="@color/white"
-            android:layout_margin="10dp"
-            android:text="@string/save_signature" />
-    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

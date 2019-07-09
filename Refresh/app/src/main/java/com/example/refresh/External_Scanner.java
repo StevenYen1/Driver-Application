@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +34,7 @@ public class External_Scanner extends AppCompatActivity {
     String details ="Nothing scanned yet";
     String title="No title";
     String id ="No id yet";
+    Handler mHandler = new Handler();
     boolean canUndo = false;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -126,20 +129,32 @@ public class External_Scanner extends AppCompatActivity {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayAlertMessage("This will discard all saved scans. Do you still wish to continue?", new DialogInterface.OnClickListener() {
+                Runnable mUpdateTimeTask = new Runnable() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        goBack();
+                    public void run() {
+                        displayAlertMessage("This will discard all saved scans. Do you still wish to continue?", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                goBack();
+                            }
+                        });
                     }
-                });
+                };
+                mHandler.postDelayed(mUpdateTimeTask, 250);
             }
         });
-//
+
         FancyButton orders = mView.findViewById(R.id.orders);
         orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewAll();
+                Runnable mUpdateTimeTask = new Runnable() {
+                    @Override
+                    public void run() {
+                        viewAll();
+                    }
+                };
+                mHandler.postDelayed(mUpdateTimeTask, 250);
             }
         });
 
@@ -157,11 +172,19 @@ public class External_Scanner extends AppCompatActivity {
         continueB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                Runnable mUpdateTimeTask = new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                    }
+                };
+                mHandler.postDelayed(mUpdateTimeTask, 250);
             }
         });
 
     }
+
+
 
     public void openScannedItems(){
         Intent intent = new Intent(this, scannedItems.class);
@@ -178,7 +201,7 @@ public class External_Scanner extends AppCompatActivity {
         while(rawOrders.moveToNext()){
             String id = rawOrders.getString(0);
             int status = rawOrders.getInt(4);
-            if(status == SCANNED){
+            if(status == SCANNED || status == SELECTED){
                 myDb.updateStatus(id, INCOMPLETE);
             }
         }

@@ -54,6 +54,7 @@
             fancy:fb_textColor="@color/white"
             fancy:fb_textGravity="center"
             fancy:fb_defaultColor="#27B72C"
+            fancy:fb_focusColor="#30ffa9"
             fancy:fb_radius="2dp"
             />
 
@@ -68,6 +69,7 @@
             fancy:fb_textColor="@color/white"
             fancy:fb_textGravity="center"
             fancy:fb_defaultColor="#399ED8"
+            fancy:fb_focusColor="#78edff"
             fancy:fb_radius="2dp"
             />
 
@@ -82,6 +84,7 @@
             fancy:fb_textColor="@color/white"
             fancy:fb_textGravity="center"
             fancy:fb_defaultColor="#C86FE9"
+            fancy:fb_focusColor="#eab0ff"
             fancy:fb_radius="2dp"
             />
 
@@ -95,6 +98,7 @@
             fancy:fb_textColor="@color/white"
             fancy:fb_textGravity="center"
             fancy:fb_defaultColor="#EC674D"
+            fancy:fb_focusColor="#ffc1b5"
             fancy:fb_radius="2dp"
             />
 

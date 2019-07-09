@@ -1,55 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/contentBody"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".scannedItems"
-    tools:showIn="@layout/activity_scanned_items">
-
-    <Button
-        android:id="@+id/goto_sign"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/basic_button"
-        android:textColor="@color/white"
-        android:text="Sign"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.761" />
+    tools:showIn="@layout/activity_scanned_items"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="270dp"
-        android:layout_height="257dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
         android:orientation="vertical"
+        android:layout_alignParentTop="true"
         android:id="@+id/order_area"
-        app:layout_constraintBottom_toTopOf="@+id/goto_sign"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.679">
+        android:layout_above="@+id/sign_btn_layout">
 
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0.0dp"
+            android:layout_weight="5.0"/>
+
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+
+        android:id="@+id/sign_btn_layout"
+        android:layout_alignParentBottom="true">
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/goto_sign"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            fancy:fb_text="Continue\nTo\nSignature"
+            fancy:fb_textColor="@color/white"
+            fancy:fb_textGravity="center"
+            fancy:fb_defaultColor="#10b3a8"
+            fancy:fb_focusColor="#63fff5"
+            fancy:fb_radius="2dp"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

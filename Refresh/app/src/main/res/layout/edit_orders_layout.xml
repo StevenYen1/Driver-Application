@@ -46,7 +46,7 @@
             fancy:fb_defaultColor="#60A1F0"
             fancy:fb_focusColor="#2ecc71"
             fancy:fb_radius="2dp"
-            fancy:fb_text="ADD \nORDERS" />
+            fancy:fb_text="Add \nOrder" />
 
         <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/transfer_orders"
@@ -61,7 +61,7 @@
             fancy:fb_defaultColor="#60A1F0"
             fancy:fb_focusColor="#2ecc71"
             fancy:fb_radius="2dp"
-            fancy:fb_text="TRANSFER \nORDERS" />
+            fancy:fb_text="Transfer \nOrder" />
 
     </LinearLayout>
 
@@ -87,7 +87,7 @@
             fancy:fb_defaultColor="#60A1F0"
             fancy:fb_focusColor="#2ecc71"
             fancy:fb_radius="2dp"
-            fancy:fb_text="CLOSE \nORDERS" />
+            fancy:fb_text="Close \nOrder" />
 
         <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/reopen"
@@ -102,7 +102,7 @@
             fancy:fb_defaultColor="#60A1F0"
             fancy:fb_focusColor="#2ecc71"
             fancy:fb_radius="2dp"
-            fancy:fb_text="REOPEN \nORDERS" />
+            fancy:fb_text="Reopen \nOrder" />
 
     </LinearLayout>
 
@@ -127,7 +127,7 @@
             fancy:fb_defaultColor="#60A1F0"
             fancy:fb_focusColor="#2ecc71"
             fancy:fb_radius="2dp"
-            fancy:fb_text="ADJUST \nORDERS" />
+            fancy:fb_text="Adjust \nOrder" />
 
         <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/void_orders"
@@ -142,7 +142,7 @@
             fancy:fb_defaultColor="#60A1F0"
             fancy:fb_focusColor="#2ecc71"
             fancy:fb_radius="2dp"
-            fancy:fb_text="VOID \nORDERS" />
+            fancy:fb_text="Void \nOrder" />
 
     </LinearLayout>
 

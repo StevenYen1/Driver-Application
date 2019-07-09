@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
 
@@ -28,6 +30,7 @@ public class scannedItems extends AppCompatActivity {
     ArrayList<String> orders = new ArrayList<>();
     ArrayList<String> selectedItems = new ArrayList<>();
     DatabaseHelper myDb;
+    FancyButton sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,14 @@ public class scannedItems extends AppCompatActivity {
         layoutSetup();
         setOrderInformation();
 
-        Button sign = findViewById(R.id.goto_sign);
+        sign = findViewById(R.id.goto_sign);
+        if(selectedItems.isEmpty()){
+            sign.setEnabled(false);
+        }
+        else{
+            sign.setEnabled(true);
+        }
+
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,8 +61,6 @@ public class scannedItems extends AppCompatActivity {
             noOrders();
         }
     }
-
-
 
     public void layoutSetup(){
         layout = findViewById(R.id.order_area);
@@ -120,18 +128,17 @@ public class scannedItems extends AppCompatActivity {
                 if(selectedItems.contains(selectedItem)){
                     selectedItems.remove(selectedItem);
                     myDb.updateStatus(selectedItem, SCANNED);
+                    if(selectedItems.isEmpty()){
+                        sign.setEnabled(false);
+                    }
                 }
                 else{
                     selectedItems.add(selectedItem);
                     myDb.updateStatus(selectedItem, SELECTED);
-                    Cursor cursor = myDb.getInstance(selectedItem);
-                    while(cursor.moveToNext()){
-                        Toast.makeText(scannedItems.this, ""+ cursor.getInt(4), Toast.LENGTH_SHORT).show();
+                    if(!sign.isEnabled()){
+                        sign.setEnabled(true);
                     }
-
                 }
-//                showSelectedItems();
-
             }
         });
     }

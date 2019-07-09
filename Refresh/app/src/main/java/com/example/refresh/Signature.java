@@ -15,9 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mashape.unirest.http.HttpResponse;
@@ -33,6 +31,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 import static android.support.constraint.Constraints.TAG;
 import static com.example.refresh.Delivery_Item.SELECTED;
 
@@ -40,8 +40,8 @@ public class Signature extends Activity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private SignaturePad mSignaturePad;
-    private Button mClearButton;
-    private Button mSaveButton;
+    private FancyButton mClearButton;
+    private FancyButton mSaveButton;
     private static String signatureImage;
     String filepath;
     private String recipient = "No Recipient Yet";
@@ -95,7 +95,6 @@ public class Signature extends Activity {
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
             @Override
             public void onStartSigning() {
-                Toast.makeText(Signature.this, "OnStartSigning", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -113,6 +112,8 @@ public class Signature extends Activity {
 
         mClearButton = findViewById(R.id.clear_button);
         mSaveButton = findViewById(R.id.save_button);
+        mSaveButton.setEnabled(false);
+        mClearButton.setEnabled(false);
 
         mClearButton.setOnClickListener(new View.OnClickListener() {
             @Override

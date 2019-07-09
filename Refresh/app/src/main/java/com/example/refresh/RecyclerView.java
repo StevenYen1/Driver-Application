@@ -30,8 +30,8 @@ import static java.lang.Integer.parseInt;
 public class RecyclerView extends AppCompatActivity {
 
     private static final String TAG = "RecyclerView";
-    private static final int INCOMPLETE_ICON = R.drawable.x_mark;
-    private static final int COMPLETE_ICON = R.drawable.check;
+    private static final int INCOMPLETE_ICON = R.drawable.statusno;
+    private static final int COMPLETE_ICON = R.drawable.complete;
 
     private ArrayList<String> simple_displays = new ArrayList<>();
     private ArrayList<Integer> status_icons = new ArrayList<>();
@@ -98,12 +98,13 @@ public class RecyclerView extends AppCompatActivity {
 
     public String formatDetails(Cursor cursor){
         StringBuffer buffer = new StringBuffer();
-        buffer.append("Order number: " + cursor.getString(0)+"\n");
-        buffer.append("Address: " + cursor.getString(1)+"\n");
-        buffer.append("Recipient: " + cursor.getString(2)+"\n");
-        buffer.append("Item: " + cursor.getString(3)+"\n");
-        buffer.append("Status: " + cursor.getString(4)+"\n");
-        buffer.append("Sign: " + cursor.getString(5)+"\n");
+        buffer.append("Order number: \"" + cursor.getString(0)+"\"\n");
+        buffer.append("\n");
+        buffer.append("Address: \"" + cursor.getString(1)+"\"\n");
+        buffer.append("\n");
+        buffer.append("Recipient: \"" + cursor.getString(2)+"\"\n");
+        buffer.append("\n");
+        buffer.append("Item: \"" + cursor.getString(3)+"\"\n");
         buffer.append("\n");
         return buffer.toString();
     }
@@ -117,8 +118,6 @@ public class RecyclerView extends AppCompatActivity {
 
     private void initRecyclerView(){
         android.support.v7.widget.RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-
-
 
         final RecyclerViewAdapter adapter = new RecyclerViewAdapter(simple_displays, status_icons, more_details, this);
         recyclerView.setAdapter(adapter);
@@ -138,13 +137,6 @@ public class RecyclerView extends AppCompatActivity {
                                           @NonNull android.support.v7.widget.RecyclerView.ViewHolder dragged,
                                           @NonNull android.support.v7.widget.RecyclerView.ViewHolder target) {
 
-                        Cursor cursor = myDb.getAllData();
-                        Log.d(TAG, "-------------------Before:--------------------------");
-                        Log.d(TAG, "----------------------------------------------------");
-                        while(cursor.moveToNext()){
-                            Log.d(TAG, "order#: " + cursor.getString(0) + " | index: " + cursor.getInt(6));
-                        }
-
                         int position_dragged = dragged.getAdapterPosition();
                         int position_target = target.getAdapterPosition();
 
@@ -155,28 +147,11 @@ public class RecyclerView extends AppCompatActivity {
                         allOrders.add(position_target, allOrders.remove(position_dragged));
                         adapter.notifyItemMoved(position_dragged,position_target);
 
-
-                        Cursor cursora = myDb.getAllData();
-                        Log.d(TAG, "-------------------After:--------------------------");
-                        Log.d(TAG, "----------------------------------------------------");
-                        while(cursora.moveToNext()){
-                            Log.d(TAG, "order#: " + cursora.getString(0) + " | index: " + cursora.getInt(6));
-                        }
-
-
-
                         return false;
                     }
 
                     @Override
                     public void onSwiped(@NonNull android.support.v7.widget.RecyclerView.ViewHolder viewHolder, int i) {
-
-                        Cursor cursor = myDb.getAllData();
-                        Log.d(TAG, "-------------------Before:--------------------------");
-                        Log.d(TAG, "----------------------------------------------------");
-                        while(cursor.moveToNext()){
-                            Log.d(TAG, "order#: " + cursor.getString(0) + " | index: " + cursor.getInt(6));
-                        }
 
                         int position = viewHolder.getAdapterPosition();
                         ArrayList<String> deletedItem = myDb.removeIndex(allOrders.get(position), position);
@@ -190,38 +165,9 @@ public class RecyclerView extends AppCompatActivity {
                         allOrders.add(allOrders.remove(position));
                         more_details.add(more_details.remove(position));
                         addresses.add(addresses.remove(position));
-
-                        Cursor cursora = myDb.getAllData();
-                        Log.d(TAG, "-------------------After:--------------------------");
-                        Log.d(TAG, "----------------------------------------------------");
-                        while(cursora.moveToNext()){
-                            Log.d(TAG, "order#: " + cursora.getString(0) + " | index: " + cursora.getInt(6));
-                        }
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
 
-    }
-
-    //version issue
-    public boolean isServicesOK(){
-        Log.d(TAG,"isServicesOK: checking google services version");
-
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
-
-        if(available == ConnectionResult.SUCCESS){
-            Log.d(TAG, "isServicesOK: Google Play Services is working");
-            return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            //error has occurred but can be resolved
-            Log.d(TAG, "isServicesOK: An Error has occurred but is resolvable");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, available, 9001);
-            dialog.show();
-        }
-        else{
-            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
-        }
-        return false;
     }
 }
