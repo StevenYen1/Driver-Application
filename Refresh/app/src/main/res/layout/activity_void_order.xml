@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/display_details_void"
-            android:text="Order Number: \nShipment Address: \nRecipient: \nItem Description:"/>
+            android:text="Order Number: \nShipment Address: \nRecipient: \nItem Name: \nQuantity: \nCarton Number:"/>
 
     </LinearLayout>
 

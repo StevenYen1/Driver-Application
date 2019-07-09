@@ -23,6 +23,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_5 = "Status";
     public static final String COL_6 = "Signature";
     public static final String COL_7 = "idx";
+    public static final String COL_8 = "quantity";
+    public static final String COL_9 = "cartonnumber";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -30,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER) ");
+        db.execSQL("create table " + TABLE_NAME + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber INTEGER) ");
         db.execSQL("create table if not exists " + CLOSED_TABLE + "(OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER)");
     }
 
@@ -49,9 +51,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertData(String num, String addr, String recip, String item, int status, String sign, int i){
+    public boolean insertData(String num, String addr, String recip, String item, int status, String sign, int i, int quantity){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"')");
+        db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', 0)");
         db.close();
         return true;
     }
@@ -97,6 +99,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public void updateQuantity(String num, int quantity){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_8, quantity);
+        db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { num });
+        db.close();
+    }
+
     public Integer deleteData (String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         Integer result = db.delete(TABLE_NAME, "OrderNumber = ?", new String[] {id});
@@ -113,6 +123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             dataList.add(data.getString(3));
             dataList.add(data.getString(4));
             dataList.add(data.getString(5));
+            dataList.add(data.getString(7));
+            dataList.add(data.getString(8));
         }
         return dataList;
     }
@@ -165,7 +177,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void updateIndex(String id, int remove, int insert){
         ArrayList<String> info = removeIndex(id, remove);
         pushIndex(id, insert);
-        insertData(id, info.get(1), info.get(2), info.get(3), parseInt(info.get(4)), info.get(5), insert);
+        insertData(id, info.get(1), info.get(2), info.get(3), parseInt(info.get(4)), info.get(5), insert, parseInt(info.get(7)));
     }
 
     public int returnSize(String table){
@@ -179,9 +191,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //closed orders methods
-    public boolean insert_closed(String num, String addr, String recip, String item, int status, String sign, int i){
+    public boolean insert_closed(String num, String addr, String recip, String item, int status, String sign, int i, int quantity){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("replace into closed_orders_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"')");
+        db.execSQL("replace into closed_orders_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', 0)");
         return true;
     }
 
@@ -191,7 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> item_data = new ArrayList<>();
         item_data = returnData(cursor);
         insert_closed(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
-                parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE));
+                parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE), parseInt(item_data.get(7)));
         removeIndex(id, index);
         db.close();
     }
@@ -202,7 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> item_data = new ArrayList<>();
         item_data = returnData(cursor);
         insertData(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
-                parseInt(item_data.get(4)),item_data.get(5), returnSize(TABLE_NAME));
+                parseInt(item_data.get(4)),item_data.get(5), returnSize(TABLE_NAME), parseInt(item_data.get(7)));
         remove_index_closed(id, index);
         db.close();
 

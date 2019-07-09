@@ -38,7 +38,7 @@ public class DownloadPage extends AppCompatActivity {
         myDb.clear();
         int i = 0;
         for(Delivery_Item x: list){
-            myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i);
+            myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity());
             i++;
         }
         createWelcome();
@@ -61,7 +61,7 @@ public class DownloadPage extends AppCompatActivity {
         TimerTask tt = new TimerTask() {
             @Override
             public void run(){
-                counter+=2;
+                counter+=10;
                 progressBar.setProgress(counter);
 
                 if(counter == 100){

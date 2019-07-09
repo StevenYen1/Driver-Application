@@ -106,6 +106,10 @@ public class RecyclerView extends AppCompatActivity {
         buffer.append("\n");
         buffer.append("Item: \"" + cursor.getString(3)+"\"\n");
         buffer.append("\n");
+        buffer.append("Quantity: \"" + cursor.getInt(7)+"\"\n");
+        buffer.append("\n");
+        buffer.append("Carton Number: \"" + cursor.getInt(8)+"\"\n");
+        buffer.append("\n");
         return buffer.toString();
     }
 
@@ -156,7 +160,7 @@ public class RecyclerView extends AppCompatActivity {
                         int position = viewHolder.getAdapterPosition();
                         ArrayList<String> deletedItem = myDb.removeIndex(allOrders.get(position), position);
                         adapter.notifyItemRemoved(position);
-                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),parseInt(deletedItem.get(4)),deletedItem.get(5), allOrders.size()-1);
+                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),parseInt(deletedItem.get(4)),deletedItem.get(5), allOrders.size()-1, parseInt(deletedItem.get(7)));
 
                         adapter.notifyItemInserted(allOrders.size()-1);
 

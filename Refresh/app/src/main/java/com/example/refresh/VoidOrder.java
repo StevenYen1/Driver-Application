@@ -37,6 +37,8 @@ public class VoidOrder extends AppCompatActivity {
             details_string += "\nShipment Address: "+cursor.getString(1);
             details_string += "\nRecipient: "+cursor.getString(2);
             details_string += "\nItem Name: "+cursor.getString(3);
+            details_string += "\nQuantity: "+cursor.getInt(7);
+            details_string += "\nCarton Number: "+cursor.getInt(8);
             display.add(cursor.getString(0));
             details.add(details_string);
         }
@@ -47,6 +49,7 @@ public class VoidOrder extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                detail_display.setText(details.get(position));
                 final String ordernum = display.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(VoidOrder.this);
                 builder.setTitle("About to void: " + ordernum);

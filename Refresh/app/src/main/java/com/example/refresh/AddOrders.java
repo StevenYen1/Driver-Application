@@ -9,13 +9,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.zxing.common.StringUtils;
+
+import java.text.ParseException;
+
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class AddOrders extends AppCompatActivity {
 
     EditText orderno;
     EditText address;
     EditText recipient;
     EditText item;
-    Button submit;
+    EditText quantity;
+    FancyButton submit;
     DatabaseHelper myDb;
 
 
@@ -28,32 +35,52 @@ public class AddOrders extends AppCompatActivity {
         address = findViewById(R.id.add_address);
         recipient = findViewById(R.id.add_recipient);
         item = findViewById(R.id.add_item);
+        quantity = findViewById(R.id.add_quantity);
         submit = findViewById(R.id.add_submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEmpty(orderno) || isEmpty(address)|| isEmpty(recipient) || isEmpty(item)){
+                if(isEmpty(orderno) || isEmpty(address)|| isEmpty(recipient) || isEmpty(item) || isEmpty(quantity)){
                     Toast.makeText(AddOrders.this, "PLEASE ENTER DATA FOR ALL ARGUMENTS", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    String newNo = orderno.getText().toString();
-                    String newAddress = address.getText().toString();
-                    String newRecip = recipient.getText().toString();
-                    String newItem = item.getText().toString();
+                    try {
+                        if(!isParsable(quantity.getText().toString())) {
+                            Toast.makeText(AddOrders.this, "QUANTITY MUST BE A VALID VALUE", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            String newNo = orderno.getText().toString();
+                            String newAddress = address.getText().toString();
+                            String newRecip = recipient.getText().toString();
+                            String newItem = item.getText().toString();
+                            String newQuantity = quantity.getText().toString();
 
-                    Cursor cursor = myDb.getInstance(newNo);
-                    if(cursor.getCount()==0) {
-                        myDb.insertData(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize(DatabaseHelper.TABLE_NAME));
-                        Toast.makeText(AddOrders.this, "A new order has been created.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(AddOrders.this, Menu.class);
-                        startActivity(intent);
-                    }
-                    else{
-                        Toast.makeText(AddOrders.this, "Item with that order number already exists", Toast.LENGTH_SHORT).show();
+                            Cursor cursor = myDb.getInstance(newNo);
+                            if(cursor.getCount()==0) {
+                                myDb.insertData(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize(DatabaseHelper.TABLE_NAME), Integer.parseInt(newQuantity));
+                                Toast.makeText(AddOrders.this, "A new order has been created.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AddOrders.this, Menu.class);
+                                startActivity(intent);
+                            }
+                            else{
+                                Toast.makeText(AddOrders.this, "Item with that order number already exists", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
         });
+    }
+
+    public static boolean isParsable(String input) throws Exception{
+        try{
+            Integer.parseInt(input);
+            return true;
+        }catch(NumberFormatException e){
+            return false;
+        }
     }
 
     public boolean isEmpty(EditText editText){
