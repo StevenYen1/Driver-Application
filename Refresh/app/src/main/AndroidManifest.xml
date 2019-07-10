@@ -20,7 +20,8 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity android:name=".RestList"></activity>
-        <activity android:name=".AdjustOrders" />
+        <activity android:name=".AdjustOrders"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".VoidOrder" />
         <activity android:name=".TransferOrders" />
         <activity android:name=".ReopenOrders" />
