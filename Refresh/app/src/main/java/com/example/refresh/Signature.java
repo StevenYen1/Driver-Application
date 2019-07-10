@@ -212,8 +212,8 @@ public class Signature extends Activity {
 
             long time = LocalDateTime.now().getLong(ChronoField.CLOCK_HOUR_OF_DAY);
             try {
-                final HttpResponse<String> postResponse = Unirest.post("http://10.0.2.2:8080/signaturesvc/v1/capture")
-                        .basicAuth("epts_app", "epts_app")
+                final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/capture")
+                        .basicAuth("epts_app", "uB25J=UUwU")
                         .field("status", "CLOSED")
                         .field("signature", file)
                         .field("shipmentId", ""+currentOrders.get(0))

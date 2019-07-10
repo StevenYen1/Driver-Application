@@ -97,8 +97,8 @@ public class RestCalls extends AppCompatActivity {
         protected JSONObject doInBackground(Integer... integers) {
 
             try {
-                final HttpResponse<JsonNode> getResponse = Unirest.get("http://10.0.2.2:8080/signaturesvc/v1/signature")
-                        .basicAuth("epts_app", "epts_app")
+                final HttpResponse<JsonNode> getResponse = Unirest.get("http://10.244.185.101:80/signaturesvc/v1/signature")
+                        .basicAuth("epts_app", "uB25J=UUwU")
                         .field("orderID", getIntent().getStringExtra("id"))
                         .asJson();
                 if (getResponse.getCode()!=200){
