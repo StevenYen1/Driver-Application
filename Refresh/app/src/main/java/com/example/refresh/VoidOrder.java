@@ -3,21 +3,26 @@ package com.example.refresh;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class VoidOrder extends AppCompatActivity {
     ListView listView;
-    TextView detail_display;
     DatabaseHelper myDb;
     ArrayList<String> display = new ArrayList<>();
     ArrayList<String> details = new ArrayList<>();
@@ -27,7 +32,6 @@ public class VoidOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_void_order);
         listView = findViewById(R.id.void_list_view);
-        detail_display = findViewById(R.id.display_details_void);
         myDb = new DatabaseHelper(this);
 
         Cursor cursor = myDb.getAllData();
@@ -49,26 +53,54 @@ public class VoidOrder extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                detail_display.setText(details.get(position));
                 final String ordernum = display.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(VoidOrder.this);
-                builder.setTitle("About to void: " + ordernum);
-                builder.setMessage(details.get(position));
-                builder.setPositiveButton("VOID", new DialogInterface.OnClickListener() {
+                View mView = getLayoutInflater().inflate(R.layout.reasoning_for_action_layout, null);
+                TextView reasoningTitle = mView.findViewById(R.id.reasoning_title);
+                TextView orderDetails = mView.findViewById(R.id.reasoning_orderinfo);
+                EditText reasoningView = mView.findViewById(R.id.reasoning_reason);
+                final FancyButton reasoningButton = mView.findViewById(R.id.reasoning_button);
+
+                reasoningTitle.setText("WARNING! YOU ARE ABOUT TO VOID ORDER: " + ordernum);
+                reasoningTitle.setTextColor(Color.WHITE);
+                reasoningTitle.setBackgroundColor(getResources().getColor(R.color.red));
+
+                orderDetails.setText(details.get(position));
+                orderDetails.setTextColor(Color.WHITE);
+                orderDetails.setBackgroundColor(getResources().getColor(R.color.light_red));
+
+                reasoningView.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        reasoningButton.setEnabled(true);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                reasoningButton.setText("VOID");
+                reasoningButton.setEnabled(false);
+                reasoningButton.setTextColor(Color.WHITE);
+                reasoningButton.setBackgroundColor(getResources().getColor(R.color.red));
+                reasoningButton.setFocusBackgroundColor(getResources().getColor(R.color.light_red));
+                reasoningButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         myDb.removeIndex(ordernum, position);
                         Toast.makeText(VoidOrder.this, ordernum+" HAS BEEN VOIDED", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(VoidOrder.this, Menu.class);
                         startActivity(intent);
                     }
                 });
-                builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                builder.setView(mView);
                 builder.show();
 
             }

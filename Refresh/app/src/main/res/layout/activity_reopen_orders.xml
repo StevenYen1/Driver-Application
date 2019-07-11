@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="List of Items:"
+            android:text="List of OrderNumbers:"
             android:textColor="@color/white"
             android:gravity="center"
             android:background="@color/blue"/>

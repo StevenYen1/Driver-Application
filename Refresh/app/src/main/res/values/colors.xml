@@ -7,7 +7,8 @@
     <color name="skyblue">#8AAAE5</color>
     <color name="satblue">#2665cc</color>
     <color name="black">#000000</color>
-    <color name="red">#FF0000</color>
+    <color name="red">#ba0000</color>
+    <color name="light_red">#fe3939</color>
     <color name="blue">#5377ed</color>
     <color name="purple">#C86FE9</color>
 </resources>

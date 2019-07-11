@@ -15,8 +15,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/display_details_void"
-            android:text="Order Number: \nShipment Address: \nRecipient: \nItem Name: \nQuantity: \nCarton Number:"/>
+            android:text="Void Orders: "
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:background="@color/blue"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"/>
 
     </LinearLayout>
 
@@ -25,7 +31,22 @@
         android:layout_height="wrap_content"
         android:id="@+id/close_list_layout"
         android:layout_below="@id/void_layout1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="List of OrderNumbers: "
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:background="@color/skyblue"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
 
         <ListView
             android:layout_height="match_parent"

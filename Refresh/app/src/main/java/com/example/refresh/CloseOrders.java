@@ -9,12 +9,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.MenuView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +40,7 @@ public class CloseOrders extends AppCompatActivity {
     FancyButton cancel;
     DatabaseHelper myDb;
     ArrayList<String> display = new ArrayList<>();
+    ArrayList<String> orderNums = new ArrayList<>();
     ArrayList<String> details = new ArrayList<>();
     ArrayList<String> selectedItems = new ArrayList<>();
 
@@ -62,7 +66,8 @@ public class CloseOrders extends AppCompatActivity {
                 details_string += "\nItem Name: "+cursor.getString(3);
                 details_string += "\nQuantity: "+cursor.getInt(7);
                 details_string += "\nCarton Number: "+cursor.getInt(8);
-                display.add(cursor.getString(0));
+                orderNums.add(cursor.getString(0));
+                display.add("OrderNumber: " + cursor.getString(0));
                 details.add(details_string);
             }
         }
@@ -74,7 +79,7 @@ public class CloseOrders extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem =((TextView)view).getText().toString();
+                String selectedItem = orderNums.get(position);
                 if(selectedItems.contains(selectedItem)){
                     selectedItems.remove(selectedItem);
                     detail_display.setText(details.get(position));
@@ -90,11 +95,51 @@ public class CloseOrders extends AppCompatActivity {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(String x : selectedItems){
-                    myDb.close_order(x, display.indexOf(x));
-                }
-                Intent intent = new Intent(CloseOrders.this, Menu.class);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CloseOrders.this);
+                View mView = getLayoutInflater().inflate(R.layout.reasoning_for_action_layout, null);
+                TextView reasoningTitle = mView.findViewById(R.id.reasoning_title);
+                EditText reasoningView = mView.findViewById(R.id.reasoning_reason);
+                final FancyButton reasoningButton = mView.findViewById(R.id.reasoning_button);
+
+                reasoningTitle.setText("You are about to close an order(s): ");
+                reasoningTitle.setTextColor(Color.WHITE);
+                reasoningTitle.setBackgroundColor(getResources().getColor(R.color.blue));
+
+                reasoningView.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        reasoningButton.setEnabled(true);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                reasoningButton.setText("Close");
+                reasoningButton.setEnabled(false);
+                reasoningButton.setTextColor(Color.WHITE);
+                reasoningButton.setBackgroundColor(getResources().getColor(R.color.blue));
+                reasoningButton.setFocusBackgroundColor(getResources().getColor(R.color.skyblue));
+                reasoningButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for(String x : selectedItems){
+                            myDb.close_order(x, orderNums.indexOf(x));
+                        }
+                        Intent intent = new Intent(CloseOrders.this, Menu.class);
+                        startActivity(intent);
+                    }
+                });
+                builder.setView(mView);
+                builder.show();
+
             }
         });
 

@@ -14,7 +14,7 @@
             android:id="@+id/quantity_layout_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Quantity Adjustment:"
+            android:text="OrderNumber: "
             android:textSize="20sp"
             android:textColor="@color/black"
             android:gravity="center"

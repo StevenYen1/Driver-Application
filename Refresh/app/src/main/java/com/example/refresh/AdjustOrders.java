@@ -68,12 +68,14 @@ public class AdjustOrders extends AppCompatActivity {
             public void onClick(View v) {
                 if(!filterBy.equals("No Filter")){
                     ArrayList<String> searchList = new ArrayList<>();
-
+                    orderNums.clear();
                     Cursor cursor = myDb.queryInstance(filterBy, search.getText().toString());
                     while(cursor.moveToNext()){
+                        String orderNum = cursor.getString(0);
                         String item = cursor.getString(3);
                         int quantity = cursor.getInt(7);
                         searchList.add("Item: " + item + "\nQuantity: " + quantity);
+                        orderNums.add(orderNum);
                     }
 
                     ArrayAdapter newAdapter = new ArrayAdapter(AdjustOrders.this, android.R.layout.simple_list_item_1, searchList);
@@ -154,6 +156,9 @@ public class AdjustOrders extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(AdjustOrders.this);
         View mView = getLayoutInflater().inflate(R.layout.adjust_quantity_layout, null);
+
+        TextView titleView = mView.findViewById(R.id.quantity_layout_title);
+        titleView.setText("OrderNumber: " + orderNums.get(position));
 
         final TextView quantityView = mView.findViewById(R.id.quantity_layout_input_quantity);
         quantityView.setText(""+quantity);
