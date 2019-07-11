@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Date;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -133,11 +134,9 @@ public class Signature extends Activity {
                     myDb.updateData(x, 2, signatureImage);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
-                builder.setCancelable(true);
-                builder.setTitle("Successfully Completed Order:");
-                builder.setMessage("Signatures have been saved, and orders have been marked as complete.");
-                builder.setCancelable(false);
-                builder.setNeutralButton("Return to Scanned Orders", new DialogInterface.OnClickListener() {
+                builder.setTitle("Order Successful");
+                builder.setMessage("The order has been confirmed.");
+                builder.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         returnToPrev();
@@ -210,15 +209,15 @@ public class Signature extends Activity {
                 e.printStackTrace();
             }
 
-            long time = LocalDateTime.now().getLong(ChronoField.CLOCK_HOUR_OF_DAY);
+            Date date = new Date();
+            long time = date.getTime();
             try {
                 final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/capture")
                         .basicAuth("epts_app", "uB25J=UUwU")
                         .field("status", "CLOSED")
                         .field("signature", file)
-                        .field("shipmentId", ""+currentOrders.get(0))
+                        .field("shipmentId", currentOrders.remove(0))
                         .field("submissionDate", ""+time).asString();
-
 
                 return postResponse.getBody();
 

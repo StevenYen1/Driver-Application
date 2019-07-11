@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
@@ -31,8 +33,8 @@ public class CloseOrders extends AppCompatActivity {
     private static final String TAG = "CloseOrders";
     ListView listView;
     TextView detail_display;
-    Button accept;
-    Button cancel;
+    FancyButton accept;
+    FancyButton cancel;
     DatabaseHelper myDb;
     ArrayList<String> display = new ArrayList<>();
     ArrayList<String> details = new ArrayList<>();

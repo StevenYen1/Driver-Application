@@ -19,7 +19,7 @@
             android:textColor="@color/black"
             android:gravity="center"
             android:padding="10dp"
-            android:background="@color/skyblue" />
+            android:background="@color/blue" />
 
     </LinearLayout>
 
@@ -167,12 +167,12 @@
             android:layout_marginRight="20dp"
             android:padding="16dp"
             fancy:fb_text="Cancel"
-            fancy:fb_textColor="@color/skyblue"
+            fancy:fb_textColor="@color/blue"
             fancy:fb_textGravity="center"
-            fancy:fb_defaultColor="@color/skyblue"
+            fancy:fb_defaultColor="@color/blue"
             fancy:fb_focusColor="#73ffa6"
             fancy:fb_borderWidth="1dp"
-            fancy:fb_borderColor="@color/skyblue"
+            fancy:fb_borderColor="@color/blue"
             fancy:fb_radius="2dp"
             fancy:fb_ghost="true"
             />
@@ -187,10 +187,10 @@
             fancy:fb_text="Ok"
             fancy:fb_textColor="@color/white"
             fancy:fb_textGravity="center"
-            fancy:fb_defaultColor="@color/skyblue"
+            fancy:fb_defaultColor="@color/blue"
             fancy:fb_focusColor="#73ffa6"
             fancy:fb_borderWidth="1dp"
-            fancy:fb_borderColor="@color/skyblue"
+            fancy:fb_borderColor="@color/blue"
             fancy:fb_radius="2dp"
             />
 

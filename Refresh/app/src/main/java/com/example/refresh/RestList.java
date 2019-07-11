@@ -34,6 +34,7 @@ public class RestList extends AppCompatActivity {
         while(cursor.moveToNext()){
             String s = cursor.getString(0);
             list.add(s);
+            if(inputString.equals("")){inputString=s;}
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
@@ -51,15 +52,11 @@ public class RestList extends AppCompatActivity {
             }
         });
 
-        final EditText input = findViewById(R.id.rest_search_input);
         Button btn = findViewById(R.id.rest_search_btn);
         //right now search bar trumps item select. Maybe make "No id" option for dropdown, then get input text if that is selected
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!input.getText().toString().equals("")){
-                    inputString = input.getText().toString();
-                }
                 Intent intent = new Intent(RestList.this, RestCalls.class);
                 intent.putExtra("id", inputString);
                 startActivity(intent);

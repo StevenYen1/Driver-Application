@@ -119,6 +119,7 @@ public class RestCalls extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RestCalls.this);
                 builder.setTitle("Error: Missing Entry");
                 builder.setMessage("There is no such id in the database. Please try again");
+                builder.setCancelable(false);
                 builder.setPositiveButton("RETURN", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

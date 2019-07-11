@@ -16,13 +16,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class ReopenOrders extends AppCompatActivity {
 
     DatabaseHelper myDb;
     ListView listView;
     TextView detail_display;
-    Button accept;
-    Button cancel;
+    FancyButton accept;
+    FancyButton cancel;
     ArrayList<String> display = new ArrayList<>();
     ArrayList<String> details = new ArrayList<>();
     ArrayList<String> selectedItems = new ArrayList<>();
