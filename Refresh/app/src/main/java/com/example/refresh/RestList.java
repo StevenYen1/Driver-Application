@@ -5,22 +5,29 @@ import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.mashape.unirest.http.Unirest;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import me.srodrigo.androidhintspinner.HintAdapter;
+import me.srodrigo.androidhintspinner.HintSpinner;
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class RestList extends AppCompatActivity {
 
     DatabaseHelper myDb;
     String inputString = "";
+    ArrayList<String> details = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,31 +35,47 @@ public class RestList extends AppCompatActivity {
         setContentView(R.layout.activity_rest_list);
         myDb = new DatabaseHelper(this);
         Spinner dropdown = findViewById(R.id.rest_dropdown);
+        final FancyButton btn = findViewById(R.id.rest_search_btn);
+        btn.setEnabled(false);
 
         Cursor cursor = myDb.getAllData();
         final ArrayList<String> list = new ArrayList<>();
         while(cursor.moveToNext()){
-            String s = cursor.getString(0);
-            list.add(s);
-            if(inputString.equals("")){inputString=s;}
+            String orderNumber = cursor.getString(0);
+            list.add(orderNumber);
+
+            String address = cursor.getString(1);
+            String recipient = cursor.getString(2);
+            String item = cursor.getString(3);
+            String quantity = cursor.getString(7);
+            String cartionNumber = cursor.getString(8);
+
+            details.add("Order Number: " + orderNumber
+                    +"\nShipment Address: " + address
+                    +"\nRecipient: " + recipient
+                    +"\nItem: " + item
+                    +"\nQuantity: " + quantity
+                    +"\nCartonNumber: " + cartionNumber
+            );
+
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
-        dropdown.setAdapter(adapter);
+        HintSpinner<String> spinnerUI = new HintSpinner<>(
+                dropdown,
+                new HintAdapter<String>(this, "Select an order", list),
+                new HintSpinner.Callback<String>() {
+                    @Override
+                    public void onItemSelected(int position, String itemAtPosition) {
+                        inputString = list.get(position);
+                        TextView detailsView = findViewById(R.id.rest_list_details);
+                        detailsView.setText(details.get(position));
+                        detailsView.setGravity(Gravity.LEFT);
+                        btn.setEnabled(true);
+                    }
+                });
+        spinnerUI.init();
 
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                inputString = list.get(position);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                inputString = "";
-            }
-        });
-
-        Button btn = findViewById(R.id.rest_search_btn);
         //right now search bar trumps item select. Maybe make "No id" option for dropdown, then get input text if that is selected
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

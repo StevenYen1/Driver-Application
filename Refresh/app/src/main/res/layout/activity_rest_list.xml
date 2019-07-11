@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     tools:context=".RestList"
     android:orientation="vertical">
 
@@ -17,9 +18,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/white"
-            android:text="Retrieve Order Information:"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:text="Retrieve Signature Details:"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
             android:textStyle="bold"
             android:textSize="20sp"
             />
@@ -33,24 +34,63 @@
         android:orientation="horizontal"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp"
+        android:background="#DADADA">
 
         <Spinner
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
-            android:background="@android:drawable/btn_dropdown"
             android:id="@+id/rest_dropdown"
-            android:spinnerMode="dropdown">
+            android:spinnerMode="dropdown"
+            android:backgroundTint="@color/blue">
 
         </Spinner>
 
-        <Button
-            android:layout_width="0dp"
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:layout_width="0.0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/rest_search_btn"
-            android:text="Retrieve"/>
+            android:padding="15dp"
+            fancy:fb_text="Retrieve"
+            fancy:fb_textColor="@color/black"
+            fancy:fb_textGravity="center"
+            fancy:fb_defaultColor="@color/skyblue"
+            fancy:fb_focusColor="#2ecc71"
+            fancy:fb_radius="2dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order Information:"
+            android:gravity="center"
+            android:padding="10dp"
+            android:background="@color/skyblue"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            />
+
+        <TextView
+            android:id="@+id/rest_list_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DADADA"
+            android:text="There is currently no order information."
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/black"/>
+
 
     </LinearLayout>
 
