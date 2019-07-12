@@ -4,12 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VoidOrder">
+    tools:context=".VoidOrder"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/void_layout1"
+        android:background="@color/dark_blue"
         android:orientation="vertical">
 
         <TextView
@@ -18,11 +24,10 @@
             android:text="Void Orders: "
             android:gravity="center"
             android:textSize="20sp"
-            android:textColor="@color/white"
-            android:background="@color/blue"
-            android:textStyle="bold"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"/>
+            android:textColor="@color/black"
+            android:background="@color/skyblue"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
 
     </LinearLayout>
 
@@ -35,7 +40,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="30dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -49,6 +54,7 @@
             android:paddingBottom="10dp"/>
 
         <ListView
+            android:background="#DADADA"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:id="@+id/void_list_view" />

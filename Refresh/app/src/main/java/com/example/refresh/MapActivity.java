@@ -88,7 +88,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick (View w) {
                 getDeviceLocation();
                 myLocationButton.setBackgroundColor(getResources().getColor(R.color.teal));
-                geolocateButton.setBackgroundColor(getResources().getColor(R.color.blue));
+                geolocateButton.setBackgroundColor(getResources().getColor(R.color.middle_blue));
             }
         });
 
@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick (View w) {
                 geolocate();
-                myLocationButton.setBackgroundColor(getResources().getColor(R.color.blue));
+                myLocationButton.setBackgroundColor(getResources().getColor(R.color.middle_blue));
                 geolocateButton.setBackgroundColor(getResources().getColor(R.color.teal));
             }
         });

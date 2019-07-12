@@ -12,7 +12,6 @@
         android:id="@+id/text_input"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="50dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         app:errorEnabled="true"
@@ -58,8 +57,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp">
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/geometric_blue"
+            android:adjustViewBounds="true"/>
 
         <TextView
             android:id="@+id/textView"
@@ -68,8 +72,9 @@
             android:text="@string/title"
             android:textColor="@color/satblue"
             android:textSize="25sp"
-            android:layout_marginTop="150dp"
             android:gravity="center"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             app:fontFamily="sans-serif-medium"
             />
     </LinearLayout>
