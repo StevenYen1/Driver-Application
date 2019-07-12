@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, Serializable {
 
     @Override
@@ -78,36 +80,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         getLocationPermission();
 
-        Button myLocationButton = findViewById(R.id.myLocationButton);
+        final FancyButton myLocationButton = findViewById(R.id.myLocationButton);
+        final FancyButton geolocateButton = findViewById(R.id.geolocateButton);
+
         myLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
                 getDeviceLocation();
-                changeMapLocation();
+                myLocationButton.setBackgroundColor(getResources().getColor(R.color.teal));
+                geolocateButton.setBackgroundColor(getResources().getColor(R.color.blue));
             }
         });
 
-        Button geolocateButton = findViewById(R.id.geolocateButton);
+
         geolocateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View w) {
                 geolocate();
-                changeMapLocation();
+                myLocationButton.setBackgroundColor(getResources().getColor(R.color.blue));
+                geolocateButton.setBackgroundColor(getResources().getColor(R.color.teal));
             }
         });
 
-    }
-
-    private void changeMapLocation(){
-        TextView mapLocation = findViewById(R.id.maplocation);
-        if (mapLocation_value == DESTINATION){
-            mapLocation.setText("My Location:");
-            mapLocation_value = CURRENT_LOCATION;
-        }
-        else{
-            mapLocation.setText("My Destination:");
-            mapLocation_value = DESTINATION;
-        }
     }
 
     private void moveCamera(LatLng latlng, float zoom, String title) {

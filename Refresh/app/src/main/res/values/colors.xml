@@ -11,4 +11,6 @@
     <color name="light_red">#fe3939</color>
     <color name="blue">#5377ed</color>
     <color name="purple">#C86FE9</color>
+    <color name="teal">#64edc8</color>
+    <color name="dark_blue">#004d99</color>
 </resources>

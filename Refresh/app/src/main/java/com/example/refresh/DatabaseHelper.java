@@ -93,16 +93,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
-    public boolean updateData(String num, int status, String sign){
+    public void setSignature(String id, String sign){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_5, status);
         cv.put(COL_6, sign);
-
-        db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { num });
+        db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { id });
         db.close();
-        return true;
     }
 
     public void updateQuantity(String num, int quantity){

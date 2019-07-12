@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#2a69b5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select one of the following"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp">
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/get_call"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:layout_marginRight="10dip"
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#64edc8"
+            fancy:fb_radius="5dp"
+            fancy:fb_text="Retrieve Signature" />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/post_call"
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dip"
+            android:padding="10dp"
+            android:gravity="center"
+            fancy:fb_textSize="20dp"
+            fancy:fb_defaultColor="#60A1F0"
+            fancy:fb_focusColor="#64edc8"
+            fancy:fb_textColor="#FFF"
+            fancy:fb_radius="5dp"
+            fancy:fb_fontIconResource="&#xf021;"
+            fancy:fb_iconPosition="top"
+            fancy:fb_text="Sync" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

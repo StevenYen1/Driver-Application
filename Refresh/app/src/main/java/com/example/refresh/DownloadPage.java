@@ -98,7 +98,7 @@ public class DownloadPage extends AppCompatActivity {
     }
 
     public void staticList(){
-        Delivery_Item item1 = new Delivery_Item("1", "1600 Pennsylvania Ave, Washington, DC", "President of the US", "How to Tweet 101");
+        Delivery_Item item1 = new Delivery_Item("1", "1600 Pennsylvania Ave, Washington, DC", "President of the US", "How to Tweet 101", Delivery_Item.FAIL_SEND);
         Delivery_Item item2 = new Delivery_Item("2", "Seoul, South Korea");
         Delivery_Item item3 = new Delivery_Item("3", "Champ de Mars, Paris");
         Delivery_Item item4 = new Delivery_Item("4", "Los Angeles, California");
@@ -111,6 +111,7 @@ public class DownloadPage extends AppCompatActivity {
         Delivery_Item item11 = new Delivery_Item("11", "500 Staples Drive, Framingham, MA", "Saar Picker", "A Hardworking Intern");
         Delivery_Item item12 = new Delivery_Item("12", "211 Arlington Street, Acton MA");
         Delivery_Item item13 = new Delivery_Item("1112", "address", "recipient", "item", Delivery_Item.SCANNED);
+        Delivery_Item item14 = new Delivery_Item("34422", "address", "recipient", "item", Delivery_Item.FAIL_SEND);
 
         ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
 
@@ -127,6 +128,7 @@ public class DownloadPage extends AppCompatActivity {
         newList.add(item11);
         newList.add(item12);
         newList.add(item13);
+        newList.add(item14);
 
         list = newList;
     }

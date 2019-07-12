@@ -131,7 +131,8 @@ public class Signature extends Activity {
                 TextView async = new TextView(Signature.this);
                 startAsycTask(async);
                 for(String x: currentOrders){
-                    myDb.updateData(x, 2, signatureImage);
+                    Log.d(TAG, "onClick: signatureImage: " + signatureImage);
+                    myDb.updateStatus(x, 2);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
                 builder.setTitle("Order Successful");
@@ -147,7 +148,7 @@ public class Signature extends Activity {
         });
     }
 
-    public File convertImageToFile() throws IOException {
+    public File convertImageToFile(String id) throws IOException {
         File f = new File(Signature.this.getCacheDir(), "signature");
         f.createNewFile();
 
@@ -162,6 +163,8 @@ public class Signature extends Activity {
         fos.close();
 
         String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        myDb.setSignature(id, encodedImage);
+        Log.d(TAG, "convertImageToFile: " + encodedImage);
         signatureImage = encodedImage;
         return f;
     }
@@ -204,7 +207,7 @@ public class Signature extends Activity {
         protected String doInBackground(Integer... integers) {
             File file = null;
             try {
-                file = convertImageToFile();
+                file = convertImageToFile(currentOrders.get(0));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -216,8 +219,12 @@ public class Signature extends Activity {
                         .basicAuth("epts_app", "uB25J=UUwU")
                         .field("status", "CLOSED")
                         .field("signature", file)
-                        .field("shipmentId", currentOrders.remove(0))
+                        .field("shipmentId", currentOrders.get(0))
                         .field("submissionDate", ""+time).asString();
+
+                if(postResponse.getCode()!=200 || postResponse.getCode()!=201){
+                    myDb.updateStatus(currentOrders.get(0), Delivery_Item.FAIL_SEND);
+                }
 
                 return postResponse.getBody();
 
