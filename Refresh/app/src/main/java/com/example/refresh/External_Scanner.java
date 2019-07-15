@@ -20,6 +20,7 @@ import android.widget.TextView;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.Delivery_Item.COMPLETE;
+import static com.example.refresh.Delivery_Item.FAIL_SEND;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
@@ -34,6 +35,7 @@ public class External_Scanner extends AppCompatActivity {
     String details ="Nothing scanned yet";
     String title="No title";
     String id ="No id yet";
+    FancyButton sideMenu;
     Handler mHandler = new Handler();
     boolean canUndo = false;
 
@@ -44,6 +46,13 @@ public class External_Scanner extends AppCompatActivity {
         myDb = new DatabaseHelper(this);
         setContentView(R.layout.activity_external_scanner);
         results = findViewById(R.id.scan_results);
+        sideMenu = findViewById(R.id.external_sideMenu);
+        sideMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         setOrderInformation();
         setInput();
 
@@ -77,14 +86,14 @@ public class External_Scanner extends AppCompatActivity {
         TextView body = mView.findViewById(R.id.details_body);
         body.setText(this.details);
         builder.setCancelable(true);
-//        if(canUndo){
-//            builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    unscanItem(id);
-//                }
-//            });
-//        }
+        if(canUndo){
+            builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    unscanItem(id);
+                }
+            });
+        }
         builder.setView(mView);
         builder.show();
     }
@@ -98,7 +107,7 @@ public class External_Scanner extends AppCompatActivity {
         StringBuffer buffer = new StringBuffer();
         while (rawOrders.moveToNext()) {
             int status = rawOrders.getInt(4);
-            if(status == COMPLETE){
+            if(status == COMPLETE || status == FAIL_SEND){
                 buffer.append("Current Status: COMPLETED\n");
             }
             else if(status == SCANNED){
@@ -219,7 +228,7 @@ public class External_Scanner extends AppCompatActivity {
         StringBuffer buffer = new StringBuffer();
         while (rawOrders.moveToNext()) {
             int status = rawOrders.getInt(4);
-            if(status == COMPLETE){
+            if(status == COMPLETE || status == FAIL_SEND){
                 buffer.append("Current Status: COMPLETED\n");
             }
             else if(status == SCANNED){
@@ -255,7 +264,7 @@ public class External_Scanner extends AppCompatActivity {
         StringBuffer buffer = new StringBuffer();
         while (rawOrders.moveToNext()) {
             int status = rawOrders.getInt(4);
-            if(status == COMPLETE){
+            if(status == COMPLETE || status == FAIL_SEND){
                 title = "Current Status: COMPLETED";
             }
             else if(status == SCANNED){
@@ -316,15 +325,15 @@ public class External_Scanner extends AppCompatActivity {
     public void handleResult(String scanResult) {
         int status = myDb.getStatus(scanResult);
 
-        if(status == COMPLETE){
-            results.setTextColor(Color.parseColor("#fa5555"));
+        if(status == COMPLETE || status == FAIL_SEND){
+            results.setBackgroundColor(Color.parseColor("#fa5555"));
             results.setText("COMPLETED ITEM");
             id = scanResult;
             details = viewInstance(scanResult);
             canUndo = false;
         }
         else if(status == SCANNED || status == SELECTED){
-            results.setTextColor(Color.parseColor("#fa5555"));
+            results.setBackgroundColor(Color.parseColor("#fa5555"));
             results.setText("ALREADY SCANNED");
             id = scanResult;
             details = viewInstance(scanResult);
@@ -333,14 +342,14 @@ public class External_Scanner extends AppCompatActivity {
         }
         else if(status == INCOMPLETE){
             myDb.updateStatus(scanResult, SCANNED);
-            results.setTextColor(Color.parseColor("#1c9c2b"));
+            results.setBackgroundColor(Color.parseColor("#1c9c2b"));
             results.setText("SUCCESS");
             id = scanResult;
             details = viewInstance(scanResult);
             canUndo = true;
         }
         else{
-            results.setTextColor(Color.parseColor("#fa5555"));
+            results.setBackgroundColor(Color.parseColor("#fa5555"));
             results.setText("INVALID ITEM");
             id = "Not a valid ID";
             details = "There are no details for an invalid item.";

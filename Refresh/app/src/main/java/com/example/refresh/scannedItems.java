@@ -29,6 +29,7 @@ public class scannedItems extends AppCompatActivity {
     ListView view;
     ArrayList<String> orders = new ArrayList<>();
     ArrayList<String> selectedItems = new ArrayList<>();
+    ArrayList<String> display = new ArrayList<>();
     DatabaseHelper myDb;
     FancyButton sign;
 
@@ -64,14 +65,14 @@ public class scannedItems extends AppCompatActivity {
 
     public void layoutSetup(){
         layout = findViewById(R.id.order_area);
-        TextView title = new TextView(this);
-        title.setText("Scanned Orders:");
-        title.setTextSize(20);
-        title.setGravity(Gravity.CENTER);
+//        TextView title = new TextView(this);
+//        title.setText("Scanned Orders:");
+//        title.setTextSize(20);
+//        title.setGravity(Gravity.CENTER);
 
         view = findViewById(R.id.list);
         view.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        view.addHeaderView(title, "Scanned Orders: ", false);
+//        view.addHeaderView(title, "Scanned Orders: ", false);
     }
 
     public void setOrderInformation(){
@@ -84,6 +85,7 @@ public class scannedItems extends AppCompatActivity {
             int status = rawOrders.getInt(4);
             if(status == SCANNED || status == SELECTED){
                 orders.add(ordernumber);
+                display.add("OrderNumber: " + ordernumber);
                 if(status == SELECTED){
                     selectedItems.add(ordernumber);
                 }
@@ -113,7 +115,7 @@ public class scannedItems extends AppCompatActivity {
     }
 
     public void createView(){
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.rowlayout, R.id.checklist, orders);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.rowlayout, R.id.checklist, display);
         view.setAdapter(adapter);
 
         for (String x : selectedItems){
@@ -124,7 +126,7 @@ public class scannedItems extends AppCompatActivity {
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem =((TextView)view).getText().toString();
+                String selectedItem = orders.get(position);
                 if(selectedItems.contains(selectedItem)){
                     selectedItems.remove(selectedItem);
                     myDb.updateStatus(selectedItem, SCANNED);

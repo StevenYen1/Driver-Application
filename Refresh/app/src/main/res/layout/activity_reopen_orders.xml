@@ -7,14 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".ReopenOrders"
     android:orientation="vertical"
-    android:layout_alignParentBottom="true">
+    android:layout_alignParentBottom="true"
+    android:background="@drawable/background_gradient_dark">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/reopen_layout1"
         android:orientation="vertical"
-        android:background="@color/blue">
+        android:background="#60A1F0"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -48,7 +52,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_above="@id/reopen_buttons">
 
         <TextView

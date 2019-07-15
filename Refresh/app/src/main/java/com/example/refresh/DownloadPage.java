@@ -2,6 +2,7 @@ package com.example.refresh;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -22,7 +23,9 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 public class DownloadPage extends AppCompatActivity {
     private FancyButton download_btn;
-    private ConstraintLayout layout;
+    private FancyButton confirm;
+    private FancyButton finish;
+    private TextView title;
     DatabaseHelper myDb;
     ProgressBar progressBar;
     int counter = 0;
@@ -33,7 +36,6 @@ public class DownloadPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_page);
         myDb = new DatabaseHelper(this);
-        layout = findViewById(R.id.layout);
         staticList();
         myDb.clear();
         int i = 0;
@@ -41,15 +43,35 @@ public class DownloadPage extends AppCompatActivity {
             myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity());
             i++;
         }
-        createWelcome();
 
         download_btn = findViewById(R.id.download);
+        confirm = findViewById(R.id.confirm_load);
+        finish = findViewById(R.id.download_continue);
+        title = findViewById(R.id.download_title);
+        title.setText("Welcome, " + getIntent().getStringExtra("username"));
+
         download_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
                 progress();
             }
         });
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirm.setBackgroundColor(getResources().getColor(R.color.success));
+            }
+        });
+
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDeliveries();
+            }
+        });
+
+
 
     }
 
@@ -61,40 +83,22 @@ public class DownloadPage extends AppCompatActivity {
         TimerTask tt = new TimerTask() {
             @Override
             public void run(){
-                counter+=10;
+                counter+=4;
                 progressBar.setProgress(counter);
 
                 if(counter == 100){
                     t.cancel();
-                    openDeliveries();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            download_btn.setBackgroundColor(getResources().getColor(R.color.success));
+                        }
+                    });
                 }
             }
         };
 
         t.schedule(tt, 0, 100);
-    }
-
-    @TargetApi(26)
-    public void createWelcome(){
-
-        ConstraintLayout.LayoutParams params = createMargins();
-
-        TextView welcome = new TextView(this);
-        welcome.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
-        String username = this.getIntent().getStringExtra("username");
-        welcome.setText("Welcome, " + username);
-//        welcome.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        welcome.setGravity(Gravity.CENTER);
-        welcome.setLayoutParams(params);
-        layout.addView(welcome, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-    }
-
-    public ConstraintLayout.LayoutParams createMargins(){
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(10,10,10,10);
-
-        return params;
     }
 
     public void staticList(){

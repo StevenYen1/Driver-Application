@@ -5,188 +5,214 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Menu">
+    tools:context=".Menu"
+    android:background="@drawable/background_gradient_dark">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         app:cardElevation="3dp"
+        fancy:cardCornerRadius="5dp"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toTopOf="parent"
         >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/linearlayout_title"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/satblue"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:textSize="22sp"
-                android:text="MANAGE ROUTE MENU"
-                android:textColor="@color/white"
-                android:fontFamily="sans-serif-medium"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearlayout1"
-            android:layout_below="@+id/linearlayout_title"
-            android:paddingLeft="20dip"
-            android:paddingTop="20dip"
-            android:paddingRight="20dip"
-            android:paddingBottom="1.0dip">
-
-            <mehdi.sakout.fancybuttons.FancyButton
+            <LinearLayout
+                android:id="@+id/linearlayout_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/scan_btn_open"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                fancy:fb_textGravity="center"
-                fancy:fb_defaultColor="#BEBEBE"
-                fancy:fb_focusColor="@color/satblue"
-                fancy:fb_textColor="#000"
-                fancy:fb_radius="2dp"
-                fancy:fb_text="Scan Packages"
-                fancy:fb_fontIconResource="&#xf02a;"
-                fancy:fb_iconPosition="left"
-                />
+                android:background="@color/blue"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="22sp"
+                    android:text="MANAGE ROUTE MENU"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-medium"
+                    />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearlayout2"
-            android:layout_below="@+id/linearlayout1"
-            android:orientation="horizontal"
-            android:paddingLeft="20dip"
-            android:paddingTop="20dip"
-            android:paddingRight="20dip"
-            android:paddingBottom="1.0dip">
+            </LinearLayout>
 
-            <mehdi.sakout.fancybuttons.FancyButton
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/view_route_btn"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                fancy:fb_textGravity="center"
-                fancy:fb_defaultColor="#BEBEBE"
-                fancy:fb_focusColor="@color/satblue"
-                fancy:fb_textColor="#000"
-                fancy:fb_radius="2dp"
-                fancy:fb_text="View Route"
-                fancy:fb_fontIconResource="&#xf0d1;"
-                fancy:fb_iconPosition="left"
-                />
+                android:id="@+id/linearlayout1"
+                android:layout_below="@+id/linearlayout_title"
+                android:paddingLeft="20dip"
+                android:paddingTop="20dip"
+                android:paddingRight="20dip"
+                android:paddingBottom="15dip">
 
-        </LinearLayout>
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scan_btn_open"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:paddingBottom="25dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="25dp"
+                    fancy:fb_textGravity="center"
+                    fancy:fb_defaultColor="#BEBEBE"
+                    fancy:fb_focusColor="@color/satblue"
+                    fancy:fb_textColor="#000"
+                    fancy:fb_radius="2dp"
+                    fancy:fb_text="Open Scanner"
+                    fancy:fb_textSize="20sp"
+                    fancy:fb_fontIconResource="&#xf02a;"
+                    fancy:fb_fontIconSize="25sp"
+                    fancy:fb_iconPosition="left"
+                    />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearlayout3"
-            android:layout_below="@+id/linearlayout2"
-            android:orientation="horizontal"
-            android:paddingLeft="20dip"
-            android:paddingTop="20dip"
-            android:paddingRight="20dip"
-            android:paddingBottom="1.0dip">
+            </LinearLayout>
 
-            <mehdi.sakout.fancybuttons.FancyButton
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/edit_orders_btn"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                fancy:fb_textGravity="center"
-                fancy:fb_defaultColor="#BEBEBE"
-                fancy:fb_focusColor="@color/satblue"
-                fancy:fb_textColor="#000"
-                fancy:fb_radius="2dp"
-                fancy:fb_text="Edit Orders"
-                fancy:fb_fontIconResource="&#xf044;"
-                fancy:fb_iconPosition="left"
-                />
+                android:id="@+id/linearlayout2"
+                android:layout_below="@+id/linearlayout1"
+                android:orientation="horizontal"
+                android:paddingLeft="20dip"
+                android:paddingRight="20dip"
+                android:paddingBottom="15dip">
 
-        </LinearLayout>
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/view_route_btn"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:paddingBottom="25dp"
+                    android:paddingRight="27dp"
+                    android:paddingTop="25dp"
+                    fancy:fb_textGravity="center"
+                    fancy:fb_defaultColor="#BEBEBE"
+                    fancy:fb_focusColor="@color/satblue"
+                    fancy:fb_textColor="#000"
+                    fancy:fb_radius="2dp"
+                    fancy:fb_text="View Route"
+                    fancy:fb_textSize="20sp"
+                    fancy:fb_fontIconResource="&#xf0d1;"
+                    fancy:fb_fontIconSize="25sp"
+                    fancy:fb_iconPosition="left"
+                    />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearlayout4"
-            android:layout_below="@+id/linearlayout3"
-            android:orientation="horizontal"
-            android:paddingLeft="20dip"
-            android:paddingTop="20dip"
-            android:paddingRight="20dip"
-            android:paddingBottom="1.0dip">
+            </LinearLayout>
 
-            <mehdi.sakout.fancybuttons.FancyButton
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/call_server_btn"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                fancy:fb_textGravity="center"
-                fancy:fb_defaultColor="#BEBEBE"
-                fancy:fb_focusColor="@color/satblue"
-                fancy:fb_textColor="#000"
-                fancy:fb_radius="2dp"
-                fancy:fb_text="Call Server"
-                fancy:fb_fontIconResource="&#xf0c2;"
-                fancy:fb_iconPosition="left"
-                />
+                android:id="@+id/linearlayout3"
+                android:layout_below="@+id/linearlayout2"
+                android:orientation="horizontal"
+                android:paddingLeft="20dip"
+                android:paddingRight="20dip"
+                android:paddingBottom="15dip">
 
-        </LinearLayout>
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edit_orders_btn"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:paddingBottom="25dp"
+                    android:paddingRight="27dp"
+                    android:paddingTop="25dp"
+                    fancy:fb_textGravity="center"
+                    fancy:fb_defaultColor="#BEBEBE"
+                    fancy:fb_focusColor="@color/satblue"
+                    fancy:fb_textColor="#000"
+                    fancy:fb_radius="2dp"
+                    fancy:fb_text="Edit Orders"
+                    fancy:fb_textSize="20sp"
+                    fancy:fb_fontIconResource="&#xf044;"
+                    fancy:fb_fontIconSize="25sp"
+                    fancy:fb_iconPosition="left"
+                    />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearlayout5"
-            android:layout_below="@+id/linearlayout4"
-            android:orientation="horizontal"
-            android:paddingLeft="20dip"
-            android:paddingTop="20dip"
-            android:paddingRight="20dip"
-            android:paddingBottom="1.0dip">
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearlayout4"
+                android:layout_below="@+id/linearlayout3"
+                android:orientation="horizontal"
+                android:paddingLeft="20dip"
+                android:paddingRight="20dip">
 
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/call_server_btn"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:paddingBottom="25dp"
+                    android:paddingRight="27dp"
+                    android:paddingTop="25dp"
+                    fancy:fb_textGravity="center"
+                    fancy:fb_defaultColor="#BEBEBE"
+                    fancy:fb_focusColor="@color/satblue"
+                    fancy:fb_textColor="#000"
+                    fancy:fb_radius="2dp"
+                    fancy:fb_text="Call Server"
+                    fancy:fb_textSize="20sp"
+                    fancy:fb_fontIconResource="&#xf0c2;"
+                    fancy:fb_fontIconSize="25sp"
+                    fancy:fb_iconPosition="left"
+                    />
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearlayout5"
+                android:layout_below="@+id/linearlayout4"
+                android:orientation="horizontal"
+                android:paddingLeft="20dip"
+                android:paddingTop="15dip"
+                android:paddingRight="20dip"
+                android:paddingBottom="20dip">
+
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/logout_btn"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:paddingBottom="25dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="25dp"
+                    fancy:fb_textGravity="center"
+                    fancy:fb_defaultColor="#BEBEBE"
+                    fancy:fb_focusColor="@color/satblue"
+                    fancy:fb_textColor="#000"
+                    fancy:fb_radius="2dp"
+                    fancy:fb_text="Log Out"
+                    fancy:fb_textSize="20sp"
+                    fancy:fb_fontIconResource="&#xf191;"
+                    fancy:fb_fontIconSize="25sp"
+                    fancy:fb_iconPosition="left"
+                    />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

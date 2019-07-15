@@ -1,11 +1,14 @@
 package com.example.refresh;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,7 +48,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
          //this gets the device's location
 //        if (mLocationPermissionGranted) {
@@ -65,13 +67,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final float DEFAULT_ZOOM = 15f;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static int DESTINATION = 1;
-    private static int CURRENT_LOCATION = 0;
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
-    private int mapLocation_value = DESTINATION;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,9 +129,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location");
                             Location currentLocation = (Location) task.getResult();
-
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM, "my location");
-
                         }
                         else{
                             Log.d(TAG, "onComplete: current location is null");

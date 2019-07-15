@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,55 +8,44 @@
     android:id="@+id/layout"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DownloadPage"
-    tools:showIn="@layout/activity_download_page">
-
+    tools:showIn="@layout/activity_download_page"
+    android:orientation="vertical"
+    android:background="@drawable/background_gradient_dark">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="50dp"
-        android:id="@+id/download_btn_layout"
-        app:layout_constraintTop_toBottomOf="@id/welcome_layout"
-        android:orientation="vertical">
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="100dp">
 
-        <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/download"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            fancy:fb_defaultColor="@color/satblue"
-            fancy:fb_focusColor="#7EF9FF"
-            fancy:fb_text="@string/download"
-            fancy:fb_fontIconResource="&#xf019;"
-            fancy:fb_iconPosition="left"
-            fancy:fb_borderColor="#FFFFFF"
-            fancy:fb_radius="2dp"
-            fancy:fb_borderWidth="1dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"/>
-        
-        <ProgressBar
+        <TextView
+            android:id="@+id/download_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-            android:id="@+id/progressbar_download"/>
+            android:gravity="center"
+            android:text="Welcome, User"
+            android:background="@drawable/rounded_corner"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:padding="10dp"/>
 
     </LinearLayout>
 
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
         android:id="@+id/welcome_layout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="@color/white"
         >
 
         <TextView
@@ -65,31 +54,74 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="18dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:gravity="center"
             android:text="@string/welcome_text"
-            app:layout_constraintBottom_toTopOf="@+id/download"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.666" />
+            android:paddingBottom="10dp"
+            />
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="60dp"
+            android:id="@+id/download_btn_layout"
+            android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/download_btn_layout"
-        app:layout_constraintVertical_bias="0.597"
-        app:srcCompat="@drawable/stapleslogo" />
-</android.support.constraint.ConstraintLayout>
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/download"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                fancy:fb_defaultColor="@color/blue"
+                fancy:fb_focusColor="#7EF9FF"
+                fancy:fb_text="@string/download"
+                fancy:fb_fontIconResource="&#xf019;"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="4dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"/>
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:id="@+id/progressbar_download"/>
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/confirm_load"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                fancy:fb_defaultColor="@color/blue"
+                fancy:fb_text="Confirm Load"
+                fancy:fb_radius="4dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"/>
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/download_continue"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                fancy:fb_defaultColor="@color/blue"
+                fancy:fb_focusColor="#7EF9FF"
+                fancy:fb_text="Finish"
+                fancy:fb_radius="4dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

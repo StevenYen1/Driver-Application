@@ -1,6 +1,7 @@
 package com.example.refresh;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -14,15 +15,17 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 
 public class MainActivity extends AppCompatActivity {
     private Button address_button;
     private ActionProcessButton actionProcessButton;
-    private TextInputEditText textInputUsername;
+    private EditText textInputUsername;
     private Handler mHandler = new Handler();
-    private TextInputEditText textInputPass;
+    private EditText textInputPass;
     private String pass = "";
     private String user = "";
 
@@ -32,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ImageView logo = findViewById(R.id.logo_main);
+        logo.setColorFilter(Color.WHITE);
         textInputPass = findViewById(R.id.password);
         textInputUsername = findViewById(R.id.username);
 

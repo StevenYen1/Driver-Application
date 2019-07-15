@@ -25,6 +25,7 @@ public class VoidOrder extends AppCompatActivity {
     ListView listView;
     DatabaseHelper myDb;
     ArrayList<String> display = new ArrayList<>();
+    ArrayList<String> orderNums = new ArrayList<>();
     ArrayList<String> details = new ArrayList<>();
 
     @Override
@@ -43,7 +44,8 @@ public class VoidOrder extends AppCompatActivity {
             details_string += "\nItem Name: "+cursor.getString(3);
             details_string += "\nQuantity: "+cursor.getInt(7);
             details_string += "\nCarton Number: "+cursor.getInt(8);
-            display.add(cursor.getString(0));
+            display.add("Order Number: " + cursor.getString(0));
+            orderNums.add(cursor.getString(0));
             details.add(details_string);
         }
 
@@ -53,7 +55,7 @@ public class VoidOrder extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                final String ordernum = display.get(position);
+                final String ordernum = orderNums.get(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(VoidOrder.this);
                 View mView = getLayoutInflater().inflate(R.layout.reasoning_for_action_layout, null);
                 TextView reasoningTitle = mView.findViewById(R.id.reasoning_title);

@@ -25,6 +25,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
+import static com.example.refresh.Delivery_Item.SCANNED;
+import static com.example.refresh.Delivery_Item.SELECTED;
 import static java.lang.Integer.parseInt;
 
 public class RecyclerView extends AppCompatActivity {
@@ -68,7 +70,7 @@ public class RecyclerView extends AppCompatActivity {
             simple_displays.add("#"+ordernumber+'\n'+address);
             addresses.add(address);
             Log.d(TAG, "Status: "+ status);
-            if(status == INCOMPLETE){
+            if(status == INCOMPLETE || status == SELECTED || status == SCANNED){
                 remainingOrders.add(ordernumber);
                 status_icons.add(INCOMPLETE_ICON);
             }

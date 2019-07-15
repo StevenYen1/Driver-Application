@@ -37,6 +37,7 @@ public class Menu extends AppCompatActivity {
     private FancyButton viewOrders;
     private FancyButton editOrders;
     private FancyButton restCall;
+    private FancyButton logout;
     private DatabaseHelper myDb;
     private ArrayList<String> sync_ids = new ArrayList<>();
     private ArrayList<String> sync_signs = new ArrayList<>();
@@ -51,6 +52,7 @@ public class Menu extends AppCompatActivity {
         viewOrders = findViewById(R.id.view_route_btn);
         editOrders = findViewById(R.id.edit_orders_btn);
         restCall = findViewById(R.id.call_server_btn);
+        logout = findViewById(R.id.logout_btn);
 
 
         scan_btn.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +179,14 @@ public class Menu extends AppCompatActivity {
                 });
                 builder.setView(mView);
                 builder.show();
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Menu.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
