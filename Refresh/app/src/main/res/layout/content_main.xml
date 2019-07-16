@@ -40,15 +40,14 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:gravity="center"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="40dp"
-            app:fontFamily="sans-serif-medium"
-            />
+            android:gravity="center"
+            android:text="@string/title"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:fontFamily="@font/metrophobic" />
 
     </LinearLayout>
 
@@ -66,6 +65,8 @@
             android:layout_height="40dp"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
+            android:fontFamily="@font/overpass_thin"
+            android:padding="5dp"
             android:hint="@string/Username"
             android:inputType="textPersonName"
             android:textSize="16sp"
@@ -80,6 +81,8 @@
             android:layout_height="40dp"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
+            android:fontFamily="@font/overpass_thin"
+            android:padding="5dp"
             android:hint="@string/Password"
             android:inputType="textPassword"
             android:textSize="16sp"
@@ -89,56 +92,20 @@
 
     </LinearLayout>
 
-    <!--<android.support.design.widget.TextInputLayout-->
-        <!--android:id="@+id/text_input"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_marginStart="30dp"-->
-        <!--android:layout_marginEnd="30dp"-->
-        <!--android:textColorHint="@color/white"-->
-        <!--app:errorEnabled="true">-->
-
-        <!--<android.support.design.widget.TextInputEditText-->
-            <!--android:id="@+id/username"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/Username"-->
-            <!--android:inputType="text"-->
-            <!--android:textColor="@color/white"-->
-            <!--/>-->
-
-    <!--</android.support.design.widget.TextInputLayout>-->
-
-    <!--<android.support.design.widget.TextInputLayout-->
-        <!--android:id="@+id/pass_input"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_marginStart="30dp"-->
-        <!--android:layout_marginEnd="30dp"-->
-        <!--app:errorEnabled="true"-->
-        <!--app:passwordToggleEnabled="true">-->
-
-        <!--<android.support.design.widget.TextInputEditText-->
-            <!--android:id="@+id/password"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/Password"-->
-            <!--android:inputType="textPassword" />-->
-
-    <!--</android.support.design.widget.TextInputLayout>-->
-
 
     <com.dd.processbutton.iml.ActionProcessButton
         android:id="@+id/mapsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/next"
+        android:text="Sign In"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        custom:pb_colorComplete="@color/green_complete"
+        android:fontFamily="@font/overpass"
+        custom:pb_colorComplete="@color/success"
         custom:pb_colorNormal="@color/blue_normal"
         custom:pb_colorPressed="@color/blue_pressed"
         custom:pb_colorProgress="@color/purple_progress"

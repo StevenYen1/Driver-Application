@@ -38,10 +38,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:layout_marginTop="20dp"
-                    android:textSize="22sp"
-                    android:text="MANAGE ROUTE MENU"
+                    android:textSize="26sp"
+                    android:text="Manage Route Menu"
+                    android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:fontFamily="sans-serif-medium"
+                    android:fontFamily="@font/metrophobic"
                     />
 
             </LinearLayout>

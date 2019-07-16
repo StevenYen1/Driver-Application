@@ -81,7 +81,9 @@
                     android:background="#DADADA"
                     android:hint="Order Number"
                     android:textSize="15sp"
-                    android:paddingLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:fontFamily="@font/overpass_thin"
+                    android:textColorHint="#5c5c5c"/>
 
             </RelativeLayout>
 
@@ -114,7 +116,9 @@
                     android:background="#DADADA"
                     android:hint="Delivery Address"
                     android:textSize="15sp"
-                    android:paddingLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:fontFamily="@font/overpass_thin"
+                    android:textColorHint="#5c5c5c"/>
 
             </RelativeLayout>
 
@@ -147,7 +151,9 @@
                     android:background="#DADADA"
                     android:hint="Recipient"
                     android:textSize="15sp"
-                    android:paddingLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:fontFamily="@font/overpass_thin"
+                    android:textColorHint="#5c5c5c"/>
 
             </RelativeLayout>
 
@@ -180,7 +186,9 @@
                     android:background="#DADADA"
                     android:hint="Item"
                     android:textSize="15sp"
-                    android:paddingLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:fontFamily="@font/overpass_thin"
+                    android:textColorHint="#5c5c5c"/>
 
             </RelativeLayout>
 
@@ -213,7 +221,9 @@
                     android:background="#DADADA"
                     android:hint="Quantity"
                     android:textSize="15sp"
-                    android:paddingLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:fontFamily="@font/overpass_thin"
+                    android:textColorHint="#5c5c5c"/>
 
             </RelativeLayout>
 
@@ -246,7 +256,9 @@
                     android:background="#DADADA"
                     android:hint="Carton Number"
                     android:textSize="15sp"
-                    android:paddingLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:fontFamily="@font/overpass_thin"
+                    android:textColorHint="#5c5c5c"/>
 
             </RelativeLayout>
 

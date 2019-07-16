@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -65,14 +66,8 @@ public class scannedItems extends AppCompatActivity {
 
     public void layoutSetup(){
         layout = findViewById(R.id.order_area);
-//        TextView title = new TextView(this);
-//        title.setText("Scanned Orders:");
-//        title.setTextSize(20);
-//        title.setGravity(Gravity.CENTER);
-
         view = findViewById(R.id.list);
         view.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-//        view.addHeaderView(title, "Scanned Orders: ", false);
     }
 
     public void setOrderInformation(){
@@ -119,7 +114,7 @@ public class scannedItems extends AppCompatActivity {
         view.setAdapter(adapter);
 
         for (String x : selectedItems){
-            int index = orders.indexOf(x)+1;
+            int index = orders.indexOf(x);
             view.setItemChecked(index, true);
         }
 
