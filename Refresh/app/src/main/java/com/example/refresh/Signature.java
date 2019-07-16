@@ -132,7 +132,7 @@ public class Signature extends Activity {
                 startAsycTask(async);
                 for(String x: currentOrders){
                     Log.d(TAG, "onClick: signatureImage: " + signatureImage);
-                    myDb.updateStatus(x, 2);
+                    myDb.updateStatus(x, Delivery_Item.COMPLETE);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
                 builder.setTitle("Order Successful");
@@ -222,14 +222,11 @@ public class Signature extends Activity {
                         .field("shipmentId", currentOrders.get(0))
                         .field("submissionDate", ""+time).asString();
 
-                if(postResponse.getCode()!=200 || postResponse.getCode()!=201){
-                    myDb.updateStatus(currentOrders.get(0), Delivery_Item.FAIL_SEND);
-                }
-
                 return postResponse.getBody();
 
             } catch (UnirestException e) {
                 e.printStackTrace();
+                myDb.updateStatus(currentOrders.get(0), Delivery_Item.FAIL_SEND);
             }
             return "";
         }

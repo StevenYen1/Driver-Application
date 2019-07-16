@@ -61,6 +61,8 @@
             android:gravity="center"
             android:paddingBottom="10dp"
             android:text="@string/welcome_text"
+            android:textSize="16sp"
+            android:textColor="#5c5c5c"
             app:fontFamily="@font/roboto_light" />
 
         <LinearLayout

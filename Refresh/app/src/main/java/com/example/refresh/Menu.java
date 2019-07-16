@@ -211,7 +211,7 @@ public class Menu extends AppCompatActivity {
         File f = new File(Menu.this.getCacheDir(), "signature");
         f.createNewFile();
 
-        byte[] b = sign.getBytes();
+        byte[] b = Base64.decode(sign, Base64.DEFAULT);
 
         FileOutputStream fos = new FileOutputStream(f);
         fos.write(b);

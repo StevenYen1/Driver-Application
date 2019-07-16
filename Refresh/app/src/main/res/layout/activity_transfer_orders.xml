@@ -5,14 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TransferOrders"
-    android:background="@drawable/background_gradient_dark">
+    android:background="@drawable/background_gradient_dark"
+    android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
         android:text="DEVELOPMENT CURRENTLY IN PROGRESS..."/>
+
+    <ImageView
+        android:id="@+id/imageview_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

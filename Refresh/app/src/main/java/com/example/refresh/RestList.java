@@ -1,5 +1,6 @@
 package com.example.refresh;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
@@ -41,23 +42,32 @@ public class RestList extends AppCompatActivity {
         Cursor cursor = myDb.getAllData();
         final ArrayList<String> list = new ArrayList<>();
         while(cursor.moveToNext()){
-            String orderNumber = cursor.getString(0);
-            list.add(orderNumber);
+            int status = cursor.getInt(4);
+            if(status == Delivery_Item.COMPLETE){
+                String orderNumber = cursor.getString(0);
+                list.add(orderNumber);
 
-            String address = cursor.getString(1);
-            String recipient = cursor.getString(2);
-            String item = cursor.getString(3);
-            String quantity = cursor.getString(7);
-            String cartionNumber = cursor.getString(8);
+                String address = cursor.getString(1);
+                String recipient = cursor.getString(2);
+                String item = cursor.getString(3);
+                String quantity = cursor.getString(7);
+                String cartionNumber = cursor.getString(8);
 
-            details.add("Order Number: " + orderNumber
-                    +"\nShipment Address: " + address
-                    +"\nRecipient: " + recipient
-                    +"\nItem: " + item
-                    +"\nQuantity: " + quantity
-                    +"\nCartonNumber: " + cartionNumber
-            );
+                details.add("Order Number: " + orderNumber
+                        +"\nShipment Address: " + address
+                        +"\nRecipient: " + recipient
+                        +"\nItem: " + item
+                        +"\nQuantity: " + quantity
+                        +"\nCartonNumber: " + cartionNumber
+                );
+            }
+        }
 
+        if(list.isEmpty()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Error:");
+            builder.setMessage("There is no signature to retrieve.");
+            builder.show();
         }
 
         HintSpinner<String> spinnerUI = new HintSpinner<>(
