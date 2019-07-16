@@ -53,11 +53,9 @@
             android:id="@+id/welcome_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="18dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="40dp"
             android:gravity="center"
             android:paddingBottom="10dp"
             android:text="@string/welcome_text"
@@ -88,10 +86,10 @@
                 fancy:fb_fontIconResource="&#xf019;"
                 fancy:fb_iconPosition="left"
                 fancy:fb_radius="3dp"
-                android:paddingBottom="25dp"
+                android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="25dp"/>
+                android:paddingRight="40dp"
+                android:paddingTop="15dp"/>
 
             <ProgressBar
                 android:layout_width="match_parent"

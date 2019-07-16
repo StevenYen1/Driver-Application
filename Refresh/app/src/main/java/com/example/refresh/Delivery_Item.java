@@ -66,6 +66,16 @@ public class Delivery_Item {
         this.cartonNumber = "0000";
     }
 
+    public Delivery_Item(String o, String a, String r, String i, int s, int q, String cn){
+        this.orderNumber = o;
+        this.orderString = a;
+        this.recipient = r;
+        this.item = i;
+        this.status = s;
+        this.quantity = q;
+        this.cartonNumber = cn;
+    }
+
     public Delivery_Item(String orderNum, String orderStr) {
         this.orderNumber = orderNum;
         this.orderString = orderStr;

@@ -110,7 +110,7 @@ public class RecyclerView extends AppCompatActivity {
         buffer.append("\n");
         buffer.append("Quantity: \"" + cursor.getInt(7)+"\"\n");
         buffer.append("\n");
-        buffer.append("Carton Number: \"" + cursor.getInt(8)+"\"\n");
+        buffer.append("Carton Number: \"" + cursor.getString(8)+"\"\n");
         buffer.append("\n");
         return buffer.toString();
     }

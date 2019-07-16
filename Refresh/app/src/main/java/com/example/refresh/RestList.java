@@ -43,7 +43,7 @@ public class RestList extends AppCompatActivity {
         final ArrayList<String> list = new ArrayList<>();
         while(cursor.moveToNext()){
             int status = cursor.getInt(4);
-            if(status == Delivery_Item.COMPLETE){
+//            if(status == Delivery_Item.COMPLETE){
                 String orderNumber = cursor.getString(0);
                 list.add(orderNumber);
 
@@ -61,7 +61,7 @@ public class RestList extends AppCompatActivity {
                         +"\nCartonNumber: " + cartionNumber
                 );
             }
-        }
+//        }
 
         if(list.isEmpty()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -95,5 +95,11 @@ public class RestList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(RestList.this, Menu.class);
+        startActivity(intent);
     }
 }

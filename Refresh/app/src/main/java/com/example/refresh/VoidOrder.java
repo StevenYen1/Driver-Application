@@ -43,7 +43,7 @@ public class VoidOrder extends AppCompatActivity {
             details_string += "\nRecipient: "+cursor.getString(2);
             details_string += "\nItem Name: "+cursor.getString(3);
             details_string += "\nQuantity: "+cursor.getInt(7);
-            details_string += "\nCarton Number: "+cursor.getInt(8);
+            details_string += "\nCarton Number: "+cursor.getString(8);
             display.add("Order Number: " + cursor.getString(0));
             orderNums.add(cursor.getString(0));
             details.add(details_string);

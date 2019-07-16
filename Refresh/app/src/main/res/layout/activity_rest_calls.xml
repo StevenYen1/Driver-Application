@@ -4,33 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RestCalls">
+    tools:context=".RestCalls"
+    android:background="@drawable/background_gradient_dark"
+    >
 
     <LinearLayout
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Response Information:"
+            android:gravity="center"
+            android:textColor="@color/white"
+            />
 
         <TextView
             android:id="@+id/rest_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:paddingLeft="40dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:text="Loading Data..."
-            app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
-            app:layout_constraintEnd_toEndOf="@+id/nestedScrollView"
-            app:layout_constraintStart_toStartOf="@+id/nestedScrollView"
-            app:layout_constraintTop_toTopOf="@+id/nestedScrollView" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageview2"
+            android:background="@color/white"
+            android:textColor="@color/black"
             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blue"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginTop="30dp"
+                android:text="Signature:"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageview2"
+                android:layout_marginBottom="20dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 

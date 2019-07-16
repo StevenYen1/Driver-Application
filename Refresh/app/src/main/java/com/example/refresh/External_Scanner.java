@@ -122,7 +122,7 @@ public class External_Scanner extends AppCompatActivity {
             buffer.append("Recipient: " + rawOrders.getString(2)+"\n");
             buffer.append("Item: " + rawOrders.getString(3)+"\n");
             buffer.append("Quantity: " + rawOrders.getInt(7)+"\n");
-            buffer.append("Carton Number: " + rawOrders.getInt(8)+"\n");
+            buffer.append("Carton Number: " + rawOrders.getString(8)+"\n");
             buffer.append("--------------------------------------------------------\n");
             buffer.append("\n");
             buffer.append("\n");
@@ -246,7 +246,7 @@ public class External_Scanner extends AppCompatActivity {
             buffer.append("Recipient: " + rawOrders.getString(2)+"\n");
             buffer.append("Item: " + rawOrders.getString(3)+"\n");
             buffer.append("Quantity: " + rawOrders.getInt(7)+"\n");
-            buffer.append("Carton Number: " + rawOrders.getInt(8)+"\n");
+            buffer.append("Carton Number: " + rawOrders.getString(8)+"\n");
             buffer.append("--------------------------------------------------------\n");
             buffer.append("\n");
             buffer.append("\n");
@@ -282,7 +282,7 @@ public class External_Scanner extends AppCompatActivity {
             buffer.append("Recipient: " + rawOrders.getString(2)+"\n");
             buffer.append("Item: " + rawOrders.getString(3)+"\n");
             buffer.append("Quantity: " + rawOrders.getInt(7)+"\n");
-            buffer.append("Carton Number: " + rawOrders.getInt(8)+"\n");
+            buffer.append("Carton Number: " + rawOrders.getString(8)+"\n");
             buffer.append("--------------------------------------------------------\n");
             buffer.append("\n");
             buffer.append("\n");

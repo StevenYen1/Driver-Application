@@ -68,9 +68,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void showMessageMap(String title, String message, final String id){
         final com.example.refresh.RecyclerView recyclerView = (com.example.refresh.RecyclerView) mContext;
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View mView = inflater.inflate(R.layout.order_details_layout, null);
         builder.setCancelable(true);
-        builder.setTitle(title);
+        TextView titleView = mView.findViewById(R.id.details_title);
+        titleView.setText(title);
+        TextView bodyView = mView.findViewById(R.id.details_body);
+        bodyView.setText(message);
         builder.setPositiveButton("Map", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
@@ -83,7 +88,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 dialog.cancel();
             }
         });
-        builder.setMessage(message);
+        builder.setView(mView);
         builder.show();
     }
 
