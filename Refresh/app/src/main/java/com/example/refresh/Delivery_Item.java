@@ -13,7 +13,15 @@ public class Delivery_Item {
     private String recipient;
     private String signature;
     private int quantity;
-    private int cartonNumber;
+    private String cartonNumber;
+
+    public String getCartonNumber() {
+        return cartonNumber;
+    }
+
+    public void setCartonNumber(String cartonNumber) {
+        this.cartonNumber = cartonNumber;
+    }
 
     public int getQuantity() {
         return quantity;
@@ -33,7 +41,7 @@ public class Delivery_Item {
         this.recipient = "N/A";
         this.signature = "No Signature Yet";
         this.quantity = 1;
-        this.cartonNumber = 0;
+        this.cartonNumber = "0000";
 
     }
 
@@ -45,7 +53,7 @@ public class Delivery_Item {
         this.item = item;
         this.signature = "No Signature Yet";
         this.quantity = 1;
-        this.cartonNumber = 0;
+        this.cartonNumber = "0000";
     }
 
     public Delivery_Item(String o, String a, String r, String i, int s){
@@ -55,7 +63,7 @@ public class Delivery_Item {
         this.item = i;
         this.status = s;
         this.quantity = 1;
-        this.cartonNumber = 0;
+        this.cartonNumber = "0000";
     }
 
     public Delivery_Item(String orderNum, String orderStr) {
@@ -66,7 +74,7 @@ public class Delivery_Item {
         this.item = "database.getItem()";
         this.signature = "No Signature Yet";
         this.quantity = 1;
-        this.cartonNumber = 0;
+        this.cartonNumber = "0000";
     }
 
     public String getOrderNumber() {

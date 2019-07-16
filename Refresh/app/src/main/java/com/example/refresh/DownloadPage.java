@@ -40,7 +40,7 @@ public class DownloadPage extends AppCompatActivity {
         myDb.clear();
         int i = 0;
         for(Delivery_Item x: list){
-            myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity());
+            myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity(), x.getCartonNumber());
             i++;
         }
 

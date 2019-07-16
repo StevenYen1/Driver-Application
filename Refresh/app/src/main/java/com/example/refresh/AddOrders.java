@@ -22,6 +22,7 @@ public class AddOrders extends AppCompatActivity {
     EditText recipient;
     EditText item;
     EditText quantity;
+    EditText cartonNum;
     FancyButton submit;
     DatabaseHelper myDb;
 
@@ -36,6 +37,7 @@ public class AddOrders extends AppCompatActivity {
         recipient = findViewById(R.id.add_recipient);
         item = findViewById(R.id.add_item);
         quantity = findViewById(R.id.add_quantity);
+        cartonNum = findViewById(R.id.add_carton_num);
         submit = findViewById(R.id.add_submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,10 +56,11 @@ public class AddOrders extends AppCompatActivity {
                             String newRecip = recipient.getText().toString();
                             String newItem = item.getText().toString();
                             String newQuantity = quantity.getText().toString();
+                            String newCarton = cartonNum.getText().toString();
 
                             Cursor cursor = myDb.getInstance(newNo);
                             if(cursor.getCount()==0) {
-                                myDb.insertData(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize(DatabaseHelper.TABLE_NAME), Integer.parseInt(newQuantity));
+                                myDb.insertData(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize(DatabaseHelper.TABLE_NAME), Integer.parseInt(newQuantity), newCarton);
                                 Toast.makeText(AddOrders.this, "A new order has been created.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AddOrders.this, Menu.class);
                                 startActivity(intent);

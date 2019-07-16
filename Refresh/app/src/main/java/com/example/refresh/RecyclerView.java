@@ -162,7 +162,7 @@ public class RecyclerView extends AppCompatActivity {
                         int position = viewHolder.getAdapterPosition();
                         ArrayList<String> deletedItem = myDb.removeIndex(allOrders.get(position), position);
                         adapter.notifyItemRemoved(position);
-                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),parseInt(deletedItem.get(4)),deletedItem.get(5), allOrders.size()-1, parseInt(deletedItem.get(7)));
+                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),parseInt(deletedItem.get(4)),deletedItem.get(5), allOrders.size()-1, parseInt(deletedItem.get(6)), deletedItem.get(7));
 
                         adapter.notifyItemInserted(allOrders.size()-1);
 
