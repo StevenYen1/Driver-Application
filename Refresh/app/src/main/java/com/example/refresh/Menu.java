@@ -186,6 +186,7 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Menu.this, MainActivity.class);
+                intent.putExtra("logout", "logout");
                 startActivity(intent);
             }
         });
@@ -265,8 +266,11 @@ public class Menu extends AppCompatActivity {
                     return "THERE IS NO INTERNET CONNECTION";
                 }
             }
+            if(returnString.isEmpty()){
+                return "THERE IS NOTHING TO SYNC";
+            }
             returnString += "\nEND OF RESULTS";
-            return returnString;
+            return "SYNC COMPLETE. RESULTS DOWN BELOW: \n\n"+returnString;
         }
 
         @TargetApi(Build.VERSION_CODES.O)

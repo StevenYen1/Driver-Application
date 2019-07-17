@@ -42,12 +42,12 @@ public class AddOrders extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEmpty(orderno) || isEmpty(address)|| isEmpty(recipient) || isEmpty(item) || isEmpty(quantity)){
+                if(isEmpty(orderno) || isEmpty(address)|| isEmpty(recipient) || isEmpty(item) || isEmpty(quantity) || isEmpty(cartonNum)){
                     Toast.makeText(AddOrders.this, "PLEASE ENTER DATA FOR ALL ARGUMENTS", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     try {
-                        if(!isParsable(quantity.getText().toString())) {
+                        if(!isParsable(quantity.getText().toString()) || Integer.parseInt(quantity.getText().toString()) < 1) {
                             Toast.makeText(AddOrders.this, "QUANTITY MUST BE A VALID VALUE", Toast.LENGTH_SHORT).show();
                         }
                         else{

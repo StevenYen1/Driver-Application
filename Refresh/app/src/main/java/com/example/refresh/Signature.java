@@ -46,7 +46,7 @@ public class Signature extends Activity {
     private static String signatureImage;
     String filepath;
     private String recipient = "No Recipient Yet";
-    private static ArrayList<String> currentOrders = new ArrayList<>();
+    private ArrayList<String> currentOrders = new ArrayList<>();
     DatabaseHelper myDb;
 
     @Override
@@ -130,10 +130,6 @@ public class Signature extends Activity {
 
                 TextView async = new TextView(Signature.this);
                 startAsycTask(async);
-                for(String x: currentOrders){
-                    Log.d(TAG, "onClick: signatureImage: " + signatureImage);
-                    myDb.updateStatus(x, Delivery_Item.COMPLETE);
-                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
                 builder.setTitle("Order Successful");
                 builder.setMessage("The order has been confirmed.");
@@ -221,6 +217,13 @@ public class Signature extends Activity {
                         .field("signature", file)
                         .field("shipmentId", currentOrders.get(0))
                         .field("submissionDate", ""+time).asString();
+
+                if(postResponse.getCode() > 204){
+                    myDb.updateStatus(currentOrders.get(0), Delivery_Item.FAIL_SEND);
+                }
+                else{
+                    myDb.updateStatus(currentOrders.get(0), Delivery_Item.COMPLETE);
+                }
 
                 return postResponse.getBody();
 

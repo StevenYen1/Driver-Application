@@ -102,7 +102,7 @@ public class DownloadPage extends AppCompatActivity {
     }
 
     public void staticList(){
-        Delivery_Item item1 = new Delivery_Item("9082416397", "1600 Pennsylvania Ave, Washington, DC", "President of the US", "A Book", 0, 3, "7364322720");
+        Delivery_Item item1 = new Delivery_Item("9082416390", "1600 Pennsylvania Ave, Washington, DC", "President of the US", "A Book", 0, 3, "7364322720");
         Delivery_Item item2 = new Delivery_Item("6315422512", "968 Woodside Circle, Glendale, FL 32433", "John Smith", "Hammer", 0, 1, "3258756119");
         Delivery_Item item3 = new Delivery_Item("8971204327", "3668 Young Road Boise, Idaho 83716", "Anthony Green", "Extention Cable", 0, 2, "3419677734");
         Delivery_Item item4 = new Delivery_Item("5985212781", "3295 Fantages Way, Bingham, ME 04920", "Trisha Patricks", "Shovel", 0 , 1, "0424509038");

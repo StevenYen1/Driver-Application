@@ -12,7 +12,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,7 +76,13 @@ public class MainActivity extends AppCompatActivity {
         pass = textInputPass.getText().toString();
         intent.putExtra("username", user);
         intent.putExtra("pass", pass);
-        startActivity(intent);
+        if(getIntent().getStringExtra("logout")!=null){
+            Intent continueFromSession = new Intent(MainActivity.this, Menu.class);
+            startActivity(continueFromSession);
+        }
+        else{
+            startActivity(intent);
+        }
     }
 
 }
