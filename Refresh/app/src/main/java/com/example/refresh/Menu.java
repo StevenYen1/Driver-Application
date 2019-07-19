@@ -66,7 +66,7 @@ public class Menu extends AppCompatActivity {
                 openCamera.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openActivity(Scanner.class);
+                        openActivity(Scandit.class);
                     }
                 });
 

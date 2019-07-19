@@ -69,6 +69,7 @@ public class AdjustOrders extends AppCompatActivity {
                 if(!filterBy.equals("No Filter")){
                     ArrayList<String> searchList = new ArrayList<>();
                     orderNums.clear();
+                    quantities.clear();
                     Cursor cursor = myDb.queryInstance(filterBy, search.getText().toString());
                     while(cursor.moveToNext()){
                         String orderNum = cursor.getString(0);
@@ -76,6 +77,7 @@ public class AdjustOrders extends AppCompatActivity {
                         int quantity = cursor.getInt(7);
                         searchList.add("Item: " + item + "\nQuantity: " + quantity);
                         orderNums.add(orderNum);
+                        quantities.add(quantity);
                     }
 
                     ArrayAdapter newAdapter = new ArrayAdapter(AdjustOrders.this, android.R.layout.simple_list_item_1, searchList);

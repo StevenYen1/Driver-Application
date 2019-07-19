@@ -85,7 +85,6 @@ public class scannedItems extends AppCompatActivity {
                     selectedItems.add(ordernumber);
                 }
             }
-
         }
     }
 
@@ -143,10 +142,8 @@ public class scannedItems extends AppCompatActivity {
     public void openSign(){
         Intent intent = new Intent(this, Signature.class);
         if(selectedItems.isEmpty()){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Error: ");
+            AlertDialog.Builder builder = buildStandardMessage("Error:", "Please select an order to sign");
             builder.setCancelable(true);
-            builder.setMessage("Please select an order to sign");
             builder.show();
             return;
         }
@@ -160,7 +157,7 @@ public class scannedItems extends AppCompatActivity {
             intent = new Intent(this, External_Scanner.class);
         }
         else{
-            intent = new Intent(this, Scanner.class);
+            intent = new Intent(this, Scandit.class);
         }
         startActivity(intent);
     }
@@ -171,8 +168,8 @@ public class scannedItems extends AppCompatActivity {
     }
 
     public void noOrders(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("There are no orders available");
+
+        AlertDialog.Builder builder = buildStandardMessage("Error:", "There are no orders available.");
         builder.setCancelable(false);
         builder.setPositiveButton("Scan", new DialogInterface.OnClickListener() {
             @Override
@@ -187,6 +184,13 @@ public class scannedItems extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    public AlertDialog.Builder buildStandardMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        return builder;
     }
 
 }

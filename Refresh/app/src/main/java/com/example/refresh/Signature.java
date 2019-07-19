@@ -16,6 +16,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mashape.unirest.http.HttpResponse;
@@ -130,16 +131,16 @@ public class Signature extends Activity {
 
                 TextView async = new TextView(Signature.this);
                 startAsycTask(async);
-                AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
-                builder.setTitle("Order Successful");
-                builder.setMessage("The order has been confirmed.");
-                builder.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        returnToPrev();
-                    }
-                });
-                builder.show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
+//                builder.setTitle("Order Successful");
+//                builder.setMessage("The order has been confirmed.");
+//                builder.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        returnToPrev();
+//                    }
+//                });
+//                builder.show();
             }
         });
     }
@@ -160,7 +161,6 @@ public class Signature extends Activity {
 
         String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
         myDb.setSignature(id, encodedImage);
-        Log.d(TAG, "convertImageToFile: " + encodedImage);
         signatureImage = encodedImage;
         return f;
     }
@@ -201,37 +201,41 @@ public class Signature extends Activity {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected String doInBackground(Integer... integers) {
-            File file = null;
-            try {
-                file = convertImageToFile(currentOrders.get(0));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            Date date = new Date();
-            long time = date.getTime();
-            try {
-                final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/capture")
-                        .basicAuth("epts_app", "uB25J=UUwU")
-                        .field("status", "CLOSED")
-                        .field("signature", file)
-                        .field("shipmentId", currentOrders.get(0))
-                        .field("submissionDate", ""+time).asString();
-
-                if(postResponse.getCode() > 204){
-                    myDb.updateStatus(currentOrders.get(0), Delivery_Item.FAIL_SEND);
-                }
-                else{
-                    myDb.updateStatus(currentOrders.get(0), Delivery_Item.COMPLETE);
+            for(int i = 0; i < currentOrders.size(); i++){
+                File file = null;
+                try {
+                    file = convertImageToFile(currentOrders.get(i));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
-                return postResponse.getBody();
+                Date date = new Date();
+                long time = date.getTime();
+                try {
+                    final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/capture")
+                            .basicAuth("epts_app", "uB25J=UUwU")
+                            .field("status", "CLOSED")
+                            .field("signature", file)
+                            .field("shipmentId", currentOrders.get(i))
+                            .field("submissionDate", ""+time).asString();
 
-            } catch (UnirestException e) {
-                e.printStackTrace();
-                myDb.updateStatus(currentOrders.get(0), Delivery_Item.FAIL_SEND);
+                    if(postResponse.getCode() > 204){
+                        myDb.updateStatus(currentOrders.get(i), Delivery_Item.FAIL_SEND);
+                    }
+                    else{
+                        myDb.updateStatus(currentOrders.get(i), Delivery_Item.COMPLETE);
+                    }
+                    Log.d(TAG, "doInBackground: " + postResponse.getBody());
+
+
+
+                } catch (UnirestException e) {
+                    e.printStackTrace();
+                    myDb.updateStatus(currentOrders.get(i), Delivery_Item.FAIL_SEND);
+                }
             }
-            return "";
+            return "Complete";
         }
 
         @TargetApi(Build.VERSION_CODES.O)
@@ -242,7 +246,7 @@ public class Signature extends Activity {
             else{
                 Log.d(TAG, "Post Successful: "+result);
             }
-
+            returnToPrev();
         }
     }
 }
