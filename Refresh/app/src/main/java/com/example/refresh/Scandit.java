@@ -74,7 +74,7 @@ public class Scandit extends Activity implements OnScanListener {
         List<Barcode> list = scanSession.getNewlyRecognizedCodes();
         if(myDb.getStatus(list.get(0).getData())==INCOMPLETE){
             myDb.updateStatus(list.get(0).getData(), SCANNED);
-            Toast.makeText(this, "Scan Complete: " + list.get(0).getData(), Toast.LENGTH_SHORT).show();
+            scanSuccess(list.get(0).getData());
         }
 
     }
@@ -251,10 +251,41 @@ public class Scandit extends Activity implements OnScanListener {
 
     public void displayAlertMessage(String message, DialogInterface.OnClickListener listener){
         new AlertDialog.Builder(Scandit.this)
+                .setTitle("Alert:")
                 .setMessage(message)
                 .setPositiveButton("Ok", listener)
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    public void scanSuccess(String id){
+        mPicker.pauseScanning();
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setTitle("Success!")
+                .setMessage("Successfully scanned " + id);
+
+        final AlertDialog alert = dialog.create();
+        alert.show();
+
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (alert.isShowing()) {
+                    alert.dismiss();
+                    mPicker.resumeScanning();
+                }
+            }
+        };
+
+        alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacks(runnable);
+            }
+        });
+
+        handler.postDelayed(runnable, 1000);
     }
 }

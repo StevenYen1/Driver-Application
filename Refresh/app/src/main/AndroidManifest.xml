@@ -19,7 +19,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        >
         <activity android:name=".Scandit"/>
         <activity android:name=".RestList" />
         <activity

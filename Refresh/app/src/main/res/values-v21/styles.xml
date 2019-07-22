@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="colorControlHighlight_blue">
+        <item name="android:colorControlHighlight">@color/middle_blue</item>
+    </style>
+</resources>

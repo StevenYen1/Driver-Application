@@ -22,4 +22,8 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
+    <style name="colorControlHighlight_blue">
+        <item name="android:colorControlHighlight">@color/blue</item>
+    </style>
+
 </resources>

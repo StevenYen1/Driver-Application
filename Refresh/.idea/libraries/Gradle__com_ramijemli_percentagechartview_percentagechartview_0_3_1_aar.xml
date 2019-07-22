@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.ramijemli.percentagechartview:percentagechartview:0.3.1@aar">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/71aad4e333066fdb812faa7efd0ef644/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/71aad4e333066fdb812faa7efd0ef644/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/71aad4e333066fdb812faa7efd0ef644/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ramijemli.percentagechartview/percentagechartview/0.3.1/bd512c85fbce860d4c2897e11f28e7f34407127/percentagechartview-0.3.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

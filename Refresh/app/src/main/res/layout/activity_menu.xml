@@ -1,224 +1,300 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Menu"
-    android:background="@drawable/background_gradient_dark">
+    android:background="@drawable/background_gradient_dark"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
+        android:id="@+id/linearlayout_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        app:cardElevation="3dp"
-        fancy:cardCornerRadius="5dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:textSize="22sp"
+            android:text="Manage Route Menu"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:fontFamily="@font/metrophobic"
+            />
+
+        <com.ramijemli.percentagechartview.PercentageChartView
+            android:id="@+id/current_progress_chart"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            app:pcv_mode="ring"
+            app:pcv_progressBarThickness="8dp"
+            app:pcv_backgroundBarThickness="8dp"
+            app:pcv_orientation="clockwise"
+            app:pcv_progressColor="@color/success"
+            app:pcv_progressBarStyle="square"
+            app:pcv_backgroundColor="#DADADA"
+            app:pcv_backgroundBarColor="#DADADA"
+            app:pcv_progress="0"
+            app:pcv_startAngle="90"/>
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="Current Delivery Progress"
+            android:gravity="center"
+            android:textColor="#DADADA"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/scan_btn_open"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:theme="@style/colorControlHighlight_blue"
+            android:clickable="true"
+            app:cardElevation="3dp"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
-                android:id="@+id/linearlayout_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp"
-                    android:textSize="26sp"
-                    android:text="Manage Route Menu"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/metrophobic"
+                    android:text="Scan Packages"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/roboto_light"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="6dp"
                     />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Opens Scanning Feature. Leads to Signature Capture."
+                    android:textSize="13dp"
+                    android:fontFamily="@font/roboto_light" />
+
+
             </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/view_route_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:theme="@style/colorControlHighlight_blue"
+            android:clickable="true"
+            app:cardElevation="3dp"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearlayout1"
-                android:layout_below="@+id/linearlayout_title"
-                android:paddingLeft="20dip"
-                android:paddingTop="20dip"
-                android:paddingRight="20dip"
-                android:paddingBottom="15dip">
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
 
-                <mehdi.sakout.fancybuttons.FancyButton
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/scan_btn_open"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:paddingBottom="25dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="25dp"
-                    fancy:fb_textFontRes="@font/roboto_light"
-                    fancy:fb_textGravity="center"
-                    fancy:fb_defaultColor="#BEBEBE"
-                    fancy:fb_focusColor="@color/satblue"
-                    fancy:fb_textColor="#000"
-                    fancy:fb_radius="2dp"
-                    fancy:fb_text="Open Scanner"
-                    fancy:fb_textSize="20sp"
-                    fancy:fb_fontIconResource="&#xf02a;"
-                    fancy:fb_fontIconSize="25sp"
-                    fancy:fb_iconPosition="left"
+                    android:text="View Route"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/roboto_light"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="6dp"
                     />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="View individual delivery information. Adjust order of deliveries."
+                    android:textSize="13dp"
+                    android:fontFamily="@font/roboto_light" />
+
+
             </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/edit_orders_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:theme="@style/colorControlHighlight_blue"
+            android:clickable="true"
+            app:cardElevation="3dp"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearlayout2"
-                android:layout_below="@+id/linearlayout1"
-                android:orientation="horizontal"
-                android:paddingLeft="20dip"
-                android:paddingRight="20dip"
-                android:paddingBottom="15dip">
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
 
-                <mehdi.sakout.fancybuttons.FancyButton
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/view_route_btn"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:paddingBottom="25dp"
-                    android:paddingRight="27dp"
-                    android:paddingTop="25dp"
-                    fancy:fb_textFontRes="@font/roboto_light"
-                    fancy:fb_textGravity="center"
-                    fancy:fb_defaultColor="#BEBEBE"
-                    fancy:fb_focusColor="@color/satblue"
-                    fancy:fb_textColor="#000"
-                    fancy:fb_radius="2dp"
-                    fancy:fb_text="View Route"
-                    fancy:fb_textSize="20sp"
-                    fancy:fb_fontIconResource="&#xf0d1;"
-                    fancy:fb_fontIconSize="25sp"
-                    fancy:fb_iconPosition="left"
+                    android:text="Edit Orders"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/roboto_light"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="6dp"
                     />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Additional features for drivers given certain circumstances."
+                    android:textSize="13dp"
+                    android:fontFamily="@font/roboto_light" />
+
+
             </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/call_server_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:theme="@style/colorControlHighlight_blue"
+            android:clickable="true"
+            app:cardElevation="3dp"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearlayout3"
-                android:layout_below="@+id/linearlayout2"
-                android:orientation="horizontal"
-                android:paddingLeft="20dip"
-                android:paddingRight="20dip"
-                android:paddingBottom="15dip">
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
 
-                <mehdi.sakout.fancybuttons.FancyButton
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edit_orders_btn"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:paddingBottom="25dp"
-                    android:paddingRight="27dp"
-                    android:paddingTop="25dp"
-                    fancy:fb_textFontRes="@font/roboto_light"
-                    fancy:fb_textGravity="center"
-                    fancy:fb_defaultColor="#BEBEBE"
-                    fancy:fb_focusColor="@color/satblue"
-                    fancy:fb_textColor="#000"
-                    fancy:fb_radius="2dp"
-                    fancy:fb_text="Edit Orders"
-                    fancy:fb_textSize="20sp"
-                    fancy:fb_fontIconResource="&#xf044;"
-                    fancy:fb_fontIconSize="25sp"
-                    fancy:fb_iconPosition="left"
+                    android:text="Call Server"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/roboto_light"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="6dp"
                     />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Retrieve signatures from or sync completed deliveries to the online server."
+                    android:textSize="13dp"
+                    android:fontFamily="@font/roboto_light" />
+
+
             </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/logout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:theme="@style/colorControlHighlight_blue"
+            android:clickable="true"
+            app:cardElevation="3dp"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearlayout4"
-                android:layout_below="@+id/linearlayout3"
-                android:orientation="horizontal"
-                android:paddingLeft="20dip"
-                android:paddingRight="20dip">
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
 
-                <mehdi.sakout.fancybuttons.FancyButton
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/call_server_btn"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:paddingBottom="25dp"
-                    android:paddingRight="27dp"
-                    android:paddingTop="25dp"
-                    fancy:fb_textFontRes="@font/roboto_light"
-                    fancy:fb_textGravity="center"
-                    fancy:fb_defaultColor="#BEBEBE"
-                    fancy:fb_focusColor="@color/satblue"
-                    fancy:fb_textColor="#000"
-                    fancy:fb_radius="2dp"
-                    fancy:fb_text="Call Server"
-                    fancy:fb_textSize="20sp"
-                    fancy:fb_fontIconResource="&#xf0c2;"
-                    fancy:fb_fontIconSize="25sp"
-                    fancy:fb_iconPosition="left"
+                    android:text="Sign Out"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/roboto_light"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="6dp"
                     />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Exit of the application. All changes will be saved to your account."
+                    android:textSize="13dp"
+                    android:fontFamily="@font/roboto_light" />
+
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/linearlayout5"
-                android:layout_below="@+id/linearlayout4"
-                android:orientation="horizontal"
-                android:paddingLeft="20dip"
-                android:paddingTop="15dip"
-                android:paddingRight="20dip"
-                android:paddingBottom="20dip">
 
-                <mehdi.sakout.fancybuttons.FancyButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/logout_btn"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:paddingBottom="25dp"
-                    android:paddingRight="40dp"
-                    android:paddingTop="25dp"
-                    fancy:fb_textFontRes="@font/roboto_light"
-                    fancy:fb_textGravity="center"
-                    fancy:fb_defaultColor="#BEBEBE"
-                    fancy:fb_focusColor="@color/satblue"
-                    fancy:fb_textColor="#000"
-                    fancy:fb_radius="2dp"
-                    fancy:fb_text="Log Out"
-                    fancy:fb_textSize="20sp"
-                    fancy:fb_fontIconResource="&#xf191;"
-                    fancy:fb_fontIconSize="25sp"
-                    fancy:fb_iconPosition="left"
-                    />
+        </android.support.v7.widget.CardView>
 
-            </LinearLayout>
 
-        </RelativeLayout>
+    </LinearLayout>
 
-    </android.support.v7.widget.CardView>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

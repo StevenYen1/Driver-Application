@@ -3,24 +3,24 @@ package com.example.refresh;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.ramijemli.percentagechartview.PercentageChartView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,14 +33,16 @@ import static android.support.constraint.Constraints.TAG;
 
 public class Menu extends AppCompatActivity {
 
-    private FancyButton scan_btn;
-    private FancyButton viewOrders;
-    private FancyButton editOrders;
-    private FancyButton restCall;
-    private FancyButton logout;
+    private CardView scan_btn;
+    private CardView viewOrders;
+    private CardView editOrders;
+    private CardView restCall;
+    private CardView logout;
     private DatabaseHelper myDb;
     private ArrayList<String> sync_ids = new ArrayList<>();
     private ArrayList<String> sync_signs = new ArrayList<>();
+    private PercentageChartView currentProgress;
+    private Handler mHandler = new Handler();
 
 
     @Override
@@ -53,43 +55,32 @@ public class Menu extends AppCompatActivity {
         editOrders = findViewById(R.id.edit_orders_btn);
         restCall = findViewById(R.id.call_server_btn);
         logout = findViewById(R.id.logout_btn);
+        currentProgress = findViewById(R.id.current_progress_chart);
+        setCurrentProgress();
 
 
-        scan_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+        scan_btn.setOnClickListener(v -> {
+            Runnable mUpdateTimeTask = () -> {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
                 builder.setCancelable(true);
                 View mView = getLayoutInflater().inflate(R.layout.choose_scan_layout, null);
                 FancyButton openCamera = mView.findViewById(R.id.camera_btn);
                 FancyButton openExternal = mView.findViewById(R.id.external_btn);
-                openCamera.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(Scandit.class);
-                    }
-                });
 
-                openExternal.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) { openActivity(External_Scanner.class);
-                    }
-                });
+                openCamera.setOnClickListener(v1 -> openActivity(Scandit.class));
+                openExternal.setOnClickListener(v12 -> openActivity(External_Scanner.class));
+
                 builder.setView(mView);
                 builder.show();
-            }
+            };
+            mHandler.postDelayed(mUpdateTimeTask, 100);
         });
 
-        viewOrders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity(RecyclerView.class);
-            }
-        });
+        viewOrders.setOnClickListener(v -> openActivity(RecyclerView.class));
 
-        editOrders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        editOrders.setOnClickListener(v -> {
+            Runnable mUpdateTimeTask = () -> {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
                 builder.setCancelable(true);
                 View mView = getLayoutInflater().inflate(R.layout.edit_orders_layout, null);
@@ -99,96 +90,56 @@ public class Menu extends AppCompatActivity {
                 FancyButton reopen = mView.findViewById(R.id.reopen);
                 FancyButton adjust = mView.findViewById(R.id.adjust_orders);
                 FancyButton void_order = mView.findViewById(R.id.void_orders);
-                add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(AddOrders.class);
-                    }
-                });
 
-                transfer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(TransferOrders.class);
-                    }
-                });
+                add.setOnClickListener(v13 -> openActivity(AddOrders.class));
+                transfer.setOnClickListener(v14 -> openActivity(TransferOrders.class));
+                close.setOnClickListener(v15 -> openActivity(CloseOrders.class));
+                reopen.setOnClickListener(v16 -> openActivity(ReopenOrders.class));
+                adjust.setOnClickListener(v17 -> openActivity(AdjustOrders.class));
+                void_order.setOnClickListener(v18 -> openActivity(VoidOrder.class));
 
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(CloseOrders.class);
-                    }
-                });
-
-                reopen.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(ReopenOrders.class);
-                    }
-                });
-
-                adjust.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(AdjustOrders.class);
-                    }
-                });
-
-                void_order.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(VoidOrder.class);
-                    }
-                });
                 builder.setView(mView);
                 builder.show();
-            }
+            };
+            mHandler.postDelayed(mUpdateTimeTask, 100);
         });
 
-        restCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        restCall.setOnClickListener(v -> {
+            Runnable mUpdateTimeTask = ()-> {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
                 builder.setCancelable(true);
                 View mView = getLayoutInflater().inflate(R.layout.choose_rest_layout, null);
                 FancyButton get_btn = mView.findViewById(R.id.get_call);
                 FancyButton post_btn = mView.findViewById(R.id.post_call);
 
-                get_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openActivity(RestList.class);
-                    }
-                });
-                post_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "onClick: ----------------------------------------------");
-                        sync_signs.clear();
-                        sync_ids.clear();
-                        Cursor cursor = myDb.getAllData();
-                        while(cursor.moveToNext()){
-                            if(cursor.getInt(4) == Delivery_Item.FAIL_SEND){
-                                sync_ids.add(cursor.getString(0));
-                                sync_signs.add(cursor.getString(5));
-                            }
+                get_btn.setOnClickListener(v19 -> openActivity(RestList.class));
+                post_btn.setOnClickListener(v110 -> {
+                    sync_signs.clear();
+                    sync_ids.clear();
+
+                    Cursor cursor = myDb.getAllData();
+                    while(cursor.moveToNext()){
+                        if(cursor.getInt(4) == Delivery_Item.FAIL_SEND){
+                            sync_ids.add(cursor.getString(0));
+                            sync_signs.add(cursor.getString(5));
                         }
-                        Log.d(TAG, "onClick: # of loops: " + sync_signs.size());
-                        startAsyncTask(v);
                     }
+                    startAsyncTask(v110);
                 });
+
                 builder.setView(mView);
                 builder.show();
-            }
+            };
+            mHandler.postDelayed(mUpdateTimeTask, 100);
         });
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        logout.setOnClickListener(v -> {
+            Runnable mUpdateTimeTask = () -> {
                 Intent intent = new Intent(Menu.this, MainActivity.class);
                 intent.putExtra("logout", "logout");
                 startActivity(intent);
-            }
+            };
+            mHandler.postDelayed(mUpdateTimeTask, 100);
         });
     }
 
@@ -220,6 +171,21 @@ public class Menu extends AppCompatActivity {
         fos.close();
 
         return f;
+    }
+
+    private void setCurrentProgress(){
+        Cursor cursor = myDb.getAllData();
+        float completed = 0;
+        float total = 0;
+        while(cursor.moveToNext()){
+            int status = cursor.getInt(4);
+            if(status==Delivery_Item.COMPLETE || status==Delivery_Item.FAIL_SEND){
+                completed++;
+            }
+            total++;
+        }
+        Log.d(TAG, "setCurrentProgress: " + (completed/total)*100);
+        currentProgress.setProgress((completed/total)*100, true);
     }
 
     private class PostConnection extends AsyncTask<Integer, Integer, String> {
