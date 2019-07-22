@@ -6,31 +6,47 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-
-            android:layout_width="0.0dip"
-            android:layout_weight="1.0"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:id="@+id/image"
-            android:src="@drawable/statusno"/>
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp">
 
         <TextView
-            android:layout_width="0.0dip"
-            android:layout_weight="4.0"
+            android:id="@+id/icon_recycler"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:padding="10dp"
-            android:gravity="center_vertical"
-            android:text="This is an address / order#"
-            android:id="@+id/image_name"
-            android:textColor="#000" />
+            android:gravity="top"
+            android:paddingTop="12dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:gravity="center_vertical"
+                android:text="This is order#"
+                android:textSize="20sp"
+                android:id="@+id/recycle_orderNum"
+                android:fontFamily="@font/roboto_light"
+                android:textColor="#000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:gravity="center_vertical"
+                android:text="This is an address"
+                android:id="@+id/recycle_address"
+                android:fontFamily="@font/roboto_light"
+                android:textColor="#707070" />
+        </LinearLayout>
+
 
     </LinearLayout>
 

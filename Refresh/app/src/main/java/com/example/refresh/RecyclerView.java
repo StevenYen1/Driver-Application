@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
@@ -31,11 +32,6 @@ import static java.lang.Integer.parseInt;
 
 public class RecyclerView extends AppCompatActivity {
 
-    private static final String TAG = "RecyclerView";
-    private static final int INCOMPLETE_ICON = R.drawable.statusno;
-    private static final int COMPLETE_ICON = R.drawable.complete;
-
-    private ArrayList<String> simple_displays = new ArrayList<>();
     private ArrayList<Integer> status_icons = new ArrayList<>();
     private ArrayList<String> more_details = new ArrayList<>();
     private ArrayList<String> addresses = new ArrayList<>();
@@ -67,16 +63,15 @@ public class RecyclerView extends AppCompatActivity {
 
             more_details.add(details);
             allOrders.add(ordernumber);
-            simple_displays.add("#"+ordernumber+'\n'+address);
             addresses.add(address);
-            Log.d(TAG, "Status: "+ status);
+
             if(status == INCOMPLETE || status == SELECTED || status == SCANNED){
                 remainingOrders.add(ordernumber);
-                status_icons.add(INCOMPLETE_ICON);
+                status_icons.add(INCOMPLETE);
             }
             else{
                 completedOrders.add(ordernumber);
-                status_icons.add(COMPLETE_ICON);
+                status_icons.add(COMPLETE);
             }
         }
     }
@@ -125,7 +120,7 @@ public class RecyclerView extends AppCompatActivity {
     private void initRecyclerView(){
         android.support.v7.widget.RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
 
-        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(simple_displays, status_icons, more_details, this);
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(allOrders, addresses, status_icons, more_details, this);
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
@@ -148,7 +143,7 @@ public class RecyclerView extends AppCompatActivity {
 
                         myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
                         status_icons.add(position_target, status_icons.remove(position_dragged));
-                        simple_displays.add(position_target, simple_displays.remove(position_dragged));
+                        addresses.add(position_target, addresses.remove(position_dragged));
                         more_details.add(position_target, more_details.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
                         adapter.notifyItemMoved(position_dragged,position_target);
@@ -167,7 +162,6 @@ public class RecyclerView extends AppCompatActivity {
                         adapter.notifyItemInserted(allOrders.size()-1);
 
                         status_icons.add(status_icons.remove(position));
-                        simple_displays.add(simple_displays.remove(position));
                         allOrders.add(allOrders.remove(position));
                         more_details.add(more_details.remove(position));
                         addresses.add(addresses.remove(position));

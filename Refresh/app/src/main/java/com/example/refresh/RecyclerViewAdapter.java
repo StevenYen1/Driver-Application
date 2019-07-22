@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -16,20 +17,23 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-    private static final String TAG = "RecyclerViewAdapter";
     private ArrayList<String> mImageNames = new ArrayList<>();
     private ArrayList<Integer> mImages = new ArrayList<>();
     private ArrayList<String> mDetails = new ArrayList<>();
+    private ArrayList<String> mAddresses = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(ArrayList<String> imageNames, ArrayList<Integer> images, ArrayList<String> details, Context context){
+    public RecyclerViewAdapter(ArrayList<String> imageNames, ArrayList<String> addresses, ArrayList<Integer> images, ArrayList<String> details, Context context){
         mImageNames = imageNames;
+        mAddresses = addresses;
         mImages = images;
         mContext = context;
         mDetails = details;
@@ -46,12 +50,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @TargetApi(26)
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-        Log.d(TAG, "onBindViewHolder: called");
         com.example.refresh.RecyclerView recyclerView = (com.example.refresh.RecyclerView) mContext;
         final ArrayList<String> addressList = recyclerView.getAddresses();
 
-        viewHolder.image.setImageResource(mImages.get(i));
-        viewHolder.imageName.setText(mImageNames.get(i));
+        Drawable img;
+        if(mImages.get(i)==0){
+            img = mContext.getResources().getDrawable( R.drawable.ic_action_falsecheck );
+        }
+        else{
+            img = mContext.getResources().getDrawable( R.drawable.ic_action_check );
+        }
+        img.setBounds( 0, 0, 60, 60 );
+        viewHolder.imageName.setText("Order Number: " + mImageNames.get(i));
+        viewHolder.imageAddress.setText(mAddresses.get(i));
+        viewHolder.statusIcon.setCompoundDrawables( img, null, null, null );
         viewHolder.moreDetails = mDetails.get(i);
         viewHolder.address = addressList.get(i);
 
@@ -62,9 +74,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 showMessageMap("Order Information", viewHolder.moreDetails, viewHolder.address);
             }
         });
-
-
     }
+
 
     public void showMessageMap(String title, String message, final String id){
         final com.example.refresh.RecyclerView recyclerView = (com.example.refresh.RecyclerView) mContext;
@@ -99,16 +110,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        CircleImageView image;
+        TextView statusIcon;
         TextView imageName;
+        TextView imageAddress;
         RelativeLayout parentLayout;
         String moreDetails;
         String address;
 
         public ViewHolder(View itemView){
             super(itemView);
-            image = itemView.findViewById(R.id.image);
-            imageName = itemView.findViewById(R.id.image_name);
+            statusIcon = itemView.findViewById(R.id.icon_recycler);
+            imageName = itemView.findViewById(R.id.recycle_orderNum);
+            imageAddress = itemView.findViewById(R.id.recycle_address);
             parentLayout = itemView.findViewById(R.id.parent_layout);
             moreDetails = "";
             address = "";
