@@ -27,17 +27,17 @@ import static com.example.refresh.Delivery_Item.SELECTED;
 
 public class External_Scanner extends AppCompatActivity {
 
-    String orders_status;
-    DatabaseHelper myDb;
-    String Barcode="";
-    TextView results;
-    EditText input;
-    String details ="Nothing scanned yet";
-    String title="No title";
-    String id ="No id yet";
-    FancyButton sideMenu;
-    Handler mHandler = new Handler();
-    boolean canUndo = false;
+    private String orders_status;
+    private DatabaseHelper myDb;
+    private String Barcode="";
+    private TextView results;
+    private EditText input;
+    private String details ="Nothing scanned yet";
+    private String title="No title";
+    private String id ="No id yet";
+    private FancyButton sideMenu;
+    private Handler mHandler = new Handler();
+    private boolean canUndo = false;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -53,7 +53,6 @@ public class External_Scanner extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        setOrderInformation();
         setInput();
 
 
@@ -78,7 +77,6 @@ public class External_Scanner extends AppCompatActivity {
     }
 
     public void displayDetails(View v){
-        TextView textView = findViewById(R.id.scan_results);
         AlertDialog.Builder builder = new AlertDialog.Builder(External_Scanner.this);
         View mView = getLayoutInflater().inflate(R.layout.order_details_layout, null);
         TextView title = mView.findViewById(R.id.details_title);
@@ -96,38 +94,6 @@ public class External_Scanner extends AppCompatActivity {
         }
         builder.setView(mView);
         builder.show();
-    }
-
-    public void setOrderInformation(){
-        Cursor rawOrders = myDb.getAllData();
-        if(rawOrders.getCount() == 0){
-            return;
-        }
-
-        StringBuffer buffer = new StringBuffer();
-        while (rawOrders.moveToNext()) {
-            int status = rawOrders.getInt(4);
-            if(status == COMPLETE || status == FAIL_SEND){
-                buffer.append("Current Status: COMPLETED\n");
-            }
-            else if(status == SCANNED){
-                buffer.append("Current Status: SCANNED\n");
-            }
-            else{
-                buffer.append("Current Status: INCOMPLETE\n");
-            }
-            buffer.append("--------------------------------------------------------\n");
-            buffer.append("Order number: " + rawOrders.getString(0)+"\n");
-            buffer.append("Address: " + rawOrders.getString(1)+"\n");
-            buffer.append("Recipient: " + rawOrders.getString(2)+"\n");
-            buffer.append("Item: " + rawOrders.getString(3)+"\n");
-            buffer.append("Quantity: " + rawOrders.getInt(7)+"\n");
-            buffer.append("Carton Number: " + rawOrders.getString(8)+"\n");
-            buffer.append("--------------------------------------------------------\n");
-            buffer.append("\n");
-            buffer.append("\n");
-        }
-        orders_status = buffer.toString();
     }
 
     @Override

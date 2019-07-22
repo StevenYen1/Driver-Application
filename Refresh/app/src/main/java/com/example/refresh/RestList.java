@@ -26,9 +26,9 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 public class RestList extends AppCompatActivity {
 
-    DatabaseHelper myDb;
-    String inputString = "";
-    ArrayList<String> details = new ArrayList<>();
+    private DatabaseHelper myDb;
+    private String inputString = "";
+    private ArrayList<String> details = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,26 +42,23 @@ public class RestList extends AppCompatActivity {
         Cursor cursor = myDb.getAllData();
         final ArrayList<String> list = new ArrayList<>();
         while(cursor.moveToNext()){
-            int status = cursor.getInt(4);
-//            if(status == Delivery_Item.COMPLETE){
-                String orderNumber = cursor.getString(0);
-                list.add(orderNumber);
+            String orderNumber = cursor.getString(0);
+            list.add(orderNumber);
 
-                String address = cursor.getString(1);
-                String recipient = cursor.getString(2);
-                String item = cursor.getString(3);
-                String quantity = cursor.getString(7);
-                String cartionNumber = cursor.getString(8);
+            String address = cursor.getString(1);
+            String recipient = cursor.getString(2);
+            String item = cursor.getString(3);
+            String quantity = cursor.getString(7);
+            String cartionNumber = cursor.getString(8);
 
-                details.add("Order Number: " + orderNumber
-                        +"\nShipment Address: " + address
-                        +"\nRecipient: " + recipient
-                        +"\nItem: " + item
-                        +"\nQuantity: " + quantity
-                        +"\nCartonNumber: " + cartionNumber
-                );
-            }
-//        }
+            details.add("Order Number: " + orderNumber
+                    +"\nShipment Address: " + address
+                    +"\nRecipient: " + recipient
+                    +"\nItem: " + item
+                    +"\nQuantity: " + quantity
+                    +"\nCartonNumber: " + cartionNumber
+            );
+        }
 
         if(list.isEmpty()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -86,7 +83,6 @@ public class RestList extends AppCompatActivity {
         spinnerUI.init();
 
 
-        //right now search bar trumps item select. Maybe make "No id" option for dropdown, then get input text if that is selected
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

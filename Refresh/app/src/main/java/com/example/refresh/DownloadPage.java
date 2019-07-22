@@ -1,19 +1,11 @@
 package com.example.refresh;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.dd.processbutton.FlatButton;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -26,10 +18,10 @@ public class DownloadPage extends AppCompatActivity {
     private FancyButton confirm;
     private FancyButton finish;
     private TextView title;
-    DatabaseHelper myDb;
-    ProgressBar progressBar;
-    int counter = 0;
-    ArrayList<Delivery_Item> list;
+    private DatabaseHelper myDb;
+    private ProgressBar progressBar;
+    private int counter = 0;
+    private ArrayList<Delivery_Item> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

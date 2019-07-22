@@ -20,14 +20,14 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 public class ReopenOrders extends AppCompatActivity {
 
-    DatabaseHelper myDb;
-    ListView listView;
-    TextView detail_display;
-    FancyButton accept;
-    FancyButton cancel;
-    ArrayList<String> display = new ArrayList<>();
-    ArrayList<String> details = new ArrayList<>();
-    ArrayList<String> selectedItems = new ArrayList<>();
+    private DatabaseHelper myDb;
+    private ListView listView;
+    private TextView detail_display;
+    private FancyButton accept;
+    private FancyButton cancel;
+    private ArrayList<String> display = new ArrayList<>();
+    private ArrayList<String> details = new ArrayList<>();
+    private ArrayList<String> selectedItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +42,14 @@ public class ReopenOrders extends AppCompatActivity {
 
         Cursor cursor = myDb.get_closed_all();
         while(cursor.moveToNext()){
-            String details_string = "";
-            details_string += "Order Number: "+cursor.getString(0);
-            details_string += "\nShipment Address: "+cursor.getString(1);
-            details_string += "\nRecipient: "+cursor.getString(2);
-            details_string += "\nItem Name: "+cursor.getString(3);
-            details_string += "\nQuantity: "+cursor.getInt(7);
-            details_string += "\nCarton Number: "+cursor.getString(8);
+
+            String details_string = "Order Number: "+cursor.getString(0)
+            + "\nShipment Address: "+cursor.getString(1)
+            + "\nRecipient: "+cursor.getString(2)
+            + "\nItem Name: "+cursor.getString(3)
+            + "\nQuantity: "+cursor.getInt(7)
+            + "\nCarton Number: "+cursor.getString(8);
+
             display.add(cursor.getString(0));
             details.add(details_string);
         }

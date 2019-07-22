@@ -1,12 +1,11 @@
 package com.example.refresh;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -22,11 +21,11 @@ import java.util.ArrayList;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class VoidOrder extends AppCompatActivity {
-    ListView listView;
-    DatabaseHelper myDb;
-    ArrayList<String> display = new ArrayList<>();
-    ArrayList<String> orderNums = new ArrayList<>();
-    ArrayList<String> details = new ArrayList<>();
+    private ListView listView;
+    private DatabaseHelper myDb;
+    private ArrayList<String> display = new ArrayList<>();
+    private ArrayList<String> orderNums = new ArrayList<>();
+    private ArrayList<String> details = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +36,14 @@ public class VoidOrder extends AppCompatActivity {
 
         Cursor cursor = myDb.getAllData();
         while(cursor.moveToNext()){
-            String details_string = "";
-            details_string += "Order Number: "+cursor.getString(0);
-            details_string += "\nShipment Address: "+cursor.getString(1);
-            details_string += "\nRecipient: "+cursor.getString(2);
-            details_string += "\nItem Name: "+cursor.getString(3);
-            details_string += "\nQuantity: "+cursor.getInt(7);
-            details_string += "\nCarton Number: "+cursor.getString(8);
+
+            String details_string = "Order Number: "+cursor.getString(0)
+            +"\nShipment Address: "+cursor.getString(1)
+            +"\nRecipient: "+cursor.getString(2)
+            +"\nItem Name: "+cursor.getString(3)
+            +"\nQuantity: "+cursor.getInt(7)
+            +"\nCarton Number: "+cursor.getString(8);
+
             display.add("Order Number: " + cursor.getString(0));
             orderNums.add(cursor.getString(0));
             details.add(details_string);

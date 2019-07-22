@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import com.dd.processbutton.iml.ActionProcessButton;
 
 public class MainActivity extends AppCompatActivity {
-    private Button address_button;
     private ActionProcessButton actionProcessButton;
     private EditText textInputUsername;
     private Handler mHandler = new Handler();

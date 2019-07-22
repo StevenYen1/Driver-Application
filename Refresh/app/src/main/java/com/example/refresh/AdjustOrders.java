@@ -34,7 +34,6 @@ public class AdjustOrders extends AppCompatActivity {
     private FancyButton search_btn;
     private FancyButton show_all_btn;
     private AwesomeSpinner dropdown;
-    private String remaining;
     private String filterBy = "No Filter";
     private boolean isMinus = true;
     DatabaseHelper myDb;
@@ -49,10 +48,11 @@ public class AdjustOrders extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adjust_orders);
+
+        myDb = new DatabaseHelper(this);
         listView = findViewById(R.id.adjust_listview);
         search = findViewById(R.id.adjust_search);
         dropdown = findViewById(R.id.adjust_filter);
-        myDb = new DatabaseHelper(this);
 
         show_all_btn = findViewById(R.id.adjust_show_all);
         show_all_btn.setOnClickListener(new View.OnClickListener() {

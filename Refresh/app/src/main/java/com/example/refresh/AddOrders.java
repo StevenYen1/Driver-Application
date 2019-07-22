@@ -17,20 +17,21 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 public class AddOrders extends AppCompatActivity {
 
-    EditText orderno;
-    EditText address;
-    EditText recipient;
-    EditText item;
-    EditText quantity;
-    EditText cartonNum;
-    FancyButton submit;
-    DatabaseHelper myDb;
+    private EditText orderno;
+    private EditText address;
+    private EditText recipient;
+    private EditText item;
+    private EditText quantity;
+    private EditText cartonNum;
+    private FancyButton submit;
+    private DatabaseHelper myDb;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_orders);
+
         myDb = new DatabaseHelper(this);
         orderno = findViewById(R.id.add_orderno);
         address = findViewById(R.id.add_address);
@@ -38,6 +39,7 @@ public class AddOrders extends AppCompatActivity {
         item = findViewById(R.id.add_item);
         quantity = findViewById(R.id.add_quantity);
         cartonNum = findViewById(R.id.add_carton_num);
+
         submit = findViewById(R.id.add_submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override

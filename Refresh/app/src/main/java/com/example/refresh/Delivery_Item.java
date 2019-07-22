@@ -31,41 +31,6 @@ public class Delivery_Item {
         this.quantity = quantity;
     }
 
-
-
-    public Delivery_Item(){
-        this.orderNumber = "N/A";
-        this.orderString = "N/A";
-        this.item = "N/A";
-        this.status = INCOMPLETE;
-        this.recipient = "N/A";
-        this.signature = "No Signature Yet";
-        this.quantity = 1;
-        this.cartonNumber = "0000";
-
-    }
-
-    public Delivery_Item(String orderNum, String orderString, String recipient, String item){
-        this.orderNumber = orderNum;
-        this.orderString = orderString;
-        this.status = INCOMPLETE;
-        this.recipient = recipient;
-        this.item = item;
-        this.signature = "No Signature Yet";
-        this.quantity = 1;
-        this.cartonNumber = "0000";
-    }
-
-    public Delivery_Item(String o, String a, String r, String i, int s){
-        this.orderNumber = o;
-        this.orderString = a;
-        this.recipient = r;
-        this.item = i;
-        this.status = s;
-        this.quantity = 1;
-        this.cartonNumber = "0000";
-    }
-
     public Delivery_Item(String o, String a, String r, String i, int s, int q, String cn){
         this.orderNumber = o;
         this.orderString = a;
@@ -74,17 +39,6 @@ public class Delivery_Item {
         this.status = s;
         this.quantity = q;
         this.cartonNumber = cn;
-    }
-
-    public Delivery_Item(String orderNum, String orderStr) {
-        this.orderNumber = orderNum;
-        this.orderString = orderStr;
-        this.status = INCOMPLETE;
-        this.recipient = "database.getRecipient()";
-        this.item = "database.getItem()";
-        this.signature = "No Signature Yet";
-        this.quantity = 1;
-        this.cartonNumber = "0000";
     }
 
     public String getOrderNumber() {

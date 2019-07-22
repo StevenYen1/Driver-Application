@@ -26,13 +26,13 @@ import static com.example.refresh.Delivery_Item.SELECTED;
 
 public class scannedItems extends AppCompatActivity {
 
-    LinearLayout layout;
-    ListView view;
-    ArrayList<String> orders = new ArrayList<>();
-    ArrayList<String> selectedItems = new ArrayList<>();
-    ArrayList<String> display = new ArrayList<>();
-    DatabaseHelper myDb;
-    FancyButton sign;
+    private LinearLayout layout;
+    private ListView view;
+    private ArrayList<String> orders = new ArrayList<>();
+    private ArrayList<String> selectedItems = new ArrayList<>();
+    private ArrayList<String> display = new ArrayList<>();
+    private DatabaseHelper myDb;
+    private FancyButton sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

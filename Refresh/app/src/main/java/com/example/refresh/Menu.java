@@ -230,8 +230,6 @@ public class Menu extends AppCompatActivity {
             for(int i = 0; i < sync_ids.size(); i++){
                 String id = sync_ids.get(i);
                 String sign =  sync_signs.get(i);
-                Log.d(TAG, "doInBackground: sync_id: " + id);
-                Log.d(TAG, "doInBackground: sign: " + sign);
 
                 File file = null;
                 try {
@@ -255,11 +253,8 @@ public class Menu extends AppCompatActivity {
                         returnString += "\nPost Request " + i + ": SUCCESS, ";
                     }
                     else{
-                        Log.d(TAG, "doInBackground: Post was UNSUCCESSFUL. PLEASE RECONNECT TO INTERNET.");
                         returnString += "\nPost Request " + i + ": FAILURE, ";
                     }
-                    Log.d(TAG, "postResponseHTTP_status: " + postResponse.getCode());
-                    Log.d(TAG, "postResponse: " + postResponse.getBody());
 
                 } catch (UnirestException e) {
                     e.printStackTrace();
@@ -276,7 +271,6 @@ public class Menu extends AppCompatActivity {
         @TargetApi(Build.VERSION_CODES.O)
         protected void onPostExecute(String result) {
             Toast.makeText(Menu.this, ""+result, Toast.LENGTH_LONG).show();
-            Log.d(TAG, "Post Result: "+result);
 
         }
     }

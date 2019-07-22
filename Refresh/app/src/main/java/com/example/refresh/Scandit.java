@@ -72,7 +72,6 @@ public class Scandit extends Activity implements OnScanListener {
     @Override
     public void didScan(ScanSession scanSession) {
         List<Barcode> list = scanSession.getNewlyRecognizedCodes();
-        Log.d(TAG, "didScan: " + list.get(0).getData());
         if(myDb.getStatus(list.get(0).getData())==INCOMPLETE){
             myDb.updateStatus(list.get(0).getData(), SCANNED);
             Toast.makeText(this, "Scan Complete: " + list.get(0).getData(), Toast.LENGTH_SHORT).show();

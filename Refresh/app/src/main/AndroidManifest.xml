@@ -18,8 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:icon">
-        <activity android:name=".Scandit"></activity>
+        tools:replace="android:icon"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Scandit"/>
         <activity android:name=".RestList" />
         <activity
             android:name=".AdjustOrders"
@@ -29,7 +30,6 @@
         <activity android:name=".ReopenOrders" />
         <activity android:name=".CloseOrders" />
         <activity android:name=".AddOrders" />
-        <activity android:name=".Scanner" />
         <activity android:name=".Menu" />
         <activity android:name=".RestCalls" />
         <activity android:name=".RecyclerView" />

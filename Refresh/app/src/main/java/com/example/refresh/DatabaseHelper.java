@@ -202,8 +202,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void close_order(String id, int index){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = getInstance(id);
-        ArrayList<String> item_data = new ArrayList<>();
-        item_data = returnData(cursor);
+        ArrayList<String> item_data = returnData(cursor);
+
         insert_closed(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
                 parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE), parseInt(item_data.get(6)), item_data.get(7));
         removeIndex(id, index);

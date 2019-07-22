@@ -45,10 +45,9 @@ public class Signature extends Activity {
     private FancyButton mClearButton;
     private FancyButton mSaveButton;
     private static String signatureImage;
-    String filepath;
     private String recipient = "No Recipient Yet";
     private ArrayList<String> currentOrders = new ArrayList<>();
-    DatabaseHelper myDb;
+    private DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,19 +127,8 @@ public class Signature extends Activity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-
                 TextView async = new TextView(Signature.this);
                 startAsycTask(async);
-//                AlertDialog.Builder builder = new AlertDialog.Builder(Signature.this);
-//                builder.setTitle("Order Successful");
-//                builder.setMessage("The order has been confirmed.");
-//                builder.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        returnToPrev();
-//                    }
-//                });
-//                builder.show();
             }
         });
     }
@@ -226,7 +214,6 @@ public class Signature extends Activity {
                     else{
                         myDb.updateStatus(currentOrders.get(i), Delivery_Item.COMPLETE);
                     }
-                    Log.d(TAG, "doInBackground: " + postResponse.getBody());
 
 
 
@@ -240,12 +227,6 @@ public class Signature extends Activity {
 
         @TargetApi(Build.VERSION_CODES.O)
         protected void onPostExecute(String result) {
-            if (result == null) {
-                Log.d(TAG, "onPostExecute: it went through");
-            }
-            else{
-                Log.d(TAG, "Post Successful: "+result);
-            }
             returnToPrev();
         }
     }
