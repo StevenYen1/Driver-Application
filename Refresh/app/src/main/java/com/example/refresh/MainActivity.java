@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 
@@ -43,20 +44,25 @@ public class MainActivity extends AppCompatActivity {
         actionProcessButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-                actionProcessButton.setProgress(1);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SystemClock.sleep(3000);
-                        MainActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                actionProcessButton.setProgress(100);
-                                mHandler.postDelayed(mUpdateTimeTask, 1000);
-                            }
-                        });
-                    }
-                }).start();
+                if(textInputUsername.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this, "Please enter a username.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    actionProcessButton.setProgress(1);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SystemClock.sleep(3000);
+                            MainActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    actionProcessButton.setProgress(100);
+                                    mHandler.postDelayed(mUpdateTimeTask, 1000);
+                                }
+                            });
+                        }
+                    }).start();
+                }
             }
         });
 

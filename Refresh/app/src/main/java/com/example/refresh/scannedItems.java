@@ -26,7 +26,6 @@ import static com.example.refresh.Delivery_Item.SELECTED;
 
 public class scannedItems extends AppCompatActivity {
 
-    private LinearLayout layout;
     private ListView view;
     private ArrayList<String> orders = new ArrayList<>();
     private ArrayList<String> selectedItems = new ArrayList<>();
@@ -65,7 +64,6 @@ public class scannedItems extends AppCompatActivity {
     }
 
     public void layoutSetup(){
-        layout = findViewById(R.id.order_area);
         view = findViewById(R.id.list);
         view.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }

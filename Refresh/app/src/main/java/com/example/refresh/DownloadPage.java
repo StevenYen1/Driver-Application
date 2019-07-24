@@ -1,13 +1,27 @@
 package com.example.refresh;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,6 +36,7 @@ public class DownloadPage extends AppCompatActivity {
     private ProgressBar progressBar;
     private int counter = 0;
     private ArrayList<Delivery_Item> list;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +55,8 @@ public class DownloadPage extends AppCompatActivity {
         confirm = findViewById(R.id.confirm_load);
         finish = findViewById(R.id.download_continue);
         title = findViewById(R.id.download_title);
-        title.setText("Welcome, " + getIntent().getStringExtra("username"));
+        name = getIntent().getStringExtra("username");
+        title.setText("Welcome, " + name);
 
         download_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,10 +83,13 @@ public class DownloadPage extends AppCompatActivity {
 
     }
 
+    public void startAsyncTask(){
+        PostUsername postUsername = new PostUsername();
+        postUsername.execute();
+    }
+
     public void progress(){
-
         progressBar = findViewById(R.id.progressbar_download);
-
         final Timer t = new Timer();
         TimerTask tt = new TimerTask() {
             @Override
@@ -84,6 +103,7 @@ public class DownloadPage extends AppCompatActivity {
                         @Override
                         public void run() {
                             download_btn.setBackgroundColor(getResources().getColor(R.color.success));
+                            startAsyncTask();
                         }
                     });
                 }
@@ -131,6 +151,45 @@ public class DownloadPage extends AppCompatActivity {
     public void openDeliveries(){
         Intent intent = new Intent(this, Menu.class);
         startActivity(intent);
+    }
+
+    private class PostUsername extends AsyncTask<Integer, Integer, String> {
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected String doInBackground(Integer... integers) {
+
+            Date date = new Date();
+            long time = date.getTime();
+            try {
+                final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/user")
+                        .basicAuth("epts_app", "uB25J=UUwU")
+                        .field("userid", name)
+                        .field("last_login", ""+time).asString();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DownloadPage.this, "Connection made.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                return postResponse.getBody();
+
+            } catch (UnirestException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DownloadPage.this, "Please connect to the internet.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            return "Complete";
+        }
+
+        @TargetApi(Build.VERSION_CODES.O)
+        protected void onPostExecute(String result) {
+            Log.d("TAG", "onPostExecute: " + result);
+        }
     }
 
 

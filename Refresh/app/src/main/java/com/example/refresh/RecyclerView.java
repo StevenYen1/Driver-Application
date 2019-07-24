@@ -59,9 +59,7 @@ public class RecyclerView extends AppCompatActivity {
             String ordernumber = rawOrders.getString(0);
             String address = rawOrders.getString(1);
             int status = rawOrders.getInt(4);
-            String details = formatDetails(rawOrders);
 
-            more_details.add(details);
             allOrders.add(ordernumber);
             addresses.add(address);
 
@@ -87,27 +85,6 @@ public class RecyclerView extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c);
         return formattedDate;
-    }
-
-    public ArrayList<String> getAddresses() {
-        return addresses;
-    }
-
-    public String formatDetails(Cursor cursor){
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("Order number: \"" + cursor.getString(0)+"\"\n");
-        buffer.append("\n");
-        buffer.append("Address: \"" + cursor.getString(1)+"\"\n");
-        buffer.append("\n");
-        buffer.append("Recipient: \"" + cursor.getString(2)+"\"\n");
-        buffer.append("\n");
-        buffer.append("Item: \"" + cursor.getString(3)+"\"\n");
-        buffer.append("\n");
-        buffer.append("Quantity: \"" + cursor.getInt(7)+"\"\n");
-        buffer.append("\n");
-        buffer.append("Carton Number: \"" + cursor.getString(8)+"\"\n");
-        buffer.append("\n");
-        return buffer.toString();
     }
 
 
@@ -144,7 +121,6 @@ public class RecyclerView extends AppCompatActivity {
                         myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
                         status_icons.add(position_target, status_icons.remove(position_dragged));
                         addresses.add(position_target, addresses.remove(position_dragged));
-                        more_details.add(position_target, more_details.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
                         adapter.notifyItemMoved(position_dragged,position_target);
 
@@ -162,9 +138,8 @@ public class RecyclerView extends AppCompatActivity {
                         adapter.notifyItemInserted(allOrders.size()-1);
 
                         status_icons.add(status_icons.remove(position));
-                        allOrders.add(allOrders.remove(position));
-                        more_details.add(more_details.remove(position));
                         addresses.add(addresses.remove(position));
+                        allOrders.add(allOrders.remove(position));
                     }
                 });
         helper.attachToRecyclerView(recyclerView);

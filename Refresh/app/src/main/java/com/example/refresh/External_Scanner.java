@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -13,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -28,16 +31,12 @@ import static com.example.refresh.Delivery_Item.SELECTED;
 public class External_Scanner extends AppCompatActivity {
 
     private String orders_status;
+    private String recentId = "";
     private DatabaseHelper myDb;
     private String Barcode="";
-    private TextView results;
     private EditText input;
-    private String details ="Nothing scanned yet";
-    private String title="No title";
-    private String id ="No id yet";
     private FancyButton sideMenu;
     private Handler mHandler = new Handler();
-    private boolean canUndo = false;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -45,7 +44,6 @@ public class External_Scanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         myDb = new DatabaseHelper(this);
         setContentView(R.layout.activity_external_scanner);
-        results = findViewById(R.id.scan_results);
         sideMenu = findViewById(R.id.external_sideMenu);
         sideMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,8 +52,61 @@ public class External_Scanner extends AppCompatActivity {
             }
         });
         setInput();
+        TextView mostRecent = findViewById(R.id.recent_id);
+        mostRecent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewRecentInformation();
+            }
+        });
 
+    }
 
+    public void viewRecentInformation(){
+        if(recentId.equals("")){
+            Toast.makeText(this, "Please scan a package first.", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View mView = getLayoutInflater().inflate(R.layout.newdetails_layout, null);
+            builder.setCancelable(true);
+
+            Cursor cursor = myDb.getInstance(recentId);
+            while (cursor.moveToNext()) {
+                String ordernum = cursor.getString(0);
+                String address = cursor.getString(1);
+                String recipient = cursor.getString(2);
+                String item = cursor.getString(3);
+                int quantity = cursor.getInt(7);
+                String cartonnum = cursor.getString(8);
+
+                TextView ordernum_view = mView.findViewById(R.id.newdetails_ordernum);
+                TextView cartonnum_view = mView.findViewById(R.id.newdetails_cartonnum);
+                TextView address_view = mView.findViewById(R.id.newdetails_address);
+                TextView recipient_view = mView.findViewById(R.id.newdetails_recipient);
+                TextView item_view = mView.findViewById(R.id.newdetails_item);
+                TextView quantity_view = mView.findViewById(R.id.newdetails_quantity);
+                FancyButton mapBtn = mView.findViewById(R.id.newdetails_map);
+
+                ordernum_view.setText("Order Number: " + ordernum);
+                cartonnum_view.setText("Carton Number: " + cartonnum);
+                address_view.setText(address);
+                recipient_view.setText(recipient);
+                item_view.setText(item);
+                quantity_view.setText("" + quantity);
+                mapBtn.setOnClickListener(v -> openMap(address));
+
+                builder.setView(mView);
+                AlertDialog dialog = builder.show();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        }
+    }
+
+    public void openMap(String id){
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("orderString", id);
+        startActivity(intent);
     }
 
     public void setInput(){
@@ -74,26 +125,6 @@ public class External_Scanner extends AppCompatActivity {
                 return false;
             }
         });
-    }
-
-    public void displayDetails(View v){
-        AlertDialog.Builder builder = new AlertDialog.Builder(External_Scanner.this);
-        View mView = getLayoutInflater().inflate(R.layout.order_details_layout, null);
-        TextView title = mView.findViewById(R.id.details_title);
-        title.setText(this.title);
-        TextView body = mView.findViewById(R.id.details_body);
-        body.setText(this.details);
-        builder.setCancelable(true);
-        if(canUndo){
-            builder.setPositiveButton("Undo", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    unscanItem(id);
-                }
-            });
-        }
-        builder.setView(mView);
-        builder.show();
     }
 
     @Override
@@ -161,8 +192,6 @@ public class External_Scanner extends AppCompatActivity {
 
     }
 
-
-
     public void openScannedItems(){
         Intent intent = new Intent(this, scannedItems.class);
         intent.putExtra("previousActivity", "e");
@@ -221,41 +250,6 @@ public class External_Scanner extends AppCompatActivity {
         showMessage("Order Information", orders_status);
     }
 
-    public String viewInstance(String id){
-        Cursor rawOrders = myDb.getInstance(id);
-        if(rawOrders.getCount() == 0){
-            return "";
-        }
-
-        StringBuffer buffer = new StringBuffer();
-        while (rawOrders.moveToNext()) {
-            int status = rawOrders.getInt(4);
-            if(status == COMPLETE || status == FAIL_SEND){
-                title = "Current Status: COMPLETED";
-            }
-            else if(status == SCANNED){
-                title = "Current Status: SCANNED";
-            }
-            else if(status == SELECTED){
-                title = "Current Status: SELECTED";
-            }
-            else{
-                title = "Current Status: INCOMPLETE";
-            }
-            buffer.append("--------------------------------------------------------\n");
-            buffer.append("Order number: " + rawOrders.getString(0)+"\n");
-            buffer.append("Address: " + rawOrders.getString(1)+"\n");
-            buffer.append("Recipient: " + rawOrders.getString(2)+"\n");
-            buffer.append("Item: " + rawOrders.getString(3)+"\n");
-            buffer.append("Quantity: " + rawOrders.getInt(7)+"\n");
-            buffer.append("Carton Number: " + rawOrders.getString(8)+"\n");
-            buffer.append("--------------------------------------------------------\n");
-            buffer.append("\n");
-            buffer.append("\n");
-        }
-        return buffer.toString();
-    }
-
     public void showMessage(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -280,46 +274,48 @@ public class External_Scanner extends AppCompatActivity {
                 .show();
     }
 
-    public void unscanItem(String id){
-        myDb.updateStatus(id, INCOMPLETE);
-        results.setText("");
-        details ="Nothing scanned yet";
-        this.id ="No id yet";
-    }
-
 
     public void handleResult(String scanResult) {
         int status = myDb.getStatus(scanResult);
 
-        if(status == COMPLETE || status == FAIL_SEND){
-            results.setBackgroundColor(Color.parseColor("#fa5555"));
-            results.setText("COMPLETED ITEM");
-            id = scanResult;
-            details = viewInstance(scanResult);
-            canUndo = false;
-        }
-        else if(status == SCANNED || status == SELECTED){
-            results.setBackgroundColor(Color.parseColor("#fa5555"));
-            results.setText("ALREADY SCANNED");
-            id = scanResult;
-            details = viewInstance(scanResult);
-            canUndo = true;
-
-        }
-        else if(status == INCOMPLETE){
+        if(status == INCOMPLETE){
             myDb.updateStatus(scanResult, SCANNED);
-            results.setBackgroundColor(Color.parseColor("#1c9c2b"));
-            results.setText("SUCCESS");
-            id = scanResult;
-            details = viewInstance(scanResult);
-            canUndo = true;
-        }
-        else{
-            results.setBackgroundColor(Color.parseColor("#fa5555"));
-            results.setText("INVALID ITEM");
-            id = "Not a valid ID";
-            details = "There are no details for an invalid item.";
-            canUndo = false;
+
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            View mView = getLayoutInflater().inflate(R.layout.success_layout, null);
+            TextView scannedOrder = mView.findViewById(R.id.success_ordernum);
+            scannedOrder.setText("Order Number: " + scanResult);
+            dialog.setView(mView);
+
+            final AlertDialog alert = dialog.create();
+            alert.show();
+
+            WindowManager.LayoutParams lp = alert.getWindow().getAttributes();
+            lp.dimAmount=0.8f; // Dim level. 0.0 - no dim, 1.0 - completely opaque
+            alert.getWindow().setAttributes(lp);
+            alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            final Handler handler = new Handler();
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (alert.isShowing()) {
+                        alert.dismiss();
+                        lp.dimAmount = 0.0f;
+                        alert.getWindow().setAttributes(lp);
+                        recentId = scanResult;
+                    }
+                }
+            };
+
+            alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    handler.removeCallbacks(runnable);
+                }
+            });
+
+            handler.postDelayed(runnable, 2000);
         }
     }
 }

@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scandit.barcodepicker.BarcodePicker;
@@ -261,12 +265,19 @@ public class Scandit extends Activity implements OnScanListener {
 
     public void scanSuccess(String id){
         mPicker.pauseScanning();
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-                .setTitle("Success!")
-                .setMessage("Successfully scanned " + id);
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        View mView = getLayoutInflater().inflate(R.layout.success_layout, null);
+        TextView scannedOrder = mView.findViewById(R.id.success_ordernum);
+        scannedOrder.setText("Order Number: " + id);
+        dialog.setView(mView);
 
         final AlertDialog alert = dialog.create();
         alert.show();
+
+        WindowManager.LayoutParams lp = alert.getWindow().getAttributes();
+        lp.dimAmount=0.8f; // Dim level. 0.0 - no dim, 1.0 - completely opaque
+        alert.getWindow().setAttributes(lp);
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
@@ -275,6 +286,8 @@ public class Scandit extends Activity implements OnScanListener {
                 if (alert.isShowing()) {
                     alert.dismiss();
                     mPicker.resumeScanning();
+                    lp.dimAmount = 0.0f;
+                    alert.getWindow().setAttributes(lp);
                 }
             }
         };
@@ -286,6 +299,6 @@ public class Scandit extends Activity implements OnScanListener {
             }
         });
 
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runnable, 2000);
     }
 }

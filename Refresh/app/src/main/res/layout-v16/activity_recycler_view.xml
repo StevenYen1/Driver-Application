@@ -24,7 +24,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:layout_marginTop="20dp"
-                    android:textSize="30sp"
+                    android:textSize="28sp"
                     android:gravity="center_horizontal"
                     android:text="Placeholder Title"
                     android:textColor="@color/white"
