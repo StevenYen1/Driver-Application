@@ -4,4 +4,5 @@
     <style name="colorControlHighlight_blue">
         <item name="android:colorControlHighlight">@color/middle_blue</item>
     </style>
+
 </resources>

@@ -6,15 +6,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scandit.barcodepicker.BarcodePicker;
 import com.scandit.barcodepicker.OnScanListener;
@@ -27,7 +24,6 @@ import java.util.List;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static android.support.constraint.Constraints.TAG;
 import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.FAIL_SEND;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;

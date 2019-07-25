@@ -1,13 +1,18 @@
 package com.example.refresh;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -68,7 +73,20 @@ public class Menu extends AppCompatActivity {
                 FancyButton openCamera = mView.findViewById(R.id.camera_btn);
                 FancyButton openExternal = mView.findViewById(R.id.external_btn);
 
-                openCamera.setOnClickListener(v1 -> openActivity(Scandit.class));
+                openCamera.setOnClickListener(v1 -> {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if(checkPermission()){
+                            Toast.makeText(Menu.this, "Permission is granted!", Toast.LENGTH_LONG).show();
+                            openActivity(Scandit.class);
+                        }
+                        else{
+                            requestPermission();
+                        }
+                    }
+                    else{
+                        openActivity(Scandit.class);
+                    }
+                });
                 openExternal.setOnClickListener(v12 -> openActivity(External_Scanner.class));
 
                 builder.setView(mView);
@@ -239,5 +257,54 @@ public class Menu extends AppCompatActivity {
             Toast.makeText(Menu.this, ""+result, Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    private boolean checkPermission(){
+        return (ContextCompat.checkSelfPermission(Menu.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void requestPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String permission[], int grantResults[]){
+        switch (requestCode) {
+            case 1:
+                if(grantResults.length > 0){
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if(cameraAccepted){
+                        Toast.makeText(Menu.this, "Permission Granted", Toast.LENGTH_LONG).show();
+                        openActivity(Scandit.class);
+                    }
+                    else{
+                        Toast.makeText(Menu.this, "Permission Denied", Toast.LENGTH_LONG).show();
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                            if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
+                                displayAlertMessage("You need to allow access for both positions.",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int i) {
+                                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
+                                                }
+                                            }
+                                        });
+                                return;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    public void displayAlertMessage(String message, DialogInterface.OnClickListener listener){
+        new AlertDialog.Builder(Menu.this)
+                .setTitle("Alert:")
+                .setMessage(message)
+                .setPositiveButton("Ok", listener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 }

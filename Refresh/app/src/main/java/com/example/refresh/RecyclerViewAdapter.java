@@ -11,20 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
