@@ -1,8 +1,22 @@
 package com.example.refresh;
+/*
+Description:
+    Main Menu that user navigates from.
 
+Specific Functions:
+    Creates buttons and routes that lead to these functions:
+        Scan Packages
+        View Route
+        Edit Orders (Add, Close, Reopen, Transfer, Adjust, Void)
+        Call Server (Retrieve Signature, Sync)
+        Sign Out
+
+Documentation & Code Written By:
+    Steven Yen
+    Staples Intern Summer 2019
+ */
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,7 +31,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,30 +47,39 @@ import java.util.Date;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static android.support.constraint.Constraints.TAG;
+import static com.example.refresh.DatabaseHelper.COL_STATUS;
 
 public class Menu extends AppCompatActivity {
 
+    /*
+    private instance variables
+     */
     private DatabaseHelper myDb;
     private ArrayList<String> sync_ids = new ArrayList<>();
     private ArrayList<String> sync_signs = new ArrayList<>();
     private Handler mHandler = new Handler();
 
-
+    /*
+    Methods that are executed when this Activity is opened.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         myDb = new DatabaseHelper(this);
-        CardView scan_btn = findViewById(R.id.scan_btn_open);
-        CardView viewOrders = findViewById(R.id.view_route_btn);
-        CardView editOrders = findViewById(R.id.edit_orders_btn);
-        CardView restCall = findViewById(R.id.call_server_btn);
-        CardView logout = findViewById(R.id.logout_btn);
         setCurrentProgress();
+        setupScanBtn();
+        setupViewOrders();
+        setupEditOrdersBtn();
+        setupRestCallBtn();
+        setupLogoutBtn();
+    }
 
-
-
+    /*
+    Instantiate Scan Packages button and set OnClickListener
+     */
+    private void setupScanBtn(){
+        CardView scan_btn = findViewById(R.id.scan_btn_open);
         scan_btn.setOnClickListener(v -> {
             Runnable mUpdateTimeTask = () -> {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
@@ -81,40 +103,62 @@ public class Menu extends AppCompatActivity {
                     }
                 });
                 openExternal.setOnClickListener(v2 -> openActivity(External_Scanner.class));
-
                 builder.setView(mView);
                 builder.show();
             };
             mHandler.postDelayed(mUpdateTimeTask, 100);
         });
+    }
 
+    /*
+    Instantiate View Route button and set OnClickListener
+     */
+    private void setupViewOrders(){
+        CardView viewOrders = findViewById(R.id.view_route_btn);
         viewOrders.setOnClickListener(v -> openActivity(RecyclerView.class));
+    }
 
+    /*
+    Instantiate Edit Orders button and set OnClickListener
+     */
+    private void setupEditOrdersBtn(){
+        CardView editOrders = findViewById(R.id.edit_orders_btn);
         editOrders.setOnClickListener(v -> {
             Runnable mUpdateTimeTask = () -> {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
                 builder.setCancelable(true);
                 View mView = getLayoutInflater().inflate(R.layout.edit_orders_layout, null);
-                FancyButton add = mView.findViewById(R.id.addOrder);
-                FancyButton transfer = mView.findViewById(R.id.transfer_orders);
-                FancyButton close = mView.findViewById(R.id.close);
-                FancyButton reopen = mView.findViewById(R.id.reopen);
-                FancyButton adjust = mView.findViewById(R.id.adjust_orders);
-                FancyButton void_order = mView.findViewById(R.id.void_orders);
 
-                add.setOnClickListener(v13 -> openActivity(AddOrders.class));
-                transfer.setOnClickListener(v14 -> openActivity(TransferOrders.class));
-                close.setOnClickListener(v15 -> openActivity(CloseOrders.class));
-                reopen.setOnClickListener(v16 -> openActivity(ReopenOrders.class));
-                adjust.setOnClickListener(v17 -> openActivity(AdjustOrders.class));
-                void_order.setOnClickListener(v18 -> openActivity(VoidOrder.class));
+                FancyButton add = mView.findViewById(R.id.addOrder);
+                add.setOnClickListener(v1 -> openActivity(AddOrders.class));
+
+                FancyButton transfer = mView.findViewById(R.id.transfer_orders);
+                transfer.setOnClickListener(v1 -> openActivity(TransferOrders.class));
+
+                FancyButton close = mView.findViewById(R.id.close);
+                close.setOnClickListener(v1 -> openActivity(CloseOrders.class));
+
+                FancyButton reopen = mView.findViewById(R.id.reopen);
+                reopen.setOnClickListener(v1 -> openActivity(ReopenOrders.class));
+
+                FancyButton adjust = mView.findViewById(R.id.adjust_orders);
+                adjust.setOnClickListener(v1 -> openActivity(AdjustOrders.class));
+
+                FancyButton void_order = mView.findViewById(R.id.void_orders);
+                void_order.setOnClickListener(v1 -> openActivity(VoidOrder.class));
 
                 builder.setView(mView);
                 builder.show();
             };
             mHandler.postDelayed(mUpdateTimeTask, 100);
         });
+    }
 
+    /*
+    Instantiate Call Server button and set OnClickListener
+     */
+    private void setupRestCallBtn(){
+        CardView restCall = findViewById(R.id.call_server_btn);
         restCall.setOnClickListener(v -> {
             Runnable mUpdateTimeTask = ()-> {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
@@ -123,19 +167,19 @@ public class Menu extends AppCompatActivity {
                 FancyButton get_btn = mView.findViewById(R.id.get_call);
                 FancyButton post_btn = mView.findViewById(R.id.post_call);
 
-                get_btn.setOnClickListener(v19 -> openActivity(RestList.class));
-                post_btn.setOnClickListener(v110 -> {
+                get_btn.setOnClickListener(v1 -> openActivity(RestList.class));
+                post_btn.setOnClickListener(v1 -> {
                     sync_signs.clear();
                     sync_ids.clear();
 
                     Cursor cursor = myDb.queryAllOrders();
                     while(cursor.moveToNext()){
-                        if(cursor.getInt(4) == Delivery_Item.FAIL_SEND){
+                        if(cursor.getInt(COL_STATUS) == Delivery_Item.FAIL_SEND){
                             sync_ids.add(cursor.getString(0));
                             sync_signs.add(cursor.getString(5));
                         }
                     }
-                    startAsyncTask(v110);
+                    startAsyncTask();
                 });
 
                 builder.setView(mView);
@@ -143,7 +187,13 @@ public class Menu extends AppCompatActivity {
             };
             mHandler.postDelayed(mUpdateTimeTask, 100);
         });
+    }
 
+    /*
+    Instantiate Sign Out button and set OnClickListener
+     */
+    private void setupLogoutBtn(){
+        CardView logout = findViewById(R.id.logout_btn);
         logout.setOnClickListener(v -> {
             Runnable mUpdateTimeTask = () -> {
                 Intent intent = new Intent(Menu.this, MainActivity.class);
@@ -154,23 +204,34 @@ public class Menu extends AppCompatActivity {
         });
     }
 
-    private void startAsyncTask(View v) {
+    /*
+    Executes actual post command
+     */
+    private void startAsyncTask() {
         PostConnection post = new PostConnection();
         post.execute();
     }
 
+    /*
+    Generic method for opening an activity.
+     */
     public void openActivity(Class nextView){
         Intent intent = new Intent(Menu.this, nextView);
         startActivity(intent);
     }
 
-    //cannot go back to the download page
+    /*
+    Overrides ability to return to download page
+     */
     @Override
     public void onBackPressed() {
     }
 
+    /*
+    Converts a signature and packages it into a file.
+     */
     @androidx.annotation.RequiresApi(api = Build.VERSION_CODES.O)
-    public File convertImageToFile(String id, String sign) throws IOException {
+    public File convertImageToFile(String sign) throws IOException {
         File f = new File(Menu.this.getCacheDir(), "signature");
         f.createNewFile();
 
@@ -184,6 +245,9 @@ public class Menu extends AppCompatActivity {
         return f;
     }
 
+    /*
+    Sets the graphic for the "Current Delivery Progress" based on completed orders
+     */
     private void setCurrentProgress(){
        PercentageChartView currentProgress = findViewById(R.id.current_progress_chart);
         Cursor cursor = myDb.queryAllOrders();
@@ -196,10 +260,18 @@ public class Menu extends AppCompatActivity {
             }
             total++;
         }
-        Log.d(TAG, "setCurrentProgress: " + (completed/total)*100);
-        currentProgress.setProgress((completed/total)*100, true);
+        if(total == 0) {
+            currentProgress.setProgress(100, true);
+        }
+        else{
+            currentProgress.setProgress((completed/total)*100, true);
+        }
     }
 
+    /*
+    Post route to rest api.
+    Stores signature information.
+     */
     private class PostConnection extends AsyncTask<Integer, Integer, String> {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
@@ -211,7 +283,7 @@ public class Menu extends AppCompatActivity {
 
                 File file = null;
                 try {
-                    file = convertImageToFile(id, sign);
+                    file = convertImageToFile(sign);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -253,14 +325,23 @@ public class Menu extends AppCompatActivity {
         }
     }
 
+    /*
+    Permission Check for camera.
+     */
     private boolean checkPermission(){
         return (ContextCompat.checkSelfPermission(Menu.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
 
+    /*
+    Executes camera permission request for the user.
+     */
     private void requestPermission(){
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
     }
 
+    /*
+    Checks if permission has been granted before opening Scandit class
+     */
     public void onRequestPermissionsResult(int requestCode, String permission[], int grantResults[]){
         switch (requestCode) {
             case 1:
@@ -272,33 +353,9 @@ public class Menu extends AppCompatActivity {
                     }
                     else{
                         Toast.makeText(Menu.this, "Permission Denied", Toast.LENGTH_LONG).show();
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                            if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
-                                displayAlertMessage("You need to allow access for both positions.",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int i) {
-                                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
-                                                }
-                                            }
-                                        });
-                                return;
-                            }
-                        }
                     }
                 }
                 break;
         }
-    }
-
-    public void displayAlertMessage(String message, DialogInterface.OnClickListener listener){
-        new AlertDialog.Builder(Menu.this)
-                .setTitle("Alert:")
-                .setMessage(message)
-                .setPositiveButton("Ok", listener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
     }
 }
