@@ -1,6 +1,5 @@
 package com.example.refresh;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -10,14 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,7 +43,7 @@ public class RecyclerView extends AppCompatActivity {
     }
 
     public void setOrderInformation(){
-        Cursor rawOrders = myDb.getAllData();
+        Cursor rawOrders = myDb.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }
@@ -118,7 +110,7 @@ public class RecyclerView extends AppCompatActivity {
                         int position_dragged = dragged.getAdapterPosition();
                         int position_target = target.getAdapterPosition();
 
-                        myDb.updateIndex(allOrders.get(position_dragged), position_dragged, position_target);
+                        myDb.moveOrder(allOrders.get(position_dragged), position_dragged, position_target);
                         status_icons.add(position_target, status_icons.remove(position_dragged));
                         addresses.add(position_target, addresses.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
@@ -131,10 +123,8 @@ public class RecyclerView extends AppCompatActivity {
                     public void onSwiped(@NonNull android.support.v7.widget.RecyclerView.ViewHolder viewHolder, int i) {
 
                         int position = viewHolder.getAdapterPosition();
-                        ArrayList<String> deletedItem = myDb.removeIndex(allOrders.get(position), position);
+                        myDb.moveOrder(allOrders.get(position), position, allOrders.size()-1);
                         adapter.notifyItemRemoved(position);
-                        myDb.insertData(deletedItem.get(0),deletedItem.get(1),deletedItem.get(2),deletedItem.get(3),parseInt(deletedItem.get(4)),deletedItem.get(5), allOrders.size()-1, parseInt(deletedItem.get(6)), deletedItem.get(7));
-
                         adapter.notifyItemInserted(allOrders.size()-1);
 
                         status_icons.add(status_icons.remove(position));

@@ -3,32 +3,24 @@ package com.example.refresh;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.MenuView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.Delivery_Item.COMPLETE;
-import static com.example.refresh.Delivery_Item.SCANNED;
-import static com.example.refresh.Delivery_Item.SELECTED;
 import static java.lang.Integer.parseInt;
 
 public class CloseOrders extends AppCompatActivity {
@@ -55,7 +47,7 @@ public class CloseOrders extends AppCompatActivity {
 
         myDb = new DatabaseHelper(this);
 
-        Cursor cursor = myDb.getAllData();
+        Cursor cursor = myDb.queryAllOrders();
         while(cursor.moveToNext()){
             if(cursor.getInt(4)!=COMPLETE){
 
@@ -131,7 +123,7 @@ public class CloseOrders extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         for(String x : selectedItems){
-                            myDb.close_order(x, orderNums.indexOf(x));
+                            myDb.closeOrder(x, orderNums.indexOf(x));
                         }
                         Intent intent = new Intent(CloseOrders.this, Menu.class);
                         startActivity(intent);

@@ -2,8 +2,6 @@ package com.example.refresh;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -83,7 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         DatabaseHelper myDb = new DatabaseHelper(mContext);
         builder.setCancelable(true);
 
-        Cursor cursor = myDb.getInstance(id);
+        Cursor cursor = myDb.queryOrder(id);
         while(cursor.moveToNext()){
             String ordernum = cursor.getString(0);
             String address = cursor.getString(1);

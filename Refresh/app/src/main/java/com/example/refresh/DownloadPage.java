@@ -1,15 +1,24 @@
 package com.example.refresh;
+/*
+Description:
+    Setup page to download orders and confirm load.
 
+Specific Functions:
+    Download Orders
+    Confirm Load
+    Post Username
+
+Documentation & Code Written By:
+    Steven Yen
+    Staples Intern Summer 2019
+ */
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +27,6 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
@@ -28,91 +35,48 @@ import java.util.TimerTask;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class DownloadPage extends AppCompatActivity {
-    private FancyButton download_btn;
-    private FancyButton confirm;
-    private FancyButton finish;
-    private TextView title;
-    private DatabaseHelper myDb;
-    private ProgressBar progressBar;
-    private int counter = 0;
-    private ArrayList<Delivery_Item> list;
-    private String name;
 
+    /*
+    private instance variables
+     */
+    private FancyButton download_btn;
+    private int countProgress = 0;
+    private String name;
+    private Boolean ordersDownloaded = false;
+
+    /*
+    Methods that are executed when this Activity is opened.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_page);
-        myDb = new DatabaseHelper(this);
-        staticList();
-        myDb.clear();
-        int i = 0;
-        for(Delivery_Item x: list){
-            myDb.insertData(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity(), x.getCartonNumber());
-            i++;
-        }
+        setTitle();
+        setupOrderList();
+        setupButtons();
+    }
 
-        download_btn = findViewById(R.id.download);
-        confirm = findViewById(R.id.confirm_load);
-        finish = findViewById(R.id.download_continue);
-        title = findViewById(R.id.download_title);
+    /*
+    Set Title Text
+     */
+    private void setTitle(){
+        TextView title = findViewById(R.id.download_title);
         name = getIntent().getStringExtra("username");
         title.setText("Welcome, " + name);
-
-        download_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-                progress();
-            }
-        });
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirm.setBackgroundColor(getResources().getColor(R.color.success));
-            }
-        });
-
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAsyncTask();
-            }
-        });
-
-
-
     }
 
-    public void startAsyncTask(){
-        PostUsername postUsername = new PostUsername();
-        postUsername.execute();
+    /*
+    Initializes a list of orders and stores it in the database
+     */
+    private void setupOrderList(){
+        ArrayList<Delivery_Item> listData = createListData();
+        populateDatabase(listData);
     }
 
-    public void progress(){
-        progressBar = findViewById(R.id.progressbar_download);
-        final Timer t = new Timer();
-        TimerTask tt = new TimerTask() {
-            @Override
-            public void run(){
-                counter+=4;
-                progressBar.setProgress(counter);
-
-                if(counter == 100){
-                    t.cancel();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            download_btn.setBackgroundColor(getResources().getColor(R.color.success));
-                        }
-                    });
-                }
-            }
-        };
-
-        t.schedule(tt, 0, 100);
-    }
-
-    public void staticList(){
+    /*
+    Static data created for testing purposes.
+     */
+    private ArrayList<Delivery_Item> createListData(){
         Delivery_Item item1 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "1600 Pennsylvania Ave, Washington, DC", "President of the US", "A Book", 0, 3, "7364322720");
         Delivery_Item item2 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "968 Woodside Circle, Glendale, FL 32433", "John Smith", "Hammer", 0, 1, "3258756119");
         Delivery_Item item3 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "3668 Young Road Boise, Idaho 83716", "Anthony Green", "Extention Cable", 0, 2, "3419677734");
@@ -141,17 +105,65 @@ public class DownloadPage extends AppCompatActivity {
         newList.add(item11);
         newList.add(item12);
 
-        list = newList;
+        return newList;
     }
 
+    /*
+    Populates the database with a list of Delivery_Items
+     */
+    private void populateDatabase(ArrayList<Delivery_Item> list){
+        DatabaseHelper myDb = new DatabaseHelper(this);
+        myDb.clearTables();
+        int i = 0;
+        for(Delivery_Item x: list){
+            myDb.insertOrder(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity(), x.getCartonNumber());
+            i++;
+        }
+    }
+
+    /*
+    Instantiate Buttons and set their OnClickListeners
+     */
+    private void setupButtons(){
+        download_btn = findViewById(R.id.download);
+        download_btn.setOnClickListener(v -> startAsyncTask());
 
 
+        FancyButton confirm = findViewById(R.id.confirm_load);
+        confirm.setOnClickListener(v -> confirm.setBackgroundColor(getResources().getColor(R.color.success)));
 
-    public void openDeliveries(){
+
+        FancyButton finish = findViewById(R.id.download_continue);
+        finish.setOnClickListener(v -> {
+            if(ordersDownloaded){
+                completeSetup();
+            }
+            else{
+                Toast.makeText(this, "Please Download Orders Before Moving On", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /*
+    Completes Setup and opens Manage Route Menu.
+     */
+    private void completeSetup(){
         Intent intent = new Intent(this, Menu.class);
         startActivity(intent);
     }
 
+    /*
+    Executes the actual post command.
+     */
+    private void startAsyncTask(){
+        PostUsername postUsername = new PostUsername();
+        postUsername.execute();
+    }
+
+    /*
+    Runs post route to rest api.
+    Stores username to user table.
+     */
     private class PostUsername extends AsyncTask<Integer, Integer, String> {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
@@ -164,35 +176,45 @@ public class DownloadPage extends AppCompatActivity {
                         .basicAuth("epts_app", "uB25J=UUwU")
                         .field("userid", name)
                         .field("last_login", ""+time).asString();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(DownloadPage.this, "Connection made.", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
+                runOnUiThread(() -> Toast.makeText(DownloadPage.this, "Connection made.", Toast.LENGTH_SHORT).show());
                 return postResponse.getBody();
 
             } catch (UnirestException e) {
                 e.printStackTrace();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(DownloadPage.this, "Please connect to the Staples Network.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                runOnUiThread(() -> Toast.makeText(DownloadPage.this, "Please connect to the Staples Network.", Toast.LENGTH_SHORT).show());
             }
-            return "Complete";
+            return "Post Failure";
         }
 
         @TargetApi(Build.VERSION_CODES.O)
         protected void onPostExecute(String result) {
-            Log.d("TAG", "onPostExecute: " + result);
-            if(!result.equals("Complete")){
-                openDeliveries();
+            if(!result.equals("Post Failure")){
+                progress();
             }
         }
     }
 
+    /*
+    Mock progressbar to simulate process of downloading orders.
+     */
+    private void progress(){
+        ProgressBar progressBar = findViewById(R.id.progressbar_download);
+        final Timer t = new Timer();
+        TimerTask tt = new TimerTask() {
+            @Override
+            public void run(){
+                countProgress +=20;
+                progressBar.setProgress(countProgress);
 
+                if(countProgress == 100){
+                    t.cancel();
+                    runOnUiThread(() -> download_btn.setBackgroundColor(getResources().getColor(R.color.success)));
+                    ordersDownloaded = true;
+                }
+            }
+        };
+
+        t.schedule(tt, 0, 100);
+    }
 }

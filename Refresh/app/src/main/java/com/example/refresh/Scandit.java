@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
@@ -72,15 +73,19 @@ public class Scandit extends Activity implements OnScanListener {
     @Override
     public void didScan(ScanSession scanSession) {
         List<Barcode> list = scanSession.getNewlyRecognizedCodes();
-        if(myDb.getStatus(list.get(0).getData())==INCOMPLETE){
-            myDb.updateStatus(list.get(0).getData(), SCANNED);
-            scanSuccess(list.get(0).getData());
+        String orderNumber = list.get(0).getData();
+        Cursor cursor = myDb.queryOrder(orderNumber);
+        if(cursor != null){
+            int status = cursor.getInt(DatabaseHelper.COL_STATUS);
+            if(status == INCOMPLETE){
+                myDb.updateStatus(orderNumber, SCANNED);
+                scanSuccess(orderNumber);
+            }
         }
-
     }
 
     public void setOrderInformation(){
-        Cursor rawOrders = myDb.getAllData();
+        Cursor rawOrders = myDb.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }
@@ -185,7 +190,7 @@ public class Scandit extends Activity implements OnScanListener {
 
     public void goBack(){
         Intent intent = new Intent(this, Menu.class);
-        Cursor rawOrders = myDb.getAllData();
+        Cursor rawOrders = myDb.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }
@@ -200,7 +205,7 @@ public class Scandit extends Activity implements OnScanListener {
     }
 
     public void viewAll(){
-        Cursor rawOrders = myDb.getAllData();
+        Cursor rawOrders = myDb.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }

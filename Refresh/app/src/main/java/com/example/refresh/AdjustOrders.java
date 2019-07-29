@@ -2,46 +2,41 @@ package com.example.refresh;
 
 import android.app.Dialog;
 import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.isapanah.awesomespinner.AwesomeSpinner;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.AddOrders.isParsable;
+import static com.example.refresh.DatabaseHelper.*;
 import static java.lang.Integer.parseInt;
 
 public class AdjustOrders extends AppCompatActivity {
 
     private ListView listView;
     private EditText search;
-    private FancyButton search_btn;
-    private FancyButton show_all_btn;
-    private AwesomeSpinner dropdown;
-    private String filterBy = "No Filter";
     private boolean isMinus = true;
     DatabaseHelper myDb;
     ArrayList<String> display = new ArrayList<>();
     ArrayList<String> orderNums = new ArrayList<>();
     ArrayList<String> items = new ArrayList<>();
     ArrayList<Integer> quantities = new ArrayList<>();
-    final String[] filters = {"Item", "OrderNumber", "CartonNumber", "Address"};
 
 
     @Override
@@ -52,62 +47,58 @@ public class AdjustOrders extends AppCompatActivity {
         myDb = new DatabaseHelper(this);
         listView = findViewById(R.id.adjust_listview);
         search = findViewById(R.id.adjust_search);
-        dropdown = findViewById(R.id.adjust_filter);
 
-        show_all_btn = findViewById(R.id.adjust_show_all);
-        show_all_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshList();
-            }
-        });
+        FancyButton show_all_btn = findViewById(R.id.adjust_show_all);
+        show_all_btn.setOnClickListener(v -> refreshList());
 
-        search_btn = findViewById(R.id.adjust_search_btn);
-        search_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!filterBy.equals("No Filter")){
-                    ArrayList<String> searchList = new ArrayList<>();
-                    orderNums.clear();
-                    quantities.clear();
-                    Cursor cursor = myDb.queryInstance(filterBy, search.getText().toString());
-                    while(cursor.moveToNext()){
-                        String orderNum = cursor.getString(0);
-                        String item = cursor.getString(3);
-                        int quantity = cursor.getInt(7);
-                        searchList.add("Item: " + item + "\nQuantity: " + quantity);
-                        orderNums.add(orderNum);
-                        quantities.add(quantity);
+        FancyButton search_btn = findViewById(R.id.adjust_search_btn);
+        search_btn.setOnClickListener(v -> {
+
+            ArrayList<String> searchList = new ArrayList<>();
+            orderNums.clear();
+            quantities.clear();
+
+            String keyword = search.getText().toString();
+            Cursor orderList = myDb.queryAllOrders();
+            while (orderList.moveToNext()) {
+                ArrayList<String> instanceList = new ArrayList<>();
+                instanceList.add(orderList.getString(COL_ORDERNUMBER));
+                instanceList.add(orderList.getString(COL_ADDRESS));
+                instanceList.add(orderList.getString(COL_RECIPIENT));
+                instanceList.add(orderList.getString(COL_ITEM));
+                instanceList.add(orderList.getString(COL_STATUS));
+                instanceList.add(orderList.getString(COL_QUANTITY));
+                instanceList.add(orderList.getString(COL_CARTONNUMBER));
+
+
+                for (String listItem : instanceList) {
+
+                    if (Pattern.compile(Pattern.quote(keyword), Pattern.CASE_INSENSITIVE).matcher(listItem).find()) {
+                        searchList.add("Item: " + orderList.getString(COL_ITEM) + "\nQuantity: " + orderList.getString(COL_QUANTITY));
+                        orderNums.add(orderList.getString(COL_ORDERNUMBER));
+                        quantities.add(orderList.getInt(COL_QUANTITY));
+                        break;
                     }
-
-                    ArrayAdapter newAdapter = new ArrayAdapter(AdjustOrders.this, android.R.layout.simple_list_item_1, searchList);
-                    listView.setAdapter(newAdapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            createAdjustPopup(position);
-                        }
-                    });
-                    if (searchList.size()==0){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AdjustOrders.this);
-                        builder.setTitle("No Items");
-                        builder.setMessage("There are no items here");
-                        builder.show();
-                    }
-                    search.setText("");
-                }
-                else{
-                    Toast.makeText(AdjustOrders.this, "PLEASE SEARCH BY A CATEGORY", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            ArrayAdapter newAdapter = new ArrayAdapter(AdjustOrders.this, android.R.layout.simple_list_item_1, searchList);
+            listView.setAdapter(newAdapter);
+            listView.setOnItemClickListener((parent, view, position, id) -> createAdjustPopup(position));
+            if (searchList.size() == 0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AdjustOrders.this);
+                builder.setTitle("No Items");
+                builder.setMessage("There are no items here");
+                builder.show();
+            }
+            search.setText("");
         });
         populateList();
-        createFilterDropdown();
         createListView();
     }
 
     private void populateList(){
-        Cursor cursor = myDb.getAllData();
+        Cursor cursor = myDb.queryAllOrders();
         while(cursor.moveToNext()){
             String orderNum = cursor.getString(0);
             String item = cursor.getString(3);
@@ -119,26 +110,10 @@ public class AdjustOrders extends AppCompatActivity {
         }
     }
 
-    private void createFilterDropdown() {
-        ArrayAdapter<String> filter_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, filters);
-        dropdown.setAdapter(filter_adapter);
-        dropdown.setOnSpinnerItemClickListener(new AwesomeSpinner.onSpinnerItemClickListener<String>() {
-            @Override
-            public void onItemSelected(int position, String itemAtPosition) {
-                filterBy = filters[position];
-            }
-        });
-    }
-
     private void createListView(){
         final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, display);
         listView.setAdapter(arrayAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                createAdjustPopup(position);
-            }
-        });
+        listView.setOnItemClickListener((parent, view, position, id) -> createAdjustPopup(position));
     }
 
     private int result(String quantity, String adjustment) throws Exception {

@@ -38,15 +38,9 @@ import static android.support.constraint.Constraints.TAG;
 
 public class Menu extends AppCompatActivity {
 
-    private CardView scan_btn;
-    private CardView viewOrders;
-    private CardView editOrders;
-    private CardView restCall;
-    private CardView logout;
     private DatabaseHelper myDb;
     private ArrayList<String> sync_ids = new ArrayList<>();
     private ArrayList<String> sync_signs = new ArrayList<>();
-    private PercentageChartView currentProgress;
     private Handler mHandler = new Handler();
 
 
@@ -55,12 +49,11 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         myDb = new DatabaseHelper(this);
-        scan_btn = findViewById(R.id.scan_btn_open);
-        viewOrders = findViewById(R.id.view_route_btn);
-        editOrders = findViewById(R.id.edit_orders_btn);
-        restCall = findViewById(R.id.call_server_btn);
-        logout = findViewById(R.id.logout_btn);
-        currentProgress = findViewById(R.id.current_progress_chart);
+        CardView scan_btn = findViewById(R.id.scan_btn_open);
+        CardView viewOrders = findViewById(R.id.view_route_btn);
+        CardView editOrders = findViewById(R.id.edit_orders_btn);
+        CardView restCall = findViewById(R.id.call_server_btn);
+        CardView logout = findViewById(R.id.logout_btn);
         setCurrentProgress();
 
 
@@ -87,7 +80,7 @@ public class Menu extends AppCompatActivity {
                         openActivity(Scandit.class);
                     }
                 });
-                openExternal.setOnClickListener(v12 -> openActivity(External_Scanner.class));
+                openExternal.setOnClickListener(v2 -> openActivity(External_Scanner.class));
 
                 builder.setView(mView);
                 builder.show();
@@ -135,7 +128,7 @@ public class Menu extends AppCompatActivity {
                     sync_signs.clear();
                     sync_ids.clear();
 
-                    Cursor cursor = myDb.getAllData();
+                    Cursor cursor = myDb.queryAllOrders();
                     while(cursor.moveToNext()){
                         if(cursor.getInt(4) == Delivery_Item.FAIL_SEND){
                             sync_ids.add(cursor.getString(0));
@@ -192,7 +185,8 @@ public class Menu extends AppCompatActivity {
     }
 
     private void setCurrentProgress(){
-        Cursor cursor = myDb.getAllData();
+       PercentageChartView currentProgress = findViewById(R.id.current_progress_chart);
+        Cursor cursor = myDb.queryAllOrders();
         float completed = 0;
         float total = 0;
         while(cursor.moveToNext()){

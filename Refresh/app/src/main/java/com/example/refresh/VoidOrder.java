@@ -34,7 +34,7 @@ public class VoidOrder extends AppCompatActivity {
         listView = findViewById(R.id.void_list_view);
         myDb = new DatabaseHelper(this);
 
-        Cursor cursor = myDb.getAllData();
+        Cursor cursor = myDb.queryAllOrders();
         while(cursor.moveToNext()){
 
             String details_string = "Order Number: "+cursor.getString(0)
@@ -96,7 +96,7 @@ public class VoidOrder extends AppCompatActivity {
                 reasoningButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        myDb.removeIndex(ordernum, position);
+                        myDb.deleteOrder(ordernum);
                         Toast.makeText(VoidOrder.this, ordernum+" HAS BEEN VOIDED", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(VoidOrder.this, Menu.class);
                         startActivity(intent);

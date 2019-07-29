@@ -1,6 +1,5 @@
 package com.example.refresh;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
@@ -8,16 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.mashape.unirest.http.Unirest;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import me.srodrigo.androidhintspinner.HintAdapter;
@@ -39,7 +31,7 @@ public class RestList extends AppCompatActivity {
         final FancyButton btn = findViewById(R.id.rest_search_btn);
         btn.setEnabled(false);
 
-        Cursor cursor = myDb.getAllData();
+        Cursor cursor = myDb.queryAllOrders();
         final ArrayList<String> list = new ArrayList<>();
         while(cursor.moveToNext()){
             String orderNumber = cursor.getString(0);

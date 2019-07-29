@@ -2,15 +2,12 @@ package com.example.refresh;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,7 +37,7 @@ public class ReopenOrders extends AppCompatActivity {
 
         myDb = new DatabaseHelper(this);
 
-        Cursor cursor = myDb.get_closed_all();
+        Cursor cursor = myDb.queryClosedAllOrders();
         while(cursor.moveToNext()){
 
             String details_string = "Order Number: "+cursor.getString(0)
@@ -80,7 +77,7 @@ public class ReopenOrders extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 for(String x : selectedItems){
-                    myDb.reopen_order(x, display.indexOf(x));
+                    myDb.reopenOrder(x, display.indexOf(x));
                     display.remove(x);
                 }
                 Intent intent = new Intent(ReopenOrders.this, Menu.class);

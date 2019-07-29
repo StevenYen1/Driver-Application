@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Handler;
-import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +15,13 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
+import static com.example.refresh.DatabaseHelper.COL_STATUS;
 import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.FAIL_SEND;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
@@ -71,7 +71,7 @@ public class External_Scanner extends AppCompatActivity {
             View mView = getLayoutInflater().inflate(R.layout.newdetails_layout, null);
             builder.setCancelable(true);
 
-            Cursor cursor = myDb.getInstance(recentId);
+            Cursor cursor = myDb.queryOrder(recentId);
             while (cursor.moveToNext()) {
                 String ordernum = cursor.getString(0);
                 String address = cursor.getString(1);
@@ -200,7 +200,7 @@ public class External_Scanner extends AppCompatActivity {
 
     public void goBack(){
         Intent intent = new Intent(this, Menu.class);
-        Cursor rawOrders = myDb.getAllData();
+        Cursor rawOrders = myDb.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }
@@ -215,7 +215,7 @@ public class External_Scanner extends AppCompatActivity {
     }
 
     public void viewAll(){
-        Cursor rawOrders = myDb.getAllData();
+        Cursor rawOrders = myDb.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }
@@ -276,7 +276,11 @@ public class External_Scanner extends AppCompatActivity {
 
 
     public void handleResult(String scanResult) {
-        int status = myDb.getStatus(scanResult);
+        Cursor cursor = myDb.queryOrder(scanResult);
+        int status = -1;
+        if(cursor!=null){
+            status = cursor.getInt(COL_STATUS);
+        }
 
         if(status == INCOMPLETE){
             myDb.updateStatus(scanResult, SCANNED);

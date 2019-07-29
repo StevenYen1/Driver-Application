@@ -13,10 +13,8 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mashape.unirest.http.HttpResponse;
@@ -28,23 +26,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static android.support.constraint.Constraints.TAG;
 import static com.example.refresh.Delivery_Item.SELECTED;
 
 public class Signature extends Activity {
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private SignaturePad mSignaturePad;
     private FancyButton mClearButton;
     private FancyButton mSaveButton;
-    private static String signatureImage;
     private String recipient = "No Recipient Yet";
     private ArrayList<String> currentOrders = new ArrayList<>();
     private DatabaseHelper myDb;
@@ -66,7 +58,7 @@ public class Signature extends Activity {
 
 
     public void setOrderInformation(){
-        Cursor rawOrders = myDb.getAllData();
+        Cursor rawOrders = myDb.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }
@@ -116,58 +108,38 @@ public class Signature extends Activity {
         mSaveButton.setEnabled(false);
         mClearButton.setEnabled(false);
 
-        mClearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSignaturePad.clear();
-            }
-        });
+        mClearButton.setOnClickListener(view -> mSignaturePad.clear());
 
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View view) {
-                TextView async = new TextView(Signature.this);
-                startAsycTask(async);
-            }
+        mSaveButton.setOnClickListener(view -> {
+            TextView async = new TextView(Signature.this);
+            startAsycTask(async);
         });
     }
 
     public File convertImageToFile(String id) throws IOException {
-        File f = new File(Signature.this.getCacheDir(), "signature");
-        f.createNewFile();
+        File file = new File(Signature.this.getCacheDir(), "signature");
+        file.createNewFile();
 
         Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] b = stream.toByteArray();
 
-        FileOutputStream fos = new FileOutputStream(f);
+        FileOutputStream fos = new FileOutputStream(file);
         fos.write(b);
         fos.flush();
         fos.close();
 
         String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-        myDb.setSignature(id, encodedImage);
-        signatureImage = encodedImage;
-        return f;
+        myDb.updateSignature(id, encodedImage);
+        return file;
     }
 
     public void onBackPressed(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Would you like to return to the previous page?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                returnToPrev();
-            }
-        });
-        builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("Yes", (dialog, which) -> returnToPrev());
+        builder.setNeutralButton("No", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

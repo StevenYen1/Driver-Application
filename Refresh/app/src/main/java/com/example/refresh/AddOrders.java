@@ -55,9 +55,9 @@ public class AddOrders extends AppCompatActivity {
                             String newQuantity = quantity.getText().toString();
                             String newCarton = cartonNum.getText().toString();
 
-                            Cursor cursor = myDb.getInstance(newNo);
+                            Cursor cursor = myDb.queryOrder(newNo);
                             if(cursor.getCount()==0) {
-                                myDb.insertData(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize(DatabaseHelper.TABLE_NAME), Integer.parseInt(newQuantity), newCarton);
+                                myDb.insertOrder(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet", myDb.returnSize(DatabaseHelper.ORDER_TABLE), Integer.parseInt(newQuantity), newCarton);
                                 Toast.makeText(AddOrders.this, "A new order has been created.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AddOrders.this, Menu.class);
                                 startActivity(intent);

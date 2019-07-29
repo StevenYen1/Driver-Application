@@ -1,187 +1,257 @@
 package com.example.refresh;
+/*
+Description:
+    This class is the single direct access point to the SQLite database.
+    It is able to create, edit, and delete tables and their entries.
+
+Specific Functions:
+    Create database tables "order_table" and "closed_orders_table"
+    Insert data into tables
+    Delete data from tables
+    Query tables for all data, or a specific instance (given an id)
+    Update Status, Signature, or Quantity in "order_table"
+    Edit "position"(index) of an entry in a table.
+    Transfer an entry from one table to the other.
+
+Documentation & Code Written By:
+    Steven Yen
+    Staples Intern Summer 2019
+ */
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.strictmode.SqliteObjectLeakedViolation;
-import android.util.Log;
-
 import java.util.ArrayList;
-
 import static java.lang.Integer.parseInt;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Order.db";
-    public static final String TABLE_NAME = "order_table";
+    public static final String ORDER_TABLE = "order_table";
     public static final String CLOSED_TABLE = "closed_orders_table";
-    public static final String COL_1 = "OrderNumber";
-    public static final String COL_2 = "Address";
-    public static final String COL_3 = "Recipient";
-    public static final String COL_4 = "Item";
-    public static final String COL_5 = "Status";
-    public static final String COL_6 = "Signature";
-    public static final String COL_7 = "idx";
-    public static final String COL_8 = "quantity";
-    public static final String COL_9 = "cartonnumber";
+
+    public static final int COL_ORDERNUMBER = 0;
+    public static final int COL_ADDRESS = 1;
+    public static final int COL_RECIPIENT = 2;
+    public static final int COL_ITEM = 3;
+    public static final int COL_STATUS = 4;
+    public static final int COL_SIGNATURE = 5;
+    public static final int COL_INDEX = 6;
+    public static final int COL_QUANTITY = 7;
+    public static final int COL_CARTONNUMBER = 8;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
+    /*
+    Creates tables of the database.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING) ");
+        db.execSQL("create table " + ORDER_TABLE + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING) ");
         db.execSQL("create table if not exists " + CLOSED_TABLE + "(OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING)");
     }
 
+    /*
+    Creates new versions of each table.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+ ORDER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+CLOSED_TABLE);
         onCreate(db);
     }
 
-    public void clear(){
+    /*
+    Clears the order table and closed table.
+     */
+    public void clearTables(){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+ ORDER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+CLOSED_TABLE);
         onCreate(db);
     }
 
-
-    public boolean insertData(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton){
+    /*
+    Inserts new entry into the order table.
+     */
+    public void insertOrder(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', '"+carton+"')");
         db.close();
-        return true;
     }
 
-    public Cursor getAllData(){
+    /*
+    Inserts an entry into the closed table.
+     */
+    public void insertClosed(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" order by idx",null);
-        return res;
+        db.execSQL("replace into closed_orders_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', '"+carton+"')");
+        db.close();
     }
 
-    public Cursor getInstance(String id){
+    /*
+    Queries all orders in the order table.
+     */
+    public Cursor queryAllOrders(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where OrderNumber = ?",new String[] { id });
-        return res;
+        return db.rawQuery("select * from "+ ORDER_TABLE +" order by idx",null);
     }
 
-    public Cursor queryInstance(String idType, String id){
+    /*
+    Queries the order table for a specific entry given an OrderNumber
+     */
+    public Cursor queryOrder(String id){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where "+idType+" = ?",new String[] { id });
-        return res;
+        return db.rawQuery("select * from "+ ORDER_TABLE +" where OrderNumber = ?",new String[] { id });
     }
 
-    public int getStatus(String num){
+    /*
+    Queries all orders from the closed table.
+     */
+    public Cursor queryClosedAllOrders(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where OrderNumber = ?", new String[] { num });
-        while(res.moveToNext()){
-            return res.getInt(4);
-        }
-        return -1;
+        return db.rawQuery("select * from "+CLOSED_TABLE+" order by idx",null);
     }
 
-    public void updateStatus(String num, int status){
+    /*
+    Queries the closed table for a specific entry given an OrderNumber
+     */
+    private Cursor queryClosedOrder(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("select * from "+CLOSED_TABLE+" where OrderNumber = ?",new String[] { id });
+    }
+
+    /*
+    Deletes an order from the order table and returns that order as an ArrayList of type String.
+     */
+    public ArrayList<String> deleteOrder(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor queryResult = db.rawQuery("select * from "+ ORDER_TABLE +" where OrderNumber = ?",new String[] { id });
+        ArrayList<String> orderData = dataToList(queryResult);
+        db.delete(ORDER_TABLE, "OrderNumber = ?", new String[] {id});
+        return orderData;
+    }
+
+    /*
+    Updates the status of a particular entry in the order table.
+     */
+    public void updateStatus(String id, int status){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_5, status);
-        db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { num });
+        cv.put("Status", status);
+        db.update(ORDER_TABLE, cv, "OrderNumber = ?", new String[] { id });
         db.close();
     }
 
-    public void setSignature(String id, String sign){
+    /*
+    Updates the signature of a particular entry in the order table.
+     */
+    public void updateSignature(String id, String sign){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_6, sign);
-        db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { id });
+        cv.put("Signature", sign);
+        db.update(ORDER_TABLE, cv, "OrderNumber = ?", new String[] { id });
         db.close();
     }
 
-    public void updateQuantity(String num, int quantity){
+    /*
+    Updates the quantity of a particular entry in the order table.
+     */
+    public void updateQuantity(String id, int quantity){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_8, quantity);
-        db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { num });
+        cv.put("quantity", quantity);
+        db.update(ORDER_TABLE, cv, "OrderNumber = ?", new String[] { id });
         db.close();
     }
 
-    public Integer deleteData (String id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Integer result = db.delete(TABLE_NAME, "OrderNumber = ?", new String[] {id});
-        db.close();
-        return result;
-    }
-
-    public ArrayList<String> returnData(Cursor data){
+    /*
+    Converts the query data from a Cursor object to an ArrayList of type String
+     */
+    private ArrayList<String> dataToList(Cursor data){
         ArrayList<String> dataList = new ArrayList<>();
         while (data.moveToNext()) {
-            dataList.add(data.getString(0));
-            dataList.add(data.getString(1));
-            dataList.add(data.getString(2));
-            dataList.add(data.getString(3));
-            dataList.add(data.getString(4));
-            dataList.add(data.getString(5));
-            dataList.add(data.getString(7));
-            dataList.add(data.getString(8));
+            dataList.add(data.getString(COL_ORDERNUMBER));
+            dataList.add(data.getString(COL_ADDRESS));
+            dataList.add(data.getString(COL_RECIPIENT));
+            dataList.add(data.getString(COL_ITEM));
+            dataList.add(data.getString(COL_STATUS));
+            dataList.add(data.getString(COL_SIGNATURE));
+            dataList.add(data.getString(COL_QUANTITY));
+            dataList.add(data.getString(COL_CARTONNUMBER));
         }
         return dataList;
     }
 
-    public ArrayList<String> removeIndex(String id, int remove){
+    /*
+    Move an order from its current position(index) to a new position in the database.
+     */
+    public void moveOrder(String id, int remove, int insert){
+        ArrayList<String> removedInstance = popFromList(id, remove);
+        pushToList(removedInstance, insert);
+    }
+
+    /*
+    Pops an order from the order table and returns the data as an ArrayList of type String.
+     */
+    private ArrayList<String> popFromList(String id, int remove){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where IDX > "+remove +" order by idx", null);
-
-        if(res.getCount() == 0){
-            ArrayList<String> returnString;
-
-            Cursor res1 = getInstance(id);
-            returnString = returnData(res1);
-            deleteData(id);
-            db.close();
-            return returnString;
+        Cursor queryResult = db.rawQuery("select * from "+ ORDER_TABLE +" where IDX > "+remove +" order by idx", null);
+        if(queryResult.getCount() > 0){
+            shiftEntriesDown(db, queryResult, remove, ORDER_TABLE);
         }
-        int i = remove;
-        while (res.moveToNext()) {
-            String key = res.getString(0);
+        ArrayList<String> removedInstance = deleteOrder(id);
+        db.close();
+        return removedInstance;
+    }
+
+
+    /*
+    Takes an order as an ArrayList of type String and pushes it to the order table.
+     */
+    private void pushToList(ArrayList<String> dataList, int insert){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+ ORDER_TABLE +" where idx >= "+insert+" order by idx", null);
+        if(res.getCount() > 0){
+            shiftEntriesUp(db, res, insert, ORDER_TABLE);
+        }
+        insertOrder(dataList.get(0), dataList.get(1), dataList.get(2), dataList.get(3),
+                parseInt(dataList.get(4)), dataList.get(5), insert, parseInt(dataList.get(6)), dataList.get(7));
+        db.close();
+    }
+
+    /*
+    Increments index of each entry by value 1.
+     */
+    private void shiftEntriesUp(SQLiteDatabase db, Cursor queryResult, int insert, String table){
+        int i = insert;
+        while (queryResult.moveToNext()) {
+            String orderNum = queryResult.getString(COL_ORDERNUMBER);
             ContentValues cv = new ContentValues();
-            cv.put(COL_7, i++);
-            db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { key });
+            cv.put("idx", ++i);
+            db.update(table, cv, "OrderNumber = ?", new String[] { orderNum });
         }
-        db.close();
-        Cursor data = getInstance(id);
-        ArrayList<String> returnString = returnData(data);
-        deleteData(id);
-        return returnString;
-
     }
 
-    public void pushIndex(String id, int insert){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME+" where idx >= "+insert+" order by idx", null);
-        if(res.getCount() != 0){
-            int i = insert;
-            while (res.moveToNext()) {
-                String key = res.getString(0);
-                ContentValues cv = new ContentValues();
-                cv.put(COL_7, ++i);
-                db.update(TABLE_NAME, cv, "OrderNumber = ?", new String[] { key });
-            }
+    /*
+    Decrements index of each entry by 1 value.
+     */
+    private void shiftEntriesDown(SQLiteDatabase db, Cursor queryResult, int remove, String table){
+        int i = remove;
+        while (queryResult.moveToNext()) {
+            String orderNumber = queryResult.getString(COL_ORDERNUMBER);
+            ContentValues cv = new ContentValues();
+            cv.put("idx", i++);
+            db.update(table, cv, "OrderNumber = ?", new String[] { orderNumber });
         }
-        db.close();
     }
 
-
-
-    public void updateIndex(String id, int remove, int insert){
-        ArrayList<String> info = removeIndex(id, remove);
-        pushIndex(id, insert);
-        insertData(id, info.get(1), info.get(2), info.get(3), parseInt(info.get(4)), info.get(5), insert, parseInt(info.get(6)), info.get(7));
-    }
-
+    /*
+    Returns the size of a given table
+     */
     public int returnSize(String table){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from "+table+" order by idx",null);
@@ -191,74 +261,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return size;
     }
 
-
-    //closed orders methods
-    public boolean insert_closed(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton){
+    /*
+    Moves an order from the order_table to the closed_table.
+     */
+    public void closeOrder(String id, int index){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("replace into closed_orders_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', '"+carton+"')");
-        return true;
-    }
+        Cursor cursor = queryOrder(id);
+        ArrayList<String> item_data = dataToList(cursor);
 
-    public void close_order(String id, int index){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = getInstance(id);
-        ArrayList<String> item_data = returnData(cursor);
-
-        insert_closed(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
+        insertClosed(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
                 parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE), parseInt(item_data.get(6)), item_data.get(7));
-        removeIndex(id, index);
+        popFromList(id, index);
         db.close();
     }
 
-    public void reopen_order(String id, int index) {
+    /*
+    Moves an order from the closed_table to the order_table.
+     */
+    public void reopenOrder(String id, int index) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = get_closed_instance(id);
-        ArrayList<String> item_data = new ArrayList<>();
-        item_data = returnData(cursor);
-        insertData(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
-                parseInt(item_data.get(4)),item_data.get(5), returnSize(TABLE_NAME), parseInt(item_data.get(6)), item_data.get(7));
-        remove_index_closed(id, index);
+        Cursor cursor = queryClosedOrder(id);
+        ArrayList<String> item_data = dataToList(cursor);
+        insertOrder(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
+                parseInt(item_data.get(4)),item_data.get(5), returnSize(ORDER_TABLE), parseInt(item_data.get(6)), item_data.get(7));
+        popFromClosed(id, index);
         db.close();
-
     }
 
-    public Cursor get_closed_all(){
+    /*
+    Deletes order from closed table. Updates indices accordingly.
+     */
+    private void popFromClosed(String id, int remove){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+CLOSED_TABLE+" order by idx",null);
-        return res;
-    }
-
-    public Cursor get_closed_instance(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+CLOSED_TABLE+" where OrderNumber = ?",new String[] { id });
-        return res;
-    }
-
-    public ArrayList<String> remove_index_closed(String id, int remove){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+CLOSED_TABLE+" where IDX > "+remove +" order by idx", null);
-
-        if(res.getCount() == 0){
-            ArrayList<String> returnString;
-
-            Cursor res1 = get_closed_instance(id);
-            returnString = returnData(res1);
-            db.delete(CLOSED_TABLE, "OrderNumber = ?", new String[] {id});
-            db.close();
-            return returnString;
+        Cursor queryResult = db.rawQuery("select * from "+CLOSED_TABLE+" where IDX > "+remove +" order by idx", null);
+        if(queryResult.getCount() > 0){
+            shiftEntriesDown(db, queryResult, remove, CLOSED_TABLE);
         }
-        int i = remove;
-        while (res.moveToNext()) {
-            String key = res.getString(0);
-            ContentValues cv = new ContentValues();
-            cv.put(COL_7, i++);
-            db.update(CLOSED_TABLE, cv, "OrderNumber = ?", new String[] { key });
-        }
-        Cursor data = get_closed_instance(id);
-        ArrayList<String> returnString = returnData(data);
         db.delete(CLOSED_TABLE, "OrderNumber = ?", new String[] {id});
         db.close();
-        return returnString;
     }
-
 }
