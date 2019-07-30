@@ -1,11 +1,10 @@
 package com.example.refresh;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -20,7 +19,6 @@ import static com.example.refresh.Delivery_Item.COMPLETE;
 import static com.example.refresh.Delivery_Item.INCOMPLETE;
 import static com.example.refresh.Delivery_Item.SCANNED;
 import static com.example.refresh.Delivery_Item.SELECTED;
-import static java.lang.Integer.parseInt;
 
 public class RecyclerView extends AppCompatActivity {
 
@@ -77,13 +75,6 @@ public class RecyclerView extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c);
         return formattedDate;
-    }
-
-
-    public void openMap(String id){
-        Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra("orderString", id);
-        startActivity(intent);
     }
 
     private void initRecyclerView(){
