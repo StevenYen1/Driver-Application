@@ -34,6 +34,11 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.refresh.RetrieveSignatures.SignatureList;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.ItemModel.PackageModel;
+import com.example.refresh.ScanPackages.External_Scanner;
+import com.example.refresh.ScanPackages.Scandit;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -47,7 +52,7 @@ import java.util.Date;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static com.example.refresh.DatabaseHelper.COL_STATUS;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
 
 public class Menu extends AppCompatActivity {
 
@@ -115,7 +120,7 @@ public class Menu extends AppCompatActivity {
      */
     private void setupViewOrders(){
         CardView viewOrders = findViewById(R.id.view_route_btn);
-        viewOrders.setOnClickListener(v -> openActivity(RecyclerView.class));
+        viewOrders.setOnClickListener(v -> openActivity(ViewOrders.class));
     }
 
     /*
@@ -167,14 +172,14 @@ public class Menu extends AppCompatActivity {
                 FancyButton get_btn = mView.findViewById(R.id.get_call);
                 FancyButton post_btn = mView.findViewById(R.id.post_call);
 
-                get_btn.setOnClickListener(v1 -> openActivity(RestList.class));
+                get_btn.setOnClickListener(v1 -> openActivity(SignatureList.class));
                 post_btn.setOnClickListener(v1 -> {
                     sync_signs.clear();
                     sync_ids.clear();
 
                     Cursor cursor = myDb.queryAllOrders();
                     while(cursor.moveToNext()){
-                        if(cursor.getInt(COL_STATUS) == Delivery_Item.FAIL_SEND){
+                        if(cursor.getInt(COL_STATUS) == PackageModel.FAIL_SEND){
                             sync_ids.add(cursor.getString(0));
                             sync_signs.add(cursor.getString(5));
                         }
@@ -255,7 +260,7 @@ public class Menu extends AppCompatActivity {
         float total = 0;
         while(cursor.moveToNext()){
             int status = cursor.getInt(4);
-            if(status==Delivery_Item.COMPLETE || status==Delivery_Item.FAIL_SEND){
+            if(status== PackageModel.COMPLETE || status== PackageModel.FAIL_SEND){
                 completed++;
             }
             total++;

@@ -2,21 +2,18 @@ package com.example.refresh;
 
 import android.app.Dialog;
 import android.database.Cursor;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.isapanah.awesomespinner.AwesomeSpinner;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -24,7 +21,7 @@ import java.util.regex.Pattern;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.AddOrders.isParsable;
-import static com.example.refresh.DatabaseHelper.*;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.*;
 import static java.lang.Integer.parseInt;
 
 public class AdjustOrders extends AppCompatActivity {

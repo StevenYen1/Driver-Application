@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/contentBody"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".scannedItems"
+    tools:context=".SignPackages.ScannedItems"
     tools:showIn="@layout/activity_scanned_items"
     android:orientation="vertical"
     android:background="@drawable/background_gradient_dark">

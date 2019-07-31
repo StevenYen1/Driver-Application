@@ -17,19 +17,19 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.example.refresh.DatabaseHelper;
-import com.example.refresh.Delivery_Item;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.R;
+import com.example.refresh.ScanPackages.Scandit;
 
-import static com.example.refresh.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.Delivery_Item.SCANNED;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
+import static com.example.refresh.ItemModel.PackageModel.SCANNED;
+import static com.example.refresh.ScanPackages.Scandit.getScanner;
 
 public class ScanResult {
 
@@ -44,6 +44,7 @@ public class ScanResult {
     public void checkScan(){
         Cursor queryResult = getOrderDetails();
         if(isIncomplete(queryResult)){
+            if(context instanceof Scandit){ getScanner().pauseScanning(); }
             buildSuccessWindow();
             statusScanned();
         }
@@ -89,6 +90,9 @@ public class ScanResult {
                 alert.dismiss();
                 lp.dimAmount = 0.0f;
                 alert.getWindow().setAttributes(lp);
+                if(context instanceof Scandit){
+                    getScanner().resumeScanning();
+                }
             }
         };
         alert.setOnDismissListener(dialog1 -> handler.removeCallbacks(runnable));

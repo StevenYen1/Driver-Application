@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class AddOrders extends AppCompatActivity {

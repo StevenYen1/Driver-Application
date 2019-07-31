@@ -4,7 +4,7 @@ Description:
     Class designed to create a four function custom AlertDialog.
 
 Specific Features:
-    Done Scanning -> move to scannedItems.class
+    Done Scanning -> move to ScannedItems.class
     Continue Scanning -> stay on the current Activity
     View Orders -> Create a popup that shows all orders and their current status
     Exit -> Go back to Manage Route Menu and discard all unsigned scans.
@@ -23,18 +23,20 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.example.refresh.DatabaseHelper;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.Menu;
 import com.example.refresh.R;
-import com.example.refresh.scannedItems;
+import com.example.refresh.ScanPackages.Scandit;
+import com.example.refresh.SignPackages.ScannedItems;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static com.example.refresh.DatabaseHelper.COL_ORDERNUMBER;
-import static com.example.refresh.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.Delivery_Item.INCOMPLETE;
-import static com.example.refresh.Delivery_Item.SCANNED;
-import static com.example.refresh.Delivery_Item.SELECTED;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
+import static com.example.refresh.ItemModel.PackageModel.INCOMPLETE;
+import static com.example.refresh.ItemModel.PackageModel.SCANNED;
+import static com.example.refresh.ItemModel.PackageModel.SELECTED;
+import static com.example.refresh.ScanPackages.Scandit.getScanner;
 
 public class ScannerMenu extends Application {
 
@@ -56,7 +58,7 @@ public class ScannerMenu extends Application {
     Public method that actually builds the AlertDialog
      */
     public void createDialog(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -77,7 +79,12 @@ public class ScannerMenu extends Application {
         FancyButton exit = view.findViewById(R.id.Exit);
         exit.setOnClickListener(v -> {
             Runnable mUpdateTimeTask = () -> discardScansWarning("This will discard all saved scans. Do you still wish to continue?",
-                    (dialog, which) -> openMenu());
+                    (dialog, which) -> {
+                        openMenu();
+                        if(context instanceof Scandit){
+                            getScanner().stopScanning();
+                        }
+                    });
             mHandler.postDelayed(mUpdateTimeTask, 250);
         });
 
@@ -91,13 +98,24 @@ public class ScannerMenu extends Application {
             mHandler.postDelayed(mUpdateTimeTask, 250);
         });
 
-        //Done Button - Moves on to scannedItems
+        //Done Button - Moves on to ScannedItems
         FancyButton done = view.findViewById(R.id.Done);
-        done.setOnClickListener(v -> openScannedItems());
+        done.setOnClickListener(v -> {
+            openScannedItems();
+            if(context instanceof Scandit){
+                getScanner().stopScanning();
+            }
+        });
 
         //Continue Button - Continue Scanning
         FancyButton continueB = view.findViewById(R.id.Continue);
-        continueB.setOnClickListener(v -> alert.dismiss());
+        continueB.setOnClickListener(v -> {
+            alert.dismiss();
+            if(context instanceof Scandit){
+                getScanner().resumeScanning();
+            }
+        }
+        );
     }
 
     /*
@@ -139,10 +157,10 @@ public class ScannerMenu extends Application {
         context.startActivity(intent);
     }
     /*
-    Opens scannedItems Page.
+    Opens ScannedItems Page.
      */
     private void openScannedItems(){
-        Intent intent = new Intent(context, scannedItems.class);
+        Intent intent = new Intent(context, ScannedItems.class);
         intent.putExtra("previousActivity", scannerType);
         context.startActivity(intent);
     }

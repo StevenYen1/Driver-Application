@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.RetrieveSignatures;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.refresh.R;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class RestCalls extends AppCompatActivity {
+public class SignatureCall extends AppCompatActivity {
 
     private TextView textViewResult;
 
@@ -73,14 +74,14 @@ public class RestCalls extends AppCompatActivity {
         @TargetApi(Build.VERSION_CODES.O)
         protected void onPostExecute(JSONObject result) {
             if (result == null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(RestCalls.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignatureCall.this);
                 builder.setTitle("Error: Missing Entry");
                 builder.setMessage("There is no such id in the database. Please try again");
                 builder.setCancelable(false);
                 builder.setPositiveButton("RETURN", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(RestCalls.this, RestList.class);
+                        Intent intent = new Intent(SignatureCall.this, SignatureList.class);
                         startActivity(intent);
                     }
                 });

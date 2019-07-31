@@ -10,17 +10,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.TextView;
 
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.example.refresh.Delivery_Item.COMPLETE;
-import static com.example.refresh.Delivery_Item.INCOMPLETE;
-import static com.example.refresh.Delivery_Item.SCANNED;
-import static com.example.refresh.Delivery_Item.SELECTED;
+import static com.example.refresh.ItemModel.PackageModel.COMPLETE;
+import static com.example.refresh.ItemModel.PackageModel.INCOMPLETE;
+import static com.example.refresh.ItemModel.PackageModel.SCANNED;
+import static com.example.refresh.ItemModel.PackageModel.SELECTED;
 
-public class RecyclerView extends AppCompatActivity {
+public class ViewOrders extends AppCompatActivity {
 
     private ArrayList<Integer> status_icons = new ArrayList<>();
     private ArrayList<String> more_details = new ArrayList<>();
@@ -80,7 +82,7 @@ public class RecyclerView extends AppCompatActivity {
     private void initRecyclerView(){
         android.support.v7.widget.RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
 
-        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(allOrders, addresses, status_icons, more_details, this);
+        final ViewOrdersAdapter adapter = new ViewOrdersAdapter(allOrders, addresses, status_icons, more_details, this);
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager layoutmanager = new LinearLayoutManager(this);

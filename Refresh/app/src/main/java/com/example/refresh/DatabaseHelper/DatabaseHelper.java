@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.DatabaseHelper;
 /*
 Description:
     This class is the single direct access point to the SQLite database.

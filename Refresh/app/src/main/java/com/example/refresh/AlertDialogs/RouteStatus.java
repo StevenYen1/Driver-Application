@@ -16,19 +16,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.refresh.DatabaseHelper;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
 
-import static com.example.refresh.DatabaseHelper.COL_ADDRESS;
-import static com.example.refresh.DatabaseHelper.COL_CARTONNUMBER;
-import static com.example.refresh.DatabaseHelper.COL_ITEM;
-import static com.example.refresh.DatabaseHelper.COL_ORDERNUMBER;
-import static com.example.refresh.DatabaseHelper.COL_QUANTITY;
-import static com.example.refresh.DatabaseHelper.COL_RECIPIENT;
-import static com.example.refresh.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.Delivery_Item.COMPLETE;
-import static com.example.refresh.Delivery_Item.FAIL_SEND;
-import static com.example.refresh.Delivery_Item.SCANNED;
-import static com.example.refresh.Delivery_Item.SELECTED;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_CARTONNUMBER;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ITEM;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_QUANTITY;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
+import static com.example.refresh.ItemModel.PackageModel.COMPLETE;
+import static com.example.refresh.ItemModel.PackageModel.FAIL_SEND;
+import static com.example.refresh.ItemModel.PackageModel.SCANNED;
+import static com.example.refresh.ItemModel.PackageModel.SELECTED;
 
 public class RouteStatus {
 

@@ -1,9 +1,7 @@
-package com.example.refresh;
+package com.example.refresh.SignPackages;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,6 +14,9 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.ItemModel.PackageModel;
+import com.example.refresh.R;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -31,7 +32,7 @@ import java.util.Date;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static com.example.refresh.Delivery_Item.SELECTED;
+import static com.example.refresh.ItemModel.PackageModel.SELECTED;
 
 public class Signature extends Activity {
     private SignaturePad mSignaturePad;
@@ -144,7 +145,7 @@ public class Signature extends Activity {
     }
 
     public void returnToPrev(){
-        Intent intent = new Intent(this, scannedItems.class);
+        Intent intent = new Intent(this, ScannedItems.class);
         intent.putExtra("previousActivity", getIntent().getStringExtra("previousActivity"));
         startActivity(intent);
     }
@@ -181,17 +182,17 @@ public class Signature extends Activity {
                             .field("submissionDate", ""+time).asString();
 
                     if(postResponse.getCode() > 204){
-                        myDb.updateStatus(currentOrders.get(i), Delivery_Item.FAIL_SEND);
+                        myDb.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
                     }
                     else{
-                        myDb.updateStatus(currentOrders.get(i), Delivery_Item.COMPLETE);
+                        myDb.updateStatus(currentOrders.get(i), PackageModel.COMPLETE);
                     }
 
 
 
                 } catch (UnirestException e) {
                     e.printStackTrace();
-                    myDb.updateStatus(currentOrders.get(i), Delivery_Item.FAIL_SEND);
+                    myDb.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
                 }
             }
             return "Complete";

@@ -15,14 +15,14 @@ import com.example.refresh.AlertDialogs.OrderDetails;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
+public class ViewOrdersAdapter extends RecyclerView.Adapter<ViewOrdersAdapter.ViewHolder>{
 
     private ArrayList<String> mImageNames = new ArrayList<>();
     private ArrayList<String> mAddresses = new ArrayList<>();
     private ArrayList<Integer> mImages = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(ArrayList<String> imageNames, ArrayList<String> addresses, ArrayList<Integer> images, ArrayList<String> details, Context context){
+    public ViewOrdersAdapter(ArrayList<String> imageNames, ArrayList<String> addresses, ArrayList<Integer> images, ArrayList<String> details, Context context){
         mImageNames = imageNames;
         mImages = images;
         mAddresses = addresses;
@@ -40,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @TargetApi(26)
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-        com.example.refresh.RecyclerView recyclerView = (com.example.refresh.RecyclerView) mContext;
+        ViewOrders recyclerView = (ViewOrders) mContext;
 
         Drawable img;
         if(mImages.get(i)==0){

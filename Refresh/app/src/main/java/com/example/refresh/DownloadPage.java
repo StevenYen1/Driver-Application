@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.ItemModel.PackageModel;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -69,28 +71,28 @@ public class DownloadPage extends AppCompatActivity {
     Initializes a list of orders and stores it in the database
      */
     private void setupOrderList(){
-        ArrayList<Delivery_Item> listData = createListData();
+        ArrayList<PackageModel> listData = createListData();
         populateDatabase(listData);
     }
 
     /*
     Static data created for testing purposes.
      */
-    private ArrayList<Delivery_Item> createListData(){
-        Delivery_Item item1 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "1600 Pennsylvania Ave, Washington, DC", "President of the US", "A Book", 0, 3, "7364322720");
-        Delivery_Item item2 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "968 Woodside Circle, Glendale, FL 32433", "John Smith", "Hammer", 0, 1, "3258756119");
-        Delivery_Item item3 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "3668 Young Road Boise, Idaho 83716", "Anthony Green", "Extention Cable", 0, 2, "3419677734");
-        Delivery_Item item4 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "3295 Fantages Way, Bingham, ME 04920", "Trisha Patricks", "Shovel", 0 , 1, "0424509038");
-        Delivery_Item item5 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "50 Vassar St, Cambridge, MA 02139", "Jamal Husain", "Acer E-Aspire", 0, 1, "4727767227");
-        Delivery_Item item6 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "924 Avenue J East, Grand Prairie, TX 75050", "Charles Nguyen", "Vans", 0, 5, "4218026124");
-        Delivery_Item item7 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "908 Massachusetts Ave, Arlington, MA 02476", "Scarlet Yin", "Summer Dress", 0, 1, "8393563789");
-        Delivery_Item item8 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "65 Harrison Ave Ste 306, Boston, MA 02111", "Margaret Silva", "AA Batteries", 0, 10, "0247724439");
-        Delivery_Item item9 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "124 Beach St, Ogunquit, ME 03907", "Takeya Shiguromo", "Samsung Galaxy 9", 0, 1, "6551938287");
-        Delivery_Item item10 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "Walt Disney World Resort, Orlando, FL 32830", "Jessica Arsenault", "Tableware", 0, 1, "1632391305");
-        Delivery_Item item11 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "500 Staples Drive, Framingham, MA 01702", "Sam Pickman", "Android Tablet", 0, 1, "4994061171");
-        Delivery_Item item12 = new Delivery_Item(""+(long) Math.floor(Math.random() * 9_000_000_000L), "211 Arlington Street, Acton MA 01720", "Xiaoyu Chen", "Colored Pencil Set", 0, 1, "4361195587");
+    private ArrayList<PackageModel> createListData(){
+        PackageModel item1 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "1600 Pennsylvania Ave, Washington, DC", "President of the US", "A Book", 0, 3, "7364322720");
+        PackageModel item2 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "968 Woodside Circle, Glendale, FL 32433", "John Smith", "Hammer", 0, 1, "3258756119");
+        PackageModel item3 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "3668 Young Road Boise, Idaho 83716", "Anthony Green", "Extention Cable", 0, 2, "3419677734");
+        PackageModel item4 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "3295 Fantages Way, Bingham, ME 04920", "Trisha Patricks", "Shovel", 0 , 1, "0424509038");
+        PackageModel item5 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "50 Vassar St, Cambridge, MA 02139", "Jamal Husain", "Acer E-Aspire", 0, 1, "4727767227");
+        PackageModel item6 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "924 Avenue J East, Grand Prairie, TX 75050", "Charles Nguyen", "Vans", 0, 5, "4218026124");
+        PackageModel item7 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "908 Massachusetts Ave, Arlington, MA 02476", "Scarlet Yin", "Summer Dress", 0, 1, "8393563789");
+        PackageModel item8 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "65 Harrison Ave Ste 306, Boston, MA 02111", "Margaret Silva", "AA Batteries", 0, 10, "0247724439");
+        PackageModel item9 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "124 Beach St, Ogunquit, ME 03907", "Takeya Shiguromo", "Samsung Galaxy 9", 0, 1, "6551938287");
+        PackageModel item10 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "Walt Disney World Resort, Orlando, FL 32830", "Jessica Arsenault", "Tableware", 0, 1, "1632391305");
+        PackageModel item11 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "500 Staples Drive, Framingham, MA 01702", "Sam Pickman", "Android Tablet", 0, 1, "4994061171");
+        PackageModel item12 = new PackageModel(""+(long) Math.floor(Math.random() * 9_000_000_000L), "211 Arlington Street, Acton MA 01720", "Xiaoyu Chen", "Colored Pencil Set", 0, 1, "4361195587");
 
-        ArrayList<Delivery_Item> newList = new ArrayList<Delivery_Item>();
+        ArrayList<PackageModel> newList = new ArrayList<PackageModel>();
 
         newList.add(item1);
         newList.add(item2);
@@ -111,12 +113,12 @@ public class DownloadPage extends AppCompatActivity {
     /*
     Populates the database with a list of Delivery_Items
      */
-    private void populateDatabase(ArrayList<Delivery_Item> list){
+    private void populateDatabase(ArrayList<PackageModel> list){
         DatabaseHelper myDb = new DatabaseHelper(this);
         myDb.clearTables();
         int i = 0;
-        for(Delivery_Item x: list){
-            myDb.insertOrder(x.getOrderNumber(), x.getOrderString(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity(), x.getCartonNumber());
+        for(PackageModel x: list){
+            myDb.insertOrder(x.getOrderNumber(), x.getAddress(), x.getRecipient(), x.getItem(), x.getStatus(), x.getSignature(), i, x.getQuantity(), x.getCartonNumber());
             i++;
         }
     }

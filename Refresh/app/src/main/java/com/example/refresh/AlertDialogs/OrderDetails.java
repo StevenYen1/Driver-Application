@@ -23,17 +23,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.refresh.DatabaseHelper;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.MapActivity;
 import com.example.refresh.R;
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static com.example.refresh.DatabaseHelper.COL_ADDRESS;
-import static com.example.refresh.DatabaseHelper.COL_CARTONNUMBER;
-import static com.example.refresh.DatabaseHelper.COL_ITEM;
-import static com.example.refresh.DatabaseHelper.COL_ORDERNUMBER;
-import static com.example.refresh.DatabaseHelper.COL_QUANTITY;
-import static com.example.refresh.DatabaseHelper.COL_RECIPIENT;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_CARTONNUMBER;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ITEM;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_QUANTITY;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
 
 public class OrderDetails extends Application {
     /*
@@ -109,7 +109,7 @@ public class OrderDetails extends Application {
      */
     private void startGoogleMap(String address){
         Intent intent = new Intent(context, MapActivity.class);
-        intent.putExtra("orderString", address);
+        intent.putExtra("address", address);
         context.startActivity(intent);
     }
 }

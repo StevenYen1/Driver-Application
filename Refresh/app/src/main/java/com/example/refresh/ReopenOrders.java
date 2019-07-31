@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
+
 import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;

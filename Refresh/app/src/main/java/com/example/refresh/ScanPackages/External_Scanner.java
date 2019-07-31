@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.ScanPackages;
 /*
 Description:
     This Activity handles the external scanner.
@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.refresh.AlertDialogs.OrderDetails;
 import com.example.refresh.AlertDialogs.ScanResult;
 import com.example.refresh.AlertDialogs.ScannerMenu;
+import com.example.refresh.R;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -46,8 +47,6 @@ public class External_Scanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         layoutSetup();
         setInput();
-
-
     }
 
     /*
