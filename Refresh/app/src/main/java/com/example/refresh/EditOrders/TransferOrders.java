@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.EditOrders;
 
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
+
+import com.example.refresh.R;
 
 public class TransferOrders extends AppCompatActivity {
 

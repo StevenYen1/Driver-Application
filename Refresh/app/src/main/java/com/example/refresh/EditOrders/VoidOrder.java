@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.EditOrders;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.Menu;
+import com.example.refresh.R;
 
 import java.util.ArrayList;
 

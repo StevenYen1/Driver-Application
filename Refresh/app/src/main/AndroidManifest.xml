@@ -24,16 +24,16 @@
         <activity android:name=".ScanPackages.Scandit"/>
         <activity android:name=".RetrieveSignatures.SignatureList" />
         <activity
-            android:name=".AdjustOrders"
+            android:name=".EditOrders.AdjustOrders"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".VoidOrder" />
-        <activity android:name=".TransferOrders" />
-        <activity android:name=".ReopenOrders" />
-        <activity android:name=".CloseOrders" />
-        <activity android:name=".AddOrders" />
+        <activity android:name=".EditOrders.VoidOrder" />
+        <activity android:name=".EditOrders.TransferOrders" />
+        <activity android:name=".EditOrders.ReopenOrders" />
+        <activity android:name=".EditOrders.CloseOrders" />
+        <activity android:name=".EditOrders.AddOrders" />
         <activity android:name=".Menu" />
         <activity android:name=".RetrieveSignatures.SignatureCall" />
-        <activity android:name=".ViewOrders" />
+        <activity android:name=".OrderDisplay.ViewOrders" />
         <activity
             android:name=".SignPackages.ScannedItems"
             android:label="@string/title_activity_scanned_items"
@@ -45,7 +45,7 @@
         <activity
             android:name=".MapActivity"
             android:label="MapActivity"
-            android:parentActivityName=".ViewOrders"
+            android:parentActivityName=".OrderDisplay.ViewOrders"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data

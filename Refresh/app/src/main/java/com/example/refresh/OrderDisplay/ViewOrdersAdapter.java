@@ -1,5 +1,9 @@
-package com.example.refresh;
-
+package com.example.refresh.OrderDisplay;
+/*
+Description:
+    The purpose of this class is to create a ViewHolder item
+    and place order information inside of each ViewHolder item in the RecyclerView.
+ */
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -12,16 +16,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.refresh.AlertDialogs.OrderDetails;
+import com.example.refresh.R;
 
 import java.util.ArrayList;
 
 public class ViewOrdersAdapter extends RecyclerView.Adapter<ViewOrdersAdapter.ViewHolder>{
 
-    private ArrayList<String> mImageNames = new ArrayList<>();
-    private ArrayList<String> mAddresses = new ArrayList<>();
-    private ArrayList<Integer> mImages = new ArrayList<>();
+    /*
+    private instance variable
+     */
+    private ArrayList<String> mImageNames;
+    private ArrayList<String> mAddresses;
+    private ArrayList<Integer> mImages;
     private Context mContext;
 
+    /*
+    constructor for adapter
+     */
     public ViewOrdersAdapter(ArrayList<String> imageNames, ArrayList<String> addresses, ArrayList<Integer> images, ArrayList<String> details, Context context){
         mImageNames = imageNames;
         mImages = images;
@@ -29,6 +40,9 @@ public class ViewOrdersAdapter extends RecyclerView.Adapter<ViewOrdersAdapter.Vi
         mContext = context;
     }
 
+    /*
+    Methods that occur when the ViewHolder is created
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -37,11 +51,12 @@ public class ViewOrdersAdapter extends RecyclerView.Adapter<ViewOrdersAdapter.Vi
         return holder;
     }
 
+    /*
+    Placing the order information from ArrayLists into the ViewHolder and sets OnClickListener
+     */
     @TargetApi(26)
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-        ViewOrders recyclerView = (ViewOrders) mContext;
-
         Drawable img;
         if(mImages.get(i)==0){
             img = mContext.getResources().getDrawable( R.drawable.ic_action_falsecheck );
@@ -59,26 +74,32 @@ public class ViewOrdersAdapter extends RecyclerView.Adapter<ViewOrdersAdapter.Vi
         viewHolder.statusIcon.setCompoundDrawables( img, null, null, null );
 
 
-        viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHolder.itemView.setBackgroundResource(R.drawable.rowclick);
-                setViewInformation(viewHolder.id);
-            }
+        viewHolder.parentLayout.setOnClickListener(v -> {
+            viewHolder.itemView.setBackgroundResource(R.drawable.rowclick);
+            viewOrderDetails(viewHolder.id);
         });
     }
 
 
-    public void setViewInformation(String id){
+    /*
+    creates a OrderDetails dialog that displays order details.
+     */
+    public void viewOrderDetails(String id){
         OrderDetails orderDetails = new OrderDetails(mContext, id);
         orderDetails.formatOrderDetails();
     }
 
+    /*
+    returns how many items there are in the adapter.
+     */
     @Override
     public int getItemCount() {
         return mImageNames.size();
     }
 
+    /*
+    Internal ViewHolder class that creates objects to hold order information.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView statusIcon;

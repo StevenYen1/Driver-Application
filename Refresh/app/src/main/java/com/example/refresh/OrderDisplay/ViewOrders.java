@@ -1,5 +1,18 @@
-package com.example.refresh;
+package com.example.refresh.OrderDisplay;
+/*
+Description:
+    The purpose of this activity is to display order information in a list,
+    as well as allow the user to manipulate the list.
 
+Specific features:
+    Create RecyclerView which allows the user to:
+        - View orders
+        - Reposition orders
+
+Documentation & Code Written By:
+    Steven Yen
+    Staples Intern Summer 2019
+ */
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,12 +24,16 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.TextView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
 import static com.example.refresh.ItemModel.PackageModel.COMPLETE;
 import static com.example.refresh.ItemModel.PackageModel.INCOMPLETE;
 import static com.example.refresh.ItemModel.PackageModel.SCANNED;
@@ -24,54 +41,64 @@ import static com.example.refresh.ItemModel.PackageModel.SELECTED;
 
 public class ViewOrders extends AppCompatActivity {
 
+    /*
+    private instance variables
+     */
     private ArrayList<Integer> status_icons = new ArrayList<>();
     private ArrayList<String> more_details = new ArrayList<>();
     private ArrayList<String> addresses = new ArrayList<>();
-    private ArrayList<String> remainingOrders = new ArrayList<>();
-    private ArrayList<String> completedOrders = new ArrayList<>();
     private ArrayList<String> allOrders = new ArrayList<>();
-    DatabaseHelper myDb;
 
+    /*
+    Methods that are called when the activity begins
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
-        myDb = new DatabaseHelper(this);
         setOrderInformation();
-        setToolbarActivities();
+        setTitle();
         initRecyclerView();
     }
 
+    /*
+    Query the database for the updated status of orders. Stores the information in private ArrayLists.
+     */
     public void setOrderInformation(){
-        Cursor rawOrders = myDb.queryAllOrders();
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        Cursor rawOrders = databaseHelper.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
         }
         while(rawOrders.moveToNext()){
-            String ordernumber = rawOrders.getString(0);
-            String address = rawOrders.getString(1);
-            int status = rawOrders.getInt(4);
+            String orderNumber = rawOrders.getString(COL_ORDERNUMBER);
+            String address = rawOrders.getString(COL_ADDRESS);
+            int status = rawOrders.getInt(COL_STATUS);
 
-            allOrders.add(ordernumber);
+            allOrders.add(orderNumber);
             addresses.add(address);
 
             if(status == INCOMPLETE || status == SELECTED || status == SCANNED){
-                remainingOrders.add(ordernumber);
                 status_icons.add(INCOMPLETE);
             }
             else{
-                completedOrders.add(ordernumber);
                 status_icons.add(COMPLETE);
             }
         }
     }
 
-    public void setToolbarActivities(){
+    /*
+    Sets the title
+     */
+    public void setTitle(){
         Resources res = this.getResources();
         TextView title = findViewById(R.id.table_title);
         title.setText(String.format(res.getString(R.string.DeliveriesDate), returnDate()));
     }
 
+    /*
+    Gets the current date and returns it as a String
+     */
     public String returnDate(){
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
@@ -79,20 +106,20 @@ public class ViewOrders extends AppCompatActivity {
         return formattedDate;
     }
 
+    /*
+    Creates the RecyclerView, which is the scrollable, swappable, swipable list of orders.
+     */
     private void initRecyclerView(){
         android.support.v7.widget.RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         final ViewOrdersAdapter adapter = new ViewOrdersAdapter(allOrders, addresses, status_icons, more_details, this);
-        recyclerView.setAdapter(adapter);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
 
-        LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
-
-        recyclerView.setLayoutManager(layoutmanager);
-
-        DividerItemDecoration itemDecor = new DividerItemDecoration(recyclerView.getContext(), layoutmanager.getOrientation());
         recyclerView.addItemDecoration(itemDecor);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
 
-
+        DatabaseHelper databaseHelper = new DatabaseHelper(ViewOrders.this);
         ItemTouchHelper helper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
@@ -103,7 +130,7 @@ public class ViewOrders extends AppCompatActivity {
                         int position_dragged = dragged.getAdapterPosition();
                         int position_target = target.getAdapterPosition();
 
-                        myDb.moveOrder(allOrders.get(position_dragged), position_dragged, position_target);
+                        databaseHelper.moveOrder(allOrders.get(position_dragged), position_dragged, position_target);
                         status_icons.add(position_target, status_icons.remove(position_dragged));
                         addresses.add(position_target, addresses.remove(position_dragged));
                         allOrders.add(position_target, allOrders.remove(position_dragged));
@@ -116,7 +143,7 @@ public class ViewOrders extends AppCompatActivity {
                     public void onSwiped(@NonNull android.support.v7.widget.RecyclerView.ViewHolder viewHolder, int i) {
 
                         int position = viewHolder.getAdapterPosition();
-                        myDb.moveOrder(allOrders.get(position), position, allOrders.size()-1);
+                        databaseHelper.moveOrder(allOrders.get(position), position, allOrders.size()-1);
                         adapter.notifyItemRemoved(position);
                         adapter.notifyItemInserted(allOrders.size()-1);
 
@@ -126,6 +153,5 @@ public class ViewOrders extends AppCompatActivity {
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
-
     }
 }

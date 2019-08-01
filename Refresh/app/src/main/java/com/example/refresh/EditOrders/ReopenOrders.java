@@ -1,16 +1,17 @@
-package com.example.refresh;
+package com.example.refresh.EditOrders;
 /*
 Description:
-    The purpose of this class is to close orders (put them in an inactive state)
+    The purpose of this class is to reopen orders (turn them from an inactive state to an active state)
 
 Specific Features:
     Creates a ListView of current orders
-    Allows the user to close any any number of orders.
+    Allows the user to reopen any any number of orders.
 
 Documentation & Code Written By:
     Steven Yen
     Staples Intern Summer 2019
  */
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +20,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.refresh.AlertDialogs.CloseOrderDialog;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.Menu;
+import com.example.refresh.R;
 
 import java.util.ArrayList;
 
@@ -35,33 +37,32 @@ import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
 import static com.example.refresh.ItemModel.PackageModel.COMPLETE;
 
-public class CloseOrders extends AppCompatActivity {
+public class ReopenOrders extends AppCompatActivity {
 
     /*
     private instance variables
      */
-    private ArrayList<String> display = new ArrayList<>();
+    private TextView detail_display;
     private ArrayList<String> orderNums = new ArrayList<>();
+    private ArrayList<String> display = new ArrayList<>();
     private ArrayList<String> details = new ArrayList<>();
     private ArrayList<String> selectedItems = new ArrayList<>();
 
-
     /*
-    Methods that are called when the activity starts.
+    Methods that occur when the Activity begins
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_close_orders);
+        setContentView(R.layout.activity_reopen_orders);
         setupOrderInformation();
         setupListLayout();
         createButtons();
     }
 
-
     /*
-    This method queries the database and stores the certain data in ArrayLists.
-     */
+   This method queries the database and stores the certain data in ArrayLists.
+    */
     private void setupOrderInformation(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         Cursor cursor = databaseHelper.queryAllOrders();
@@ -80,6 +81,7 @@ public class CloseOrders extends AppCompatActivity {
                 details.add(details_string);
             }
         }
+        cursor.close();
     }
 
 
@@ -87,13 +89,18 @@ public class CloseOrders extends AppCompatActivity {
     Initializes buttons and sets OnClickListeners
      */
     private void createButtons(){
-        FancyButton accept = findViewById(R.id.accept_close);
+        FancyButton accept = findViewById(R.id.accept_reopen);
         accept.setOnClickListener(v -> {
-            CloseOrderDialog dialog = new CloseOrderDialog(CloseOrders.this, selectedItems);
-            dialog.createReasoningDialog();
+            DatabaseHelper databaseHelper = new DatabaseHelper(this);
+            for(String x : selectedItems){
+                databaseHelper.reopenOrder(x, display.indexOf(x));
+                display.remove(x);
+            }
+            Intent intent = new Intent(ReopenOrders.this, Menu.class);
+            startActivity(intent);
         });
 
-        FancyButton cancel = findViewById(R.id.cancel_close);
+        FancyButton cancel = findViewById(R.id.cancel_reopen);
         cancel.setOnClickListener(v -> onBackPressed());
     }
 
@@ -102,8 +109,8 @@ public class CloseOrders extends AppCompatActivity {
     Initializes ListView and sets OnItemClickListener
      */
     private void setupListLayout(){
-        ListView listView = findViewById(R.id.list_view);
-        TextView detail_display = findViewById(R.id.display_details_close);
+        ListView listView = findViewById(R.id.list_view_reopen);
+        TextView detail_display = findViewById(R.id.display_details_reopen);
 
         final ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.check_listview, display);
         listView.setAdapter(arrayAdapter);
