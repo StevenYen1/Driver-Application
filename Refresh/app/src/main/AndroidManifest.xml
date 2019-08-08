@@ -22,7 +22,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         >
         <activity android:name=".ScanPackages.Scandit"/>
-        <activity android:name=".RetrieveSignatures.SignatureList" />
+        <activity android:name=".RetrieveSignatures.SignatureInterface" />
         <activity
             android:name=".EditOrders.AdjustOrders"
             android:windowSoftInputMode="stateHidden" />
@@ -58,7 +58,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".ScanPackages.External_Scanner" />
+        <activity android:name=".ScanPackages.ExternalScanner" />
         <activity
             android:name=".SignPackages.Signature"
             android:label="@string/title_activity_feature1"

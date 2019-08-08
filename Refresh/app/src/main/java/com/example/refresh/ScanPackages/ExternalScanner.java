@@ -29,7 +29,7 @@ import com.example.refresh.R;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class External_Scanner extends AppCompatActivity {
+public class ExternalScanner extends AppCompatActivity {
 
     /*
     private instance variables
@@ -97,7 +97,7 @@ public class External_Scanner extends AppCompatActivity {
      */
     @Override
     public void onBackPressed(){
-        ScannerMenu scannerMenu = new ScannerMenu(External_Scanner.this, "e");
+        ScannerMenu scannerMenu = new ScannerMenu(ExternalScanner.this, "e");
         scannerMenu.createDialog();
     }
 
@@ -105,7 +105,7 @@ public class External_Scanner extends AppCompatActivity {
     Checks the input to see if it is a valid OrderNumber.
      */
     public void handleResult(String orderId) {
-        ScanResult newScan = new ScanResult(External_Scanner.this, orderId);
+        ScanResult newScan = new ScanResult(ExternalScanner.this, orderId);
         newScan.checkScan();
         recentId = orderId;
     }

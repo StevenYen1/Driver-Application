@@ -36,7 +36,7 @@ import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_QUANTITY;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
 
-public class SignatureList extends AppCompatActivity {
+public class SignatureInterface extends AppCompatActivity {
 
     /*
     private instance variables
@@ -91,7 +91,7 @@ public class SignatureList extends AppCompatActivity {
     Returns a Cursor object that can grab all data currently available in the "order table"
      */
     private Cursor queryAllData(){
-        DatabaseHelper databaseHelper = new DatabaseHelper(SignatureList.this);
+        DatabaseHelper databaseHelper = new DatabaseHelper(SignatureInterface.this);
         return databaseHelper.queryAllOrders();
     }
 
@@ -121,7 +121,7 @@ public class SignatureList extends AppCompatActivity {
     private void searchBtnSetup(){
         signatureSearch.setEnabled(false);
         signatureSearch.setOnClickListener(v -> {
-            Intent intent = new Intent(SignatureList.this, SignatureCall.class);
+            Intent intent = new Intent(SignatureInterface.this, SignatureCall.class);
             intent.putExtra("id", orderSelected);
             startActivity(intent);
         });
@@ -133,7 +133,7 @@ public class SignatureList extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(SignatureList.this, Menu.class);
+        Intent intent = new Intent(SignatureInterface.this, Menu.class);
         startActivity(intent);
     }
 }

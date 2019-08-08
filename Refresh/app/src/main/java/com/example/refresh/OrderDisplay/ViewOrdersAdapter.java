@@ -1,8 +1,17 @@
 package com.example.refresh.OrderDisplay;
 /*
 Description:
-    The purpose of this class is to create a ViewHolder item
-    and place order information inside of each ViewHolder item in the RecyclerView.
+    The purpose of this class is to create a ViewHolder item,
+    which acts as a single entry in the RecyclerView.
+    This class also places order information inside of each ViewHolder item.
+
+Specific Features:
+    Storing information inside each ViewHolder object.
+    Setting the OnClickListener for each item.
+
+Documentation & Code Written By:
+    Steven Yen
+    Staples Intern Summer 2019
  */
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -119,8 +128,5 @@ public class ViewOrdersAdapter extends RecyclerView.Adapter<ViewOrdersAdapter.Vi
             display = "";
             address = "";
         }
-
-
-
     }
 }

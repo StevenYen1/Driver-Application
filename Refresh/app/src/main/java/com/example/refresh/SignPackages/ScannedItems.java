@@ -22,7 +22,7 @@ import com.example.refresh.AlertDialogs.StandardMessage;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.Menu;
 import com.example.refresh.R;
-import com.example.refresh.ScanPackages.External_Scanner;
+import com.example.refresh.ScanPackages.ExternalScanner;
 import com.example.refresh.ScanPackages.Scandit;
 
 import java.util.ArrayList;
@@ -179,7 +179,7 @@ public class ScannedItems extends AppCompatActivity {
     Returns the class of most recent scanner activity used.
      */
     private java.lang.Class chooseScanner(){
-        if(getIntent().getStringExtra("previousActivity").equals("e")){return External_Scanner.class;}
+        if(getIntent().getStringExtra("previousActivity").equals("e")){return ExternalScanner.class;}
         return Scandit.class;
     }
 

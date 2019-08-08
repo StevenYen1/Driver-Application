@@ -81,7 +81,7 @@ public class SignatureCall extends AppCompatActivity {
                 builder.setPositiveButton("RETURN", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(SignatureCall.this, SignatureList.class);
+                        Intent intent = new Intent(SignatureCall.this, SignatureInterface.class);
                         startActivity(intent);
                     }
                 });

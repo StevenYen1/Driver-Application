@@ -41,10 +41,10 @@ import com.example.refresh.EditOrders.ReopenOrders;
 import com.example.refresh.EditOrders.TransferOrders;
 import com.example.refresh.EditOrders.VoidOrder;
 import com.example.refresh.OrderDisplay.ViewOrders;
-import com.example.refresh.RetrieveSignatures.SignatureList;
+import com.example.refresh.RetrieveSignatures.SignatureInterface;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.ItemModel.PackageModel;
-import com.example.refresh.ScanPackages.External_Scanner;
+import com.example.refresh.ScanPackages.ExternalScanner;
 import com.example.refresh.ScanPackages.Scandit;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -114,7 +114,7 @@ public class Menu extends AppCompatActivity {
                         openActivity(Scandit.class);
                     }
                 });
-                openExternal.setOnClickListener(v2 -> openActivity(External_Scanner.class));
+                openExternal.setOnClickListener(v2 -> openActivity(ExternalScanner.class));
                 builder.setView(mView);
                 builder.show();
             };
@@ -179,7 +179,7 @@ public class Menu extends AppCompatActivity {
                 FancyButton get_btn = mView.findViewById(R.id.get_call);
                 FancyButton post_btn = mView.findViewById(R.id.post_call);
 
-                get_btn.setOnClickListener(v1 -> openActivity(SignatureList.class));
+                get_btn.setOnClickListener(v1 -> openActivity(SignatureInterface.class));
                 post_btn.setOnClickListener(v1 -> {
                     sync_signs.clear();
                     sync_ids.clear();
