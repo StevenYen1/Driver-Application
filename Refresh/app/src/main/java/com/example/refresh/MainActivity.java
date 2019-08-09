@@ -68,18 +68,12 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 actionProcessButton.setProgress(1);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SystemClock.sleep(3000);
-                        MainActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                actionProcessButton.setProgress(100);
-                                mHandler.postDelayed(mUpdateTimeTask, 1000);
-                            }
-                        });
-                    }
+                new Thread(() -> {
+                    SystemClock.sleep(3000);
+                    MainActivity.this.runOnUiThread(() -> {
+                        actionProcessButton.setProgress(100);
+                        mHandler.postDelayed(mUpdateTimeTask, 1000);
+                    });
                 }).start();
             }
         });

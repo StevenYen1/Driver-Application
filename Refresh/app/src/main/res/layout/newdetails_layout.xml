@@ -193,7 +193,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <mehdi.sakout.fancybuttons.FancyButton
                     android:id="@+id/newdetails_map"
@@ -209,6 +209,22 @@
                     fancy:fb_textColor="@color/white"
                     fancy:textFont="@font/overpass"
                     fancy:fb_defaultColor="@color/middle_blue"
+                    fancy:fb_focusColor="@color/teal"
+                    />
+
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/newdetails_print"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:layout_marginLeft="20dp"
+                    fancy:fb_textSize="20sp"
+                    fancy:fb_text=""
+                    fancy:fb_textColor="@color/white"
+                    fancy:fb_fontIconResource="&#xf02f;"
+                    fancy:textFont="@font/overpass"
+                    fancy:fb_defaultColor="@color/purple"
                     fancy:fb_focusColor="@color/teal"
                     />
 

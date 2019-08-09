@@ -65,4 +65,7 @@ dependencies {
     implementation(name: 'ScanditBarcodeScanner', ext: 'aar')
     implementation 'com.params.progressview:step-progress:1.0.2'
     implementation 'com.ramijemli.percentagechartview:percentagechartview:0.3.1'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.0.3'
+    implementation 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
+    implementation 'com.google.zxing:core:3.2.1'
 }

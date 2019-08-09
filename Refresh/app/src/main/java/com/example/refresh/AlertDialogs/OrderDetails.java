@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.MapActivity;
+import com.example.refresh.Printer;
 import com.example.refresh.R;
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -98,6 +99,9 @@ public class OrderDetails extends Application {
             FancyButton mapBtn = view.findViewById(R.id.newdetails_map);
             mapBtn.setOnClickListener(v -> startGoogleMap(address));
 
+            FancyButton printBtn = view.findViewById(R.id.newdetails_print);
+            printBtn.setOnClickListener(v -> startPrint(ordernum));
+
             alertBuilder.setView(view);
             AlertDialog dialog = alertBuilder.show();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -110,6 +114,12 @@ public class OrderDetails extends Application {
     private void startGoogleMap(String address){
         Intent intent = new Intent(context, MapActivity.class);
         intent.putExtra("address", address);
+        context.startActivity(intent);
+    }
+
+    private void startPrint(String orderId){
+        Intent intent = new Intent(context, Printer.class);
+        intent.putExtra("orderId", orderId);
         context.startActivity(intent);
     }
 }

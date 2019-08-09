@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BIND_PRINT_SERVICE"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -18,10 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:icon"
         tools:ignore="GoogleAppIndexingWarning"
-        >
-        <activity android:name=".ScanPackages.Scandit"/>
+        tools:replace="android:icon">
+        <activity android:name=".Printer"></activity>
+        <activity android:name=".ScanPackages.Scandit" />
         <activity android:name=".RetrieveSignatures.SignatureInterface" />
         <activity
             android:name=".EditOrders.AdjustOrders"

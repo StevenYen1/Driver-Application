@@ -65,7 +65,7 @@ public class ReopenOrders extends AppCompatActivity {
     */
     private void setupOrderInformation(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
-        Cursor cursor = databaseHelper.queryAllOrders();
+        Cursor cursor = databaseHelper.queryClosedAllOrders();
         while(cursor.moveToNext()){
             if(cursor.getInt(COL_STATUS)!=COMPLETE){
 
