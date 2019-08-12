@@ -7,49 +7,83 @@
     tools:context=".Printer">
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff">
+        android:background="#DADADA">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/colorPrimaryDark"
-            android:text="Generated Barcode"
+            android:background="@color/dark_blue"
+            android:text="Generate Label"
             android:textColor="#ffffff"
             android:id="@+id/tv_header"
             android:textSize="18sp"
             android:gravity="center"/>
-        <Button
-            android:id="@+id/print_button"
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/choose_print"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:contentPaddingTop="10dp"
+            app:contentPaddingBottom="10dp">
+
+            <ImageView
+                android:id="@+id/barcode_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/todo" />
+
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/choose_print"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_below="@id/tv_header"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <Button
+                android:id="@+id/shiplabel_button"
+                android:textColor="@color/white"
+                android:background="@color/blue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:textAllCaps="false"
+                android:text="Return Label" />
+
+            <Button
+                android:id="@+id/returnlabel_button"
+                android:textColor="@color/white"
+                android:background="@color/blue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textAllCaps="false"
+                android:text="Shipping Label" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_alignParentBottom="true"
+            android:id="@+id/print_button"
+            android:textColor="@color/white"
+            android:background="@color/blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Print Shipping Label"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"/>
-
-        <!--<com.github.barteksc.pdfviewer.PDFView-->
-            <!--android:id="@+id/pdfView"-->
-            <!--android:layout_below="@+id/print_button"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"/>-->
-
-        <ImageView
-            android:id="@+id/barcode_image"
-            android:layout_below="@id/print_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/todo" />
-
-        <TextView
-            android:id="@+id/barcode_text"
-            android:layout_below="@+id/barcode_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#000"
-            android:text=""/>
+            android:text="Print"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginBottom="20dp"/>
 
 
     </RelativeLayout>
