@@ -3,13 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.refresh">
 
+    <uses-feature android:name="android.hardware.bluetooth" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.BIND_PRINT_SERVICE"
+    <uses-permission
+        android:name="android.permission.BIND_PRINT_SERVICE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_PRIVILEGED"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -22,7 +30,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".Printer"></activity>
+        <activity android:name=".Bluetooth"></activity>
+        <activity android:name=".Printer" />
         <activity android:name=".ScanPackages.Scandit" />
         <activity android:name=".RetrieveSignatures.SignatureInterface" />
         <activity

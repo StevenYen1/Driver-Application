@@ -1,29 +1,35 @@
 package com.example.refresh;
 /*
 Description:
-    The purpose of this class is to pull up a shipping label based on the order.
+    The purpose of this class is to create a return/shipping label based on the order.
 
 Specific Features:
-    Generates Barcode
-    Prints Barcode
+    Generates Shipping Label
+    Generates Return Label
+    Prints Label
 
 Documentation & Code Written By:
     Steven Yen
     Staples Intern Summer 2019
  */
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.widget.Toast;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
@@ -32,23 +38,29 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.scandit.recognition.Barcode;
 
-import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
-
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_CARTONNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
 
-public class Printer extends AppCompatActivity implements OnPageChangeListener, OnLoadCompleteListener {
+public class Printer extends AppCompatActivity {
 
-    public final int RETURN_LABEL = 1;
-    public final int SHIPPING_LABEL = 2;
+    private final int RETURN_LABEL = 1;
+    private final int SHIPPING_LABEL = 2;
 
     private String orderId;
     private int bitmapPrint = 0;
@@ -60,45 +72,50 @@ public class Printer extends AppCompatActivity implements OnPageChangeListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_printer);
         orderId = getIntent().getStringExtra("orderId");
+        createLabels(orderId);
+        setupButtons();
+
+    }
+
+    private void createLabels(String orderId){
         createShippingLabel(orderId);
         createReturnLabel(orderId);
+    }
 
+    private void setupButtons(){
         ImageView image = findViewById(R.id.barcode_image);
 
-        Button print = findViewById(R.id.print_button);
-        print.setEnabled(false);
-        print.setOnClickListener(v -> doBitmapPrint());
+        Button wifiPrint = findViewById(R.id.print_wifi);
+        wifiPrint.setEnabled(false);
+        wifiPrint.setOnClickListener(v -> doBitmapPrint());
 
-        Button shippingBtn = findViewById(R.id.shiplabel_button);
+        Button bluetoothFind = findViewById(R.id.find_bluetooth);
+        bluetoothFind.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Bluetooth.class);
+            intent.putExtra("orderId", orderId);
+            startActivity(intent);
+        });
+
+        FancyButton shippingBtn = findViewById(R.id.shiplabel_button);
         shippingBtn.setOnClickListener(v -> {
             bitmapPrint = SHIPPING_LABEL;
             image.setImageBitmap(shippingLabel);
-            print.setEnabled(true);
+            wifiPrint.setEnabled(true);
 
         });
 
-        Button returnBtn = findViewById(R.id.returnlabel_button);
+        FancyButton returnBtn = findViewById(R.id.returnlabel_button);
         returnBtn.setOnClickListener(v -> {
             bitmapPrint = RETURN_LABEL;
             image.setImageBitmap(returnLabel);
-            print.setEnabled(true);
+            wifiPrint.setEnabled(true);
         });
-    }
-
-    @Override
-    public void loadComplete(int nbPages) {
-
-    }
-
-    @Override
-    public void onPageChanged(int page, int pageCount) {
-
     }
 
     private void doBitmapPrint(){
         PrintHelper bitmapPrinter = new PrintHelper(this);
         bitmapPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if(bitmapPrint == RETURN_LABEL){
             bitmap = returnLabel;
             bitmapPrinter.printBitmap("return-testprint: "+ orderId, bitmap);
@@ -109,54 +126,6 @@ public class Printer extends AppCompatActivity implements OnPageChangeListener, 
         }
     }
 
-    private static final int WHITE = 0xFFFFFFFF;
-    private static final int BLACK = 0xFF000000;
-
-    Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
-        String contentsToEncode = contents;
-        if (contentsToEncode == null) {
-            return null;
-        }
-        Map<EncodeHintType, Object> hints = null;
-        String encoding = guessAppropriateEncoding(contentsToEncode);
-        if (encoding != null) {
-            hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
-            hints.put(EncodeHintType.CHARACTER_SET, encoding);
-        }
-        MultiFormatWriter writer = new MultiFormatWriter();
-        BitMatrix result;
-        try {
-            result = writer.encode(contentsToEncode, format, img_width, img_height, hints);
-        } catch (IllegalArgumentException iae) {
-            // Unsupported format
-            return null;
-        }
-        int width = result.getWidth();
-        int height = result.getHeight();
-        int[] pixels = new int[width * height];
-        for (int y = 0; y < height; y++) {
-            int offset = y * width;
-            for (int x = 0; x < width; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-            }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height,
-                Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        return bitmap;
-    }
-
-    private static String guessAppropriateEncoding(CharSequence contents) {
-        // Very crude at the moment
-        for (int i = 0; i < contents.length(); i++) {
-            if (contents.charAt(i) > 0xFF) {
-                return "UTF-8";
-            }
-        }
-        return null;
-    }
-
     private void createShippingLabel(String orderId){
         Bitmap bitmap = Bitmap.createBitmap(600, 700, Bitmap.Config.ARGB_8888);
 
@@ -165,7 +134,7 @@ public class Printer extends AppCompatActivity implements OnPageChangeListener, 
         paint.setColor(Color.BLACK);
 
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawColor(WHITE);
+        canvas.drawColor(Color.WHITE);
 
         ArrayList<String> list = queryData(orderId);
         ArrayList<String> parsedAddress = parseAddress(list.get(COL_ADDRESS));
@@ -200,9 +169,11 @@ public class Printer extends AppCompatActivity implements OnPageChangeListener, 
         centerPaint.setTextSize(28);
         int xPos = (canvas.getWidth() / 2);
         canvas.drawText("Order Tracking #", xPos, 350, centerPaint);
-        Bitmap barcode = null;
+        BarcodeBitmap barcodeBitmap = new BarcodeBitmap(orderId);
+
+        Bitmap barcode;
         try {
-            barcode = encodeAsBitmap(orderId, BarcodeFormat.CODE_128, 500, 250);
+            barcode = barcodeBitmap.encodeAsBitmap(BarcodeFormat.CODE_128, 500, 250);
             canvas.drawBitmap(barcode, 50, 370, null);
         } catch (WriterException e) {
             e.printStackTrace();
@@ -216,7 +187,7 @@ public class Printer extends AppCompatActivity implements OnPageChangeListener, 
         ArrayList<String> data = queryData(orderId);
         Bitmap bitmap = Bitmap.createBitmap(600, 750, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawColor(WHITE);
+        canvas.drawColor(Color.WHITE);
         Paint paint = new Paint();
         paint.setTextSize(20);
         paint.setColor(Color.BLACK);
@@ -229,8 +200,12 @@ public class Printer extends AppCompatActivity implements OnPageChangeListener, 
         canvas.drawText(parsedAddress.get(1), 20, 95, paint);
 
         try {
-            Bitmap cartonBarcode = encodeAsBitmap(data.get(COL_CARTONNUMBER), BarcodeFormat.CODE_128, 600, 200);
-            Bitmap orderBarcode = encodeAsBitmap(data.get(COL_ORDERNUMBER), BarcodeFormat.CODE_128, 400, 200);
+            BarcodeBitmap cartonNumBitmap = new BarcodeBitmap(data.get(COL_CARTONNUMBER));
+            BarcodeBitmap orderNumBitmap = new BarcodeBitmap(data.get(COL_ORDERNUMBER));
+
+
+            Bitmap cartonBarcode = cartonNumBitmap.encodeAsBitmap(BarcodeFormat.CODE_128, 600, 200);
+            Bitmap orderBarcode = orderNumBitmap.encodeAsBitmap(BarcodeFormat.CODE_128, 400, 200);
 
             Paint centerPaint = new Paint();
             centerPaint.setTextAlign(Paint.Align.CENTER);
@@ -260,6 +235,7 @@ public class Printer extends AppCompatActivity implements OnPageChangeListener, 
         canvas.drawLine(0,0,0,750, paint);
         canvas.drawLine(599,0,599,750, paint);
         this.returnLabel = bitmap;
+        Log.d("tag", "createReturnLabel: " + returnLabel.toString());
     }
 
     private ArrayList<String> queryData(String orderId){

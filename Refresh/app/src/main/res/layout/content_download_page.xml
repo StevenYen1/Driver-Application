@@ -83,19 +83,11 @@
                 fancy:fb_defaultColor="@color/blue"
                 fancy:fb_focusColor="#7EF9FF"
                 fancy:fb_text="@string/download"
-                fancy:fb_fontIconResource="&#xf019;"
-                fancy:fb_iconPosition="left"
                 fancy:fb_radius="3dp"
                 android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
-                android:paddingRight="40dp"
+                android:paddingRight="20dp"
                 android:paddingTop="15dp"/>
-
-            <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                android:id="@+id/progressbar_download"/>
 
             <mehdi.sakout.fancybuttons.FancyButton
                 android:id="@+id/confirm_load"

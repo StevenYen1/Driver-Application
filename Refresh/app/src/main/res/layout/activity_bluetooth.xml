@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/background_gradient_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Status:"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/bluetooth_status"
+            android:textAllCaps="false"
+            android:text="Status: Currently No Connection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:paddingBottom="5dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/open_bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            fancy:fb_text="Open Bluetooth Connection"
+            fancy:fb_textColor="@color/white"
+            fancy:fb_textSize="18dp"
+            fancy:fb_textFontRes="@font/overpass"
+            fancy:fb_radius="3dp"
+            fancy:fb_defaultColor="@color/dark_blue"
+            fancy:fb_focusColor="@color/skyblue"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/print_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                fancy:fb_text="Text"
+                fancy:fb_textColor="@color/white"
+                fancy:fb_textSize="18dp"
+                fancy:fb_textFontRes="@font/overpass"
+                fancy:fb_radius="3dp"
+                fancy:fb_defaultColor="@color/middle_blue"
+                fancy:fb_focusColor="@color/green_complete"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/print_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                fancy:fb_text="Label"
+                fancy:fb_textColor="@color/white"
+                fancy:fb_textSize="18dp"
+                fancy:fb_textFontRes="@font/overpass"
+                fancy:fb_radius="3dp"
+                fancy:fb_defaultColor="@color/middle_blue"
+                fancy:fb_focusColor="@color/skyblue"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/close_bluetooth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                fancy:fb_text="Close Bluetooth Connection"
+                fancy:fb_textColor="@color/white"
+                fancy:fb_textSize="18dp"
+                fancy:fb_textFontRes="@font/overpass"
+                fancy:fb_radius="3dp"
+                fancy:fb_defaultColor="@color/middle_blue"
+                fancy:fb_focusColor="@color/skyblue"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/bluetooth_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Type the message you'd like to send. Then hit the Text button."
+            android:textColor="@color/black"
+            android:background="@null"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</LinearLayout>
