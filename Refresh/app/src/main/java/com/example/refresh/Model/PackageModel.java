@@ -1,4 +1,4 @@
-package com.example.refresh.ItemModel;
+package com.example.refresh.Model;
 /*
 Description:
     The purpose of this class is to create virtual packages that contain all neccessary order information.
@@ -33,12 +33,14 @@ public class PackageModel {
     private String signature;
     private int quantity;
     private String cartonNumber;
+    private String barcode;
+    private String customerId;
 
     /*
     Constructor that creates a PackageModel object
      */
     public PackageModel(String orderNumber, String address, String recipient,
-                        String item, int status, int quantity, String cartonNumber){
+                        String item, int status, int quantity, String cartonNumber, String barcode, String customerId){
         this.orderNumber = orderNumber;
         this.address = address;
         this.recipient = recipient;
@@ -46,6 +48,8 @@ public class PackageModel {
         this.status = status;
         this.quantity = quantity;
         this.cartonNumber = cartonNumber;
+        this.barcode = barcode;
+        this.customerId = customerId;
     }
 
     public String getCartonNumber() {
@@ -88,5 +92,21 @@ public class PackageModel {
 
     public void setSignature(String signature){
         this.signature = signature;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 }

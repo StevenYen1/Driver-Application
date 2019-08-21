@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.Menu;
+import com.example.refresh.MainMenu.Menu;
 import com.example.refresh.R;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -120,7 +120,7 @@ public class AddOrders extends AppCompatActivity {
 
         if(isUniqueOrder(newNo)){
             databaseHelper.insertOrder(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet",
-                    databaseHelper.returnSize(ORDER_TABLE), parseInt(newQuantity), newCarton);
+                    databaseHelper.returnSize(ORDER_TABLE), parseInt(newQuantity), newCarton, "1000", "mockForNow");
         }
         else{
             Toast.makeText(this, "OrderNumber already exists.", Toast.LENGTH_SHORT).show();

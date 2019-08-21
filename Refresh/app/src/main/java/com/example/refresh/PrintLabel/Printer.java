@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.PrintLabel;
 /*
 Description:
     The purpose of this class is to create a return/shipping label based on the order.
@@ -20,35 +20,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.widget.Toast;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.PrintLabel.BarcodeBitmap;
+import com.example.refresh.PrintLabel.Bluetooth;
+import com.example.refresh.R;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.scandit.recognition.Barcode;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 

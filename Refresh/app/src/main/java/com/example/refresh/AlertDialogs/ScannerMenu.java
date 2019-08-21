@@ -24,7 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.Menu;
+import com.example.refresh.MainMenu.Menu;
 import com.example.refresh.R;
 import com.example.refresh.ScanPackages.Scandit;
 import com.example.refresh.SignPackages.ScannedItems;
@@ -33,9 +33,9 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.ItemModel.PackageModel.INCOMPLETE;
-import static com.example.refresh.ItemModel.PackageModel.SCANNED;
-import static com.example.refresh.ItemModel.PackageModel.SELECTED;
+import static com.example.refresh.Model.PackageModel.INCOMPLETE;
+import static com.example.refresh.Model.PackageModel.SCANNED;
+import static com.example.refresh.Model.PackageModel.SELECTED;
 import static com.example.refresh.ScanPackages.Scandit.getScanner;
 
 public class ScannerMenu extends Application {

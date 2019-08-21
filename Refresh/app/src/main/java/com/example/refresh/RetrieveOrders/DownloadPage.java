@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.RetrieveOrders;
 /*
 Description:
     Setup page to download orders and confirm load.
@@ -6,33 +6,25 @@ Description:
 Specific Functions:
     Download Orders
     Confirm Load
-    Post Username
 
 Documentation & Code Written By:
     Steven Yen
     Staples Intern Summer 2019
  */
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.ItemModel.ItemModel;
-import com.example.refresh.ItemModel.PackageModel;
-import com.example.refresh.RetrieveSignatures.SignatureCall;
-import com.example.refresh.RetrieveSignatures.SignatureInterface;
+import com.example.refresh.Model.ItemModel;
+import com.example.refresh.MainMenu.Menu;
+import com.example.refresh.R;
+import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -43,14 +35,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static android.support.constraint.Constraints.TAG;
-import static com.example.refresh.ItemModel.PackageModel.INCOMPLETE;
+import static com.example.refresh.Model.PackageModel.SCANNED;
 import static java.lang.Integer.parseInt;
 
 public class DownloadPage extends AppCompatActivity {
@@ -167,7 +155,9 @@ public class DownloadPage extends AppCompatActivity {
                         String barcodeType = item.getString("barcodeType");
                         itemList.add(new ItemModel(barcode, barcodeType, itemName));
                     }
-                    databaseHelper.insertOrder(orderNumber, address, customer, "Placeholder", INCOMPLETE, null, i, parseInt(quantity), cartonNumber);
+                    Gson gson = new Gson();
+                    String inputString = gson.toJson(itemList);
+                    databaseHelper.insertOrder(orderNumber, address, customer, inputString, SCANNED, null, i, parseInt(quantity), cartonNumber, "1000", customerId);
                 }
                 ordersDownloaded = true;
                 download_btn.setText("Completed Download!");

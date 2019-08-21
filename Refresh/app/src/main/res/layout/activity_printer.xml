@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    tools:context=".Printer">
+    tools:context=".PrintLabel.Printer">
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_gradient_dark">

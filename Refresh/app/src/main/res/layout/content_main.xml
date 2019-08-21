@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".Authentication.MainActivity"
     tools:showIn="@layout/activity_main"
     android:background="@drawable/background_gradient_dark"
     android:orientation="vertical"
@@ -113,6 +113,15 @@
         custom:pb_textProgress="Loading..."
         custom:pb_textError="Error"
         custom:pb_colorError="@color/red_error" />
+
+    <TextView
+        android:id="@+id/createAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue_normal"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:text="Create Account"/>
 
 
 </LinearLayout>

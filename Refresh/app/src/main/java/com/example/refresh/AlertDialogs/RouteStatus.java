@@ -17,6 +17,12 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.Model.ItemModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_CARTONNUMBER;
@@ -25,10 +31,10 @@ import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_QUANTITY;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.ItemModel.PackageModel.COMPLETE;
-import static com.example.refresh.ItemModel.PackageModel.FAIL_SEND;
-import static com.example.refresh.ItemModel.PackageModel.SCANNED;
-import static com.example.refresh.ItemModel.PackageModel.SELECTED;
+import static com.example.refresh.Model.PackageModel.COMPLETE;
+import static com.example.refresh.Model.PackageModel.FAIL_SEND;
+import static com.example.refresh.Model.PackageModel.SCANNED;
+import static com.example.refresh.Model.PackageModel.SELECTED;
 
 public class RouteStatus {
 
@@ -89,7 +95,17 @@ public class RouteStatus {
             buffer.append("Order number: ").append(queryRequest.getString(COL_ORDERNUMBER)).append("\n");
             buffer.append("Address: ").append(queryRequest.getString(COL_ADDRESS)).append("\n");
             buffer.append("Recipient: ").append(queryRequest.getString(COL_RECIPIENT)).append("\n");
-            buffer.append("Item: ").append(queryRequest.getString(COL_ITEM)).append("\n");
+            String itemString = queryRequest.getString(COL_ITEM);
+            Type type = new TypeToken<ArrayList<ItemModel>>() {}.getType();
+            Gson gson = new Gson();
+            ArrayList<ItemModel> finalOutputString = gson.fromJson(itemString, type);
+            String items = "";
+            int i = 0;
+            for(; i < finalOutputString.size()-1; i++){
+                items+= finalOutputString.get(i).getItem()+", ";
+            }
+            items+= finalOutputString.get(i).getItem();
+            buffer.append("Items: ").append(items).append("\n");
             buffer.append("Quantity: ").append(queryRequest.getInt(COL_QUANTITY)).append("\n");
             buffer.append("Carton Number: ").append(queryRequest.getString(COL_CARTONNUMBER)).append("\n");
             buffer.append("--------------------------------------------------------\n");

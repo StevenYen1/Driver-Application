@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.PrintLabel;
 
 import android.graphics.Bitmap;
 
@@ -10,17 +10,37 @@ import com.google.zxing.common.BitMatrix;
 
 import java.util.EnumMap;
 import java.util.Map;
+/*
+Description:
+    Given content of type String, it encodes the content as a barcode and returns the barcode as a Bitmap object.
 
+Specific Features:
+    Creates Bitmap containing barcode.
+
+Documentation written by:
+    Steven Yen
+    Staples Intern Summer 2019
+
+ */
 public class BarcodeBitmap {
 
+    /*
+    private instance variables
+     */
     private String orderId;
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
 
+    /*
+    constructor
+     */
     public BarcodeBitmap(String orderId){
         this.orderId = orderId;
     }
 
+    /*
+    Encodes the content as a barcode and returns it as a bitmap.
+     */
     public Bitmap encodeAsBitmap(BarcodeFormat format, int img_width, int img_height) throws WriterException {
         String contentsToEncode = orderId;
         if (contentsToEncode == null) {

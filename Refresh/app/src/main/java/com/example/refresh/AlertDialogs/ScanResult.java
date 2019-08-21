@@ -28,7 +28,7 @@ import com.example.refresh.R;
 import com.example.refresh.ScanPackages.Scandit;
 
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.ItemModel.PackageModel.SCANNED;
+import static com.example.refresh.Model.PackageModel.SCANNED;
 import static com.example.refresh.ScanPackages.Scandit.getScanner;
 
 public class ScanResult {

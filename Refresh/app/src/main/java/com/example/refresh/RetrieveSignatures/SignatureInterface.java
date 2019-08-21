@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.Menu;
+import com.example.refresh.MainMenu.Menu;
 import com.example.refresh.R;
 
 import java.util.ArrayList;

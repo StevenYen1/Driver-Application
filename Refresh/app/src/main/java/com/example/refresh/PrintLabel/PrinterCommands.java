@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.PrintLabel;
 
 public class PrinterCommands {
     public static final byte HT = 0x9;

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    tools:context=".Authentication.AccountCreation"
+    android:background="@drawable/background_gradient_dark">
+
+
+    <LinearLayout
+        android:id="@+id/linearlayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:padding="10dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:text="Create New Account"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-medium"
+            />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/linearlayout1"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imageView1"
+            android:rotation="45"
+            android:layout_marginTop="-10dp"
+            android:layout_centerHorizontal="true"
+
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView1"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/relativelayout1"
+            >
+
+            <ImageView
+                android:id="@+id/square1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/blue"
+                android:padding="8dp"
+                android:tint="@color/white"
+                android:src="@drawable/ic_action_user"/>
+
+            <EditText
+                android:id="@+id/account_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/square1"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/square1"
+                android:background="#DADADA"
+                android:hint="@string/Username"
+                android:textSize="15sp"
+                android:paddingLeft="20dp"
+                android:fontFamily="@font/overpass_thin"
+                android:textColorHint="#5c5c5c"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativelayout1"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/relativelayout2"
+            >
+
+            <ImageView
+                android:id="@+id/square2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/blue"
+                android:padding="8dp"
+                android:tint="@color/white"
+                android:src="@drawable/ic_action_pass"/>
+
+            <EditText
+                android:id="@+id/account_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/square2"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/square2"
+                android:background="#DADADA"
+                android:hint="@string/Password"
+                android:textSize="15sp"
+                android:paddingLeft="20dp"
+                android:fontFamily="@font/overpass_thin"
+                android:textColorHint="#5c5c5c"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativelayout2"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/relativelayout3"
+            >
+
+            <ImageView
+                android:id="@+id/square3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/blue"
+                android:padding="8dp"
+                android:tint="@color/white"
+                android:src="@drawable/ic_action_square"/>
+
+            <EditText
+                android:id="@+id/account_firstname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/square3"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/square3"
+                android:background="#DADADA"
+                android:hint="First Name"
+                android:textSize="15sp"
+                android:paddingLeft="20dp"
+                android:fontFamily="@font/overpass_thin"
+                android:textColorHint="#5c5c5c"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativelayout3"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/relativelayout4"
+            >
+
+            <ImageView
+                android:id="@+id/square4"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/blue"
+                android:padding="8dp"
+                android:tint="@color/white"
+                android:src="@drawable/ic_action_square"/>
+
+            <EditText
+                android:id="@+id/account_lastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/square4"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/square4"
+                android:background="#DADADA"
+                android:hint="Last Name"
+                android:textSize="15sp"
+                android:paddingLeft="20dp"
+                android:fontFamily="@font/overpass_thin"
+                android:textColorHint="#5c5c5c"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativelayout4"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:id="@+id/relativelayout7"
+            >
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/account_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16sp"
+                fancy:fb_text="Submit"
+                fancy:fb_textColor="@color/white"
+                fancy:fb_textSize="16sp"
+                fancy:fb_textGravity="center"
+                fancy:fb_defaultColor="@color/blue"
+                fancy:fb_focusColor="@color/skyblue"
+                fancy:fb_radius="4dp"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

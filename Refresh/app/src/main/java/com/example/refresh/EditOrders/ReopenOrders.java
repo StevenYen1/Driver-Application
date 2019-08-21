@@ -21,9 +21,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.Menu;
+import com.example.refresh.Model.ItemModel;
+import com.example.refresh.MainMenu.Menu;
 import com.example.refresh.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -35,7 +39,7 @@ import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_QUANTITY;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.ItemModel.PackageModel.COMPLETE;
+import static com.example.refresh.Model.PackageModel.COMPLETE;
 
 public class ReopenOrders extends AppCompatActivity {
 
@@ -69,10 +73,20 @@ public class ReopenOrders extends AppCompatActivity {
         while(cursor.moveToNext()){
             if(cursor.getInt(COL_STATUS)!=COMPLETE){
 
+                String itemString = cursor.getString(COL_ITEM);
+                Type type = new TypeToken<ArrayList<ItemModel>>() {}.getType();
+                Gson gson = new Gson();
+                ArrayList<ItemModel> finalOutputString = gson.fromJson(itemString, type);
+                String items = "";
+                int i = 0;
+                for(; i < finalOutputString.size()-1; i++){
+                    items+= finalOutputString.get(i).getItem()+", ";
+                }
+                items+= finalOutputString.get(i).getItem();
                 String details_string = "Order Number: "+cursor.getString(COL_ORDERNUMBER)
                         + "\nShipment Address: "+cursor.getString(COL_ADDRESS)
                         + "\nRecipient: "+cursor.getString(COL_RECIPIENT)
-                        + "\nItem Name: "+cursor.getString(COL_ITEM)
+                        + "\nItems: "+items
                         + "\nQuantity: "+cursor.getInt(COL_QUANTITY)
                         + "\nCarton Number: "+cursor.getString(COL_CARTONNUMBER);
 

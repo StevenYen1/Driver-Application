@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.PrintLabel;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -14,11 +14,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 
@@ -56,9 +56,9 @@ public class Bluetooth extends AppCompatActivity {
     private int readBufferPosition;
     private volatile boolean stopWorker;
 
-    FancyButton textButton;
-    FancyButton labelButton;
-    FancyButton closeButton;
+    private FancyButton textButton;
+    private FancyButton labelButton;
+    private FancyButton closeButton;
 
 
     @SuppressLint("SetTextI18n")
@@ -295,56 +295,6 @@ public class Bluetooth extends AppCompatActivity {
     }
 
     /*
-    print custom text
-     */
-    private void printCustom(String msg, int size, int align) {
-        //Print config "mode"
-        byte[] cc = new byte[]{0x1B,0x21,0x03};  // 0- normal size text
-        //byte[] cc1 = new byte[]{0x1B,0x21,0x00};  // 0- normal size text
-        byte[] bb = new byte[]{0x1B,0x21,0x08};  // 1- only bold text
-        byte[] bb2 = new byte[]{0x1B,0x21,0x20}; // 2- bold with medium text
-        byte[] bb3 = new byte[]{0x1B,0x21,0x10}; // 3- bold with large text
-        try {
-            switch (size){
-                case 0:
-                    mmOutputStream.write(cc);
-                    break;
-                case 1:
-                    mmOutputStream.write(bb);
-                    break;
-                case 2:
-                    mmOutputStream.write(bb2);
-                    break;
-                case 3:
-                    mmOutputStream.write(bb3);
-                    break;
-            }
-
-            switch (align){
-                case 0:
-                    //left align
-                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_LEFT);
-                    break;
-                case 1:
-                    //center align
-                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
-                    break;
-                case 2:
-                    //right align
-                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_RIGHT);
-                    break;
-            }
-            mmOutputStream.write(msg.getBytes());
-            mmOutputStream.write(PrinterCommands.LF);
-            //outputStream.write(cc);
-            //printNewLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /*
     print barcode
      */
     public void printBarcode(String content) {
@@ -354,7 +304,7 @@ public class Bluetooth extends AppCompatActivity {
                 byte[] command = Utils.decodeBitmap(bmp);
                 printText(command);
             }else{
-                Log.e("Print Photo error", "the file isn't exists");
+                Log.e("Print error", "the file isn't exists");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -402,16 +352,6 @@ public class Bluetooth extends AppCompatActivity {
         }
     }
 
-
-    private String leftRightAlign(String str1, String str2) {
-        String ans = str1 +str2;
-        if(ans.length() <31){
-            int n = (31 - str1.length() + str2.length());
-            ans = str1 + new String(new char[n]).replace("\0", " ") + str2;
-        }
-        return ans;
-    }
-
     /*
     close the connection to bluetooth printer.
      */
@@ -440,7 +380,6 @@ public class Bluetooth extends AppCompatActivity {
         paint.setTextSize(20);
         paint.setColor(Color.BLACK);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-
 
         try {
             BarcodeBitmap barcodeBitmap = new BarcodeBitmap(content);

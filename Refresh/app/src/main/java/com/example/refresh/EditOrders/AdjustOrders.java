@@ -7,7 +7,6 @@ Specific Features:
     Search for items using keywords
     Adjust the quantity of items.
  */
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,21 +18,21 @@ import android.widget.ListView;
 import com.example.refresh.AlertDialogs.AdjustItemDialog;
 import com.example.refresh.AlertDialogs.StandardMessage;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.Menu;
+import com.example.refresh.Model.ItemModel;
+import com.example.refresh.MainMenu.Menu;
 import com.example.refresh.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
-import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_CARTONNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ITEM;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_QUANTITY;
-import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
-import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
 
 public class AdjustOrders extends AppCompatActivity {
 
@@ -95,19 +94,22 @@ public class AdjustOrders extends AppCompatActivity {
         Cursor orderList = databaseHelper.queryAllOrders();
         while (orderList.moveToNext()) {
             ArrayList<String> instanceList = new ArrayList<>();
-            instanceList.add(orderList.getString(COL_ORDERNUMBER));
-            instanceList.add(orderList.getString(COL_ADDRESS));
-            instanceList.add(orderList.getString(COL_RECIPIENT));
-            instanceList.add(orderList.getString(COL_ITEM));
-            instanceList.add(orderList.getString(COL_STATUS));
-            instanceList.add(orderList.getString(COL_QUANTITY));
-            instanceList.add(orderList.getString(COL_CARTONNUMBER));
-
+            String itemString = orderList.getString(COL_ITEM);
+            Type type = new TypeToken<ArrayList<ItemModel>>() {}.getType();
+            Gson gson = new Gson();
+            ArrayList<ItemModel> finalOutputString = gson.fromJson(itemString, type);
+            String items = "";
+            int i = 0;
+            for(; i < finalOutputString.size(); i++){
+                items+= finalOutputString.get(i).getItem()+", ";
+                instanceList.add(finalOutputString.get(i).getItem());
+            }
+            items+= finalOutputString.get(i).getItem();
 
             for (String listItem : instanceList) {
                 String keyword = searchView.getText().toString();
                 if (Pattern.compile(Pattern.quote(keyword), Pattern.CASE_INSENSITIVE).matcher(listItem).find()) {
-                    searchList.add("Item: " + orderList.getString(COL_ITEM) + "\nQuantity: " + orderList.getString(COL_QUANTITY));
+                    searchList.add("Items: \n" + items + "\n\nQuantity: " + orderList.getString(COL_QUANTITY));
                     orderNums.add(orderList.getString(COL_ORDERNUMBER));
                     quantities.add(orderList.getInt(COL_QUANTITY));
                     break;
@@ -135,11 +137,21 @@ public class AdjustOrders extends AppCompatActivity {
         Cursor cursor = databaseHelper.queryAllOrders();
         while(cursor.moveToNext()){
             String orderNum = cursor.getString(0);
-            String item = cursor.getString(3);
+            String itemString = cursor.getString(COL_ITEM);
+            Type type = new TypeToken<ArrayList<ItemModel>>() {}.getType();
+            Gson gson = new Gson();
+            ArrayList<ItemModel> finalOutputString = gson.fromJson(itemString, type);
+            String items = "";
+            int i = 0;
+            for(; i < finalOutputString.size()-1; i++){
+                items+= finalOutputString.get(i).getItem()+", ";
+            }
+            items+= finalOutputString.get(i).getItem();
+
             int quantity = cursor.getInt(7);
             orderNums.add(orderNum);
             quantities.add(quantity);
-            display.add("Item: " + item + "\nQuantity: " + quantity);
+            display.add("Items: \n" + items + "\n\nQuantity: " + quantity);
         }
     }
 

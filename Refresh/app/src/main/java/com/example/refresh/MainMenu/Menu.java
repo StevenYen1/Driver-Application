@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.MainMenu;
 /*
 Description:
     Main Menu that user navigates from.
@@ -34,6 +34,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.refresh.Authentication.MainActivity;
 import com.example.refresh.EditOrders.AddOrders;
 import com.example.refresh.EditOrders.AdjustOrders;
 import com.example.refresh.EditOrders.CloseOrders;
@@ -41,9 +42,10 @@ import com.example.refresh.EditOrders.ReopenOrders;
 import com.example.refresh.EditOrders.TransferOrders;
 import com.example.refresh.EditOrders.VoidOrder;
 import com.example.refresh.OrderDisplay.ViewOrders;
+import com.example.refresh.R;
 import com.example.refresh.RetrieveSignatures.SignatureInterface;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.ItemModel.PackageModel;
+import com.example.refresh.Model.PackageModel;
 import com.example.refresh.ScanPackages.ExternalScanner;
 import com.example.refresh.ScanPackages.Scandit;
 import com.mashape.unirest.http.HttpResponse;
@@ -66,7 +68,7 @@ public class Menu extends AppCompatActivity {
     /*
     private instance variables
      */
-    private DatabaseHelper myDb;
+    private DatabaseHelper databaseHelper;
     private ArrayList<String> sync_ids = new ArrayList<>();
     private ArrayList<String> sync_signs = new ArrayList<>();
     private Handler mHandler = new Handler();
@@ -78,7 +80,7 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        myDb = new DatabaseHelper(this);
+        databaseHelper = new DatabaseHelper(this);
         setCurrentProgress();
         setupScanBtn();
         setupViewOrders();
@@ -184,7 +186,7 @@ public class Menu extends AppCompatActivity {
                     sync_signs.clear();
                     sync_ids.clear();
 
-                    Cursor cursor = myDb.queryAllOrders();
+                    Cursor cursor = databaseHelper.queryAllOrders();
                     while(cursor.moveToNext()){
                         if(cursor.getInt(COL_STATUS) == PackageModel.FAIL_SEND){
                             sync_ids.add(cursor.getString(0));
@@ -262,7 +264,7 @@ public class Menu extends AppCompatActivity {
      */
     private void setCurrentProgress(){
        PercentageChartView currentProgress = findViewById(R.id.current_progress_chart);
-        Cursor cursor = myDb.queryAllOrders();
+        Cursor cursor = databaseHelper.queryAllOrders();
         float completed = 0;
         float total = 0;
         while(cursor.moveToNext()){
@@ -311,7 +313,7 @@ public class Menu extends AppCompatActivity {
                             .field("submissionDate", ""+time).asString();
 
                     if(postResponse.getCode() == 201 || postResponse.getCode()== 200){
-                        myDb.updateStatus(id, 2);
+                        databaseHelper.updateStatus(id, 2);
                         returnString += "\nPost Request " + i + ": SUCCESS, ";
                     }
                     else{

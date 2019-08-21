@@ -24,9 +24,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.MapActivity;
-import com.example.refresh.Printer;
+import com.example.refresh.Model.ItemModel;
+import com.example.refresh.GPSLocation.MapActivity;
+import com.example.refresh.PrintLabel.Printer;
 import com.example.refresh.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
@@ -74,7 +81,16 @@ public class OrderDetails extends Application {
             String ordernum = queryResult.getString(COL_ORDERNUMBER);
             String address = queryResult.getString(COL_ADDRESS);
             String recipient = queryResult.getString(COL_RECIPIENT);
-            String item = queryResult.getString(COL_ITEM);
+            String itemString = queryResult.getString(COL_ITEM);
+            Type type = new TypeToken<ArrayList<ItemModel>>() {}.getType();
+            Gson gson = new Gson();
+            ArrayList<ItemModel> finalOutputString = gson.fromJson(itemString, type);
+            String items = "";
+            int i = 0;
+            for(; i < finalOutputString.size()-1; i++){
+                items+= finalOutputString.get(i).getItem()+",\n";
+            }
+            items+= finalOutputString.get(i).getItem();
             int quantity = queryResult.getInt(COL_QUANTITY);
             String cartonnum = queryResult.getString(COL_CARTONNUMBER);
 
@@ -91,7 +107,7 @@ public class OrderDetails extends Application {
             recipient_view.setText(recipient);
 
             TextView item_view = view.findViewById(R.id.newdetails_item);
-            item_view.setText(item);
+            item_view.setText(items);
 
             TextView quantity_view = view.findViewById(R.id.newdetails_quantity);
             quantity_view.setText("" + quantity);

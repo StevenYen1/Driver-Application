@@ -34,10 +34,10 @@ import java.util.Date;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
-import static com.example.refresh.ItemModel.PackageModel.COMPLETE;
-import static com.example.refresh.ItemModel.PackageModel.INCOMPLETE;
-import static com.example.refresh.ItemModel.PackageModel.SCANNED;
-import static com.example.refresh.ItemModel.PackageModel.SELECTED;
+import static com.example.refresh.Model.PackageModel.COMPLETE;
+import static com.example.refresh.Model.PackageModel.INCOMPLETE;
+import static com.example.refresh.Model.PackageModel.SCANNED;
+import static com.example.refresh.Model.PackageModel.SELECTED;
 
 public class ViewOrders extends AppCompatActivity {
 

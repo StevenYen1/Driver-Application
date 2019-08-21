@@ -20,7 +20,7 @@ import android.widget.ListView;
 
 import com.example.refresh.AlertDialogs.StandardMessage;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.Menu;
+import com.example.refresh.MainMenu.Menu;
 import com.example.refresh.R;
 import com.example.refresh.ScanPackages.ExternalScanner;
 import com.example.refresh.ScanPackages.Scandit;
@@ -29,8 +29,8 @@ import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static com.example.refresh.ItemModel.PackageModel.SCANNED;
-import static com.example.refresh.ItemModel.PackageModel.SELECTED;
+import static com.example.refresh.Model.PackageModel.SCANNED;
+import static com.example.refresh.Model.PackageModel.SELECTED;
 
 public class ScannedItems extends AppCompatActivity {
 

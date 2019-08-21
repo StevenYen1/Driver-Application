@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.GPSLocation;
 /*
 Description:
     This activity utilizes the GoogleMap API and searches for locations on Google Maps.
@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.refresh.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;

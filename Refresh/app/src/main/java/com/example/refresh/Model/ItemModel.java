@@ -1,4 +1,4 @@
-package com.example.refresh.ItemModel;
+package com.example.refresh.Model;
 
 public class ItemModel {
 

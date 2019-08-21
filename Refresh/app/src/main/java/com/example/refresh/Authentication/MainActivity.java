@@ -1,4 +1,4 @@
-package com.example.refresh;
+package com.example.refresh.Authentication;
 /*
 Description:
     The Main Activity of the application (The first page the user sees.)
@@ -7,6 +7,7 @@ Description:
 Specific Functions:
     Sign-In page for the user.
     Stores Username and Password data.
+    Post Username
 
 Documentation & Code Written By:
     Steven Yen
@@ -18,15 +19,18 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.example.refresh.RetrieveOrders.DownloadPage;
+import com.example.refresh.MainMenu.Menu;
+import com.example.refresh.R;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setupLayout();
         setupActionButton();
+        accountCreationSetup();
     }
 
     /*
@@ -75,13 +80,37 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Please enter a username.", Toast.LENGTH_SHORT).show();
             }
             else{
-                actionProcessButton.setProgress(1);
-                new Thread(() -> {
-                    SystemClock.sleep(3000);
-                    startAsyncTask();
-                }).start();
+//                String u = username.getText().toString();
+//                String p = password.getText().toString();
+//                DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+//                if(databaseHelper.userExists(u) && databaseHelper.validatePassword(u, p)){
+                    actionProcessButton.setProgress(1);
+                    new Thread(() -> {
+                        SystemClock.sleep(3000);
+                        startAsyncTask();
+                    }).start();
+//                }
+//                else{
+//                    Toast.makeText(MainActivity.this, "Incorrect Username or Password.", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
+    }
+
+    /*
+    Text button that routes to create account page.
+     */
+    private void accountCreationSetup(){
+        TextView newAccount = findViewById(R.id.createAccount);
+        newAccount.setOnClickListener(v -> openNewAccount());
+    }
+
+    /*
+    Moves to AccountCreation
+     */
+    private void openNewAccount(){
+        Intent intent = new Intent(this, AccountCreation.class);
+        startActivity(intent);
     }
 
     /*

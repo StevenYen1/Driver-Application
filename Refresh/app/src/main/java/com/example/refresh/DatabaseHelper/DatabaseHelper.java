@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Order.db";
     public static final String ORDER_TABLE = "order_table";
     public static final String CLOSED_TABLE = "closed_orders_table";
+    public static final String USER_TABLE ="user_table";
 
     public static final int COL_ORDERNUMBER = 0;
     public static final int COL_ADDRESS = 1;
@@ -40,6 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int COL_INDEX = 6;
     public static final int COL_QUANTITY = 7;
     public static final int COL_CARTONNUMBER = 8;
+    public static final int COL_BARCODE = 9;
+    public static final int COL_CUSTOMERID = 8;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -50,8 +53,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + ORDER_TABLE + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING) ");
-        db.execSQL("create table if not exists " + CLOSED_TABLE + "(OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING)");
+        db.execSQL("create table " + ORDER_TABLE + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING, barcode STRING, customerId STRING) ");
+        db.execSQL("create table if not exists " + CLOSED_TABLE + "(OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING, barcode STRING, customerId STRING)");
+        db.execSQL("create table if not exists " + USER_TABLE + " (username text primary key, password text, firstName text, lastName text)");
     }
 
     /*
@@ -77,18 +81,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     Inserts new entry into the order table.
      */
-    public void insertOrder(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton){
+    public void insertOrder(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton, String barcode, String customerId){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', '"+carton+"')");
+        db.execSQL("replace into order_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', '"+carton+"', '"+barcode+"', '"+customerId+"')");
         db.close();
+    }
+
+    /*
+    inserts new entry into the user table
+     */
+    public void createUser(String username, String password, String firstname, String lastname){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("insert into " + USER_TABLE + " values ('"+username+"', '"+password+"', '"+firstname+"', '"+lastname+"')");
+        db.close();
+    }
+
+    /*
+    Checks if the user already exists
+     */
+    public boolean userExists(String user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from "+ USER_TABLE +" where username = ?",new String[] { user });
+        if(cursor.getCount()==0){
+            return false;
+        }
+        return true;
+    }
+
+    /*
+    checks if password is correct
+     */
+    public boolean validatePassword(String user, String password){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from "+ USER_TABLE +" where username = ?",new String[] { user });
+        while(cursor.moveToNext()){
+            String actualPassword = cursor.getString(1);
+            return password.equals(actualPassword);
+        }
+        return false;
     }
 
     /*
     Inserts an entry into the closed table.
      */
-    public void insertClosed(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton){
+    public void insertClosed(String num, String addr, String recip, String item, int status, String sign, int i, int quantity, String carton, String barcode, String customerId){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("replace into closed_orders_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', '"+carton+"')");
+        db.execSQL("replace into closed_orders_table VALUES ('"+num+"', '"+addr+"', '"+recip+"', '"+item+"', '"+status+"', '"+sign+"', '"+i+"', '"+quantity+"', '"+carton+"', '"+barcode+"', '"+customerId+"')");
         db.close();
     }
 
@@ -182,6 +220,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             dataList.add(data.getString(COL_SIGNATURE));
             dataList.add(data.getString(COL_QUANTITY));
             dataList.add(data.getString(COL_CARTONNUMBER));
+            dataList.add(data.getString(COL_BARCODE));
+            dataList.add(data.getString(COL_CUSTOMERID));
         }
         return dataList;
     }
@@ -219,7 +259,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             shiftEntriesUp(db, res, insert, ORDER_TABLE);
         }
         insertOrder(dataList.get(0), dataList.get(1), dataList.get(2), dataList.get(3),
-                parseInt(dataList.get(4)), dataList.get(5), insert, parseInt(dataList.get(6)), dataList.get(7));
+                parseInt(dataList.get(4)), dataList.get(5), insert, parseInt(dataList.get(6)), dataList.get(7), dataList.get(8), dataList.get(9));
         db.close();
     }
 
@@ -270,7 +310,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<String> item_data = dataToList(cursor);
 
         insertClosed(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
-                parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE), parseInt(item_data.get(6)), item_data.get(7));
+                parseInt(item_data.get(4)),item_data.get(5), returnSize(CLOSED_TABLE), parseInt(item_data.get(6)), item_data.get(7), item_data.get(8), item_data.get(9));
         popFromList(id, index);
         db.close();
     }
@@ -283,7 +323,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = queryClosedOrder(id);
         ArrayList<String> item_data = dataToList(cursor);
         insertOrder(item_data.get(0),item_data.get(1),item_data.get(2),item_data.get(3),
-                parseInt(item_data.get(4)),item_data.get(5), returnSize(ORDER_TABLE), parseInt(item_data.get(6)), item_data.get(7));
+                parseInt(item_data.get(4)),item_data.get(5), returnSize(ORDER_TABLE), parseInt(item_data.get(6)), item_data.get(7), item_data.get(8), item_data.get(9));
         popFromClosed(id, index);
         db.close();
     }

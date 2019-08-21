@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/layout"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".DownloadPage"
+    tools:context=".RetrieveOrders.DownloadPage"
     tools:showIn="@layout/activity_download_page"
     android:orientation="vertical"
     android:background="@drawable/background_gradient_dark">
