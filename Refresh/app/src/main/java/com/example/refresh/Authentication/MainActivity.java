@@ -15,6 +15,7 @@ Documentation & Code Written By:
  */
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.RetrieveOrders.DownloadPage;
 import com.example.refresh.MainMenu.Menu;
 import com.example.refresh.R;
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
 
+    public static String currentUser;
+
     /*
     Methods that are executed when this Activity is opened.
      */
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupLayout();
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        databaseHelper.createTables();
         setupActionButton();
         accountCreationSetup();
     }
@@ -80,19 +86,19 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Please enter a username.", Toast.LENGTH_SHORT).show();
             }
             else{
-//                String u = username.getText().toString();
-//                String p = password.getText().toString();
-//                DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
-//                if(databaseHelper.userExists(u) && databaseHelper.validatePassword(u, p)){
+                String u = username.getText().toString();
+                String p = password.getText().toString();
+                DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+                if(databaseHelper.userExists(u) && databaseHelper.validatePassword(u, p)){
                     actionProcessButton.setProgress(1);
                     new Thread(() -> {
                         SystemClock.sleep(3000);
                         startAsyncTask();
                     }).start();
-//                }
-//                else{
-//                    Toast.makeText(MainActivity.this, "Incorrect Username or Password.", Toast.LENGTH_SHORT).show();
-//                }
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Incorrect Username or Password.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -124,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         String pass = password.getText().toString();
         intent.putExtra("username", user);
         intent.putExtra("pass", pass);
+        currentUser = user;
         if(getIntent().getStringExtra("logout")!=null){
             Intent continueFromSession = new Intent(MainActivity.this, Menu.class);
             startActivity(continueFromSession);

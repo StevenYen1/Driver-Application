@@ -53,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + ORDER_TABLE + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING, barcode STRING, customerId STRING) ");
+        db.execSQL("create table if not exists " + ORDER_TABLE + " (OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING, barcode STRING, customerId STRING) ");
         db.execSQL("create table if not exists " + CLOSED_TABLE + "(OrderNumber TEXT PRIMARY KEY, ADDRESS TEXT, RECIPIENT TEXT, ITEM TEXT, STATUS INT, SIGNATURE TEXT, IDX INTEGER, QUANTITY INTEGER, cartonnumber STRING, barcode STRING, customerId STRING)");
         db.execSQL("create table if not exists " + USER_TABLE + " (username text primary key, password text, firstName text, lastName text)");
     }
@@ -75,7 +75,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS "+ ORDER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+CLOSED_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+USER_TABLE);
         onCreate(db);
+    }
+
+    public void createTables(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        onCreate(db);
+        db.close();
     }
 
     /*
@@ -103,8 +110,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from "+ USER_TABLE +" where username = ?",new String[] { user });
         if(cursor.getCount()==0){
+            db.close();
             return false;
         }
+        db.close();
         return true;
     }
 
@@ -116,9 +125,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select * from "+ USER_TABLE +" where username = ?",new String[] { user });
         while(cursor.moveToNext()){
             String actualPassword = cursor.getString(1);
+            db.close();
             return password.equals(actualPassword);
         }
+        db.close();
         return false;
+    }
+
+    public Cursor queryUser(String user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("select * from "+ USER_TABLE +" where username = ?",new String[] { user });
+
     }
 
     /*
@@ -170,6 +187,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor queryResult = db.rawQuery("select * from "+ ORDER_TABLE +" where OrderNumber = ?",new String[] { id });
         ArrayList<String> orderData = dataToList(queryResult);
         db.delete(ORDER_TABLE, "OrderNumber = ?", new String[] {id});
+        db.close();
         return orderData;
     }
 

@@ -100,11 +100,12 @@ public class AdjustOrders extends AppCompatActivity {
             ArrayList<ItemModel> finalOutputString = gson.fromJson(itemString, type);
             String items = "";
             int i = 0;
-            for(; i < finalOutputString.size(); i++){
+            for(; i < finalOutputString.size()-1; i++){
                 items+= finalOutputString.get(i).getItem()+", ";
                 instanceList.add(finalOutputString.get(i).getItem());
             }
             items+= finalOutputString.get(i).getItem();
+            instanceList.add(finalOutputString.get(i).getItem());
 
             for (String listItem : instanceList) {
                 String keyword = searchView.getText().toString();

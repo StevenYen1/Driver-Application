@@ -13,13 +13,16 @@ import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.refresh.Authentication.MainActivity;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
+import com.example.refresh.Model.EmployeeModel;
 import com.example.refresh.Model.PackageModel;
 import com.example.refresh.R;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.HttpRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,10 +31,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -51,14 +57,12 @@ public class Signature extends Activity {
     private FancyButton mSaveButton;
     private String recipient = "No Recipient Yet";
     private ArrayList<String> currentOrders = new ArrayList<>();
-    private DatabaseHelper databaseHelper;
     private String encodedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signature);
-        databaseHelper = new DatabaseHelper(this);
         setOrderInformation();
         setupSignaturePad();
     }
@@ -71,6 +75,7 @@ public class Signature extends Activity {
 
 
     public void setOrderInformation(){
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
         Cursor rawOrders = databaseHelper.queryAllOrders();
         if(rawOrders.getCount() == 0){
             return;
@@ -141,7 +146,9 @@ public class Signature extends Activity {
         fos.close();
 
         String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
         databaseHelper.updateSignature(id, encodedImage);
+        databaseHelper.close();
         this.encodedImage = encodedImage;
         return file;
     }
@@ -154,8 +161,16 @@ public class Signature extends Activity {
         return gmt.toString();
     }
 
+    private static String getUTCDateTimeAsString() {
+        final String DATEFORMATE = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATEFORMATE);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return simpleDateFormat.format(new Date());
+    }
+
     private JSONObject createJson(String orderId){
         PackageModel orderInformation = queryData(orderId);
+        EmployeeModel employeeInformation = queryEmployeeData();
         if(orderInformation==null){return null;}
         JSONObject jsonObject = new JSONObject();
         JSONObject employee = new JSONObject();
@@ -163,9 +178,9 @@ public class Signature extends Activity {
         JSONObject receipt = new JSONObject();
         JSONObject reason = new JSONObject();
         try {
-            employee.put("firstname", "Steven");
-            employee.put("lastname", "Yen");
-            employee.put("username", "YenSt001");
+            employee.put("firstname", employeeInformation.getFirstname());
+            employee.put("lastname", employeeInformation.getLastname());
+            employee.put("username", employeeInformation.getUsername());
 
             jsonObject.put("employee", employee);
             jsonObject.put("printReceipt", true);
@@ -176,9 +191,9 @@ public class Signature extends Activity {
             jsonObject.put("customerId", orderInformation.getCustomerId());
             jsonObject.put("description", "Medium Box/Env/18X12X13");
             jsonObject.put("purposeNumber", "deliver");
-            jsonObject.put("barcode", orderInformation.getBarcode());
-            jsonObject.put("typebarcode", "UPC");
-            jsonObject.put("timestamp", createTime());
+            jsonObject.put("barcode", "00000004720580220440");
+            jsonObject.put("barcodeType", "UPC");
+            jsonObject.put("timestamp", getUTCDateTimeAsString());
 
             contact.put("firstname", "John");
             contact.put("lastname", "Wick");
@@ -204,6 +219,22 @@ public class Signature extends Activity {
         return jsonObject;
     }
 
+    private EmployeeModel queryEmployeeData(){
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        Cursor userData = databaseHelper.queryUser(MainActivity.currentUser);
+        while(userData.moveToNext()){
+            String username = userData.getString(0);
+            String firstname = userData.getString(2);
+            String lastname = userData.getString(3);
+
+            EmployeeModel currentEmployee = new EmployeeModel(firstname, lastname, username);
+            databaseHelper.close();
+            return currentEmployee;
+        }
+        databaseHelper.close();
+        return new EmployeeModel("null", "null", "null");
+    }
+
     private PackageModel queryData(String orderId){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         Cursor data = databaseHelper.queryOrder(orderId);
@@ -216,8 +247,10 @@ public class Signature extends Activity {
             String barcode = data.getString(COL_BARCODE);
             String customerId = data.getString(COL_CUSTOMERID);
             PackageModel packageModel = new PackageModel(orderId, address, recipient, item, PackageModel.COMPLETE, parseInt(quantity), cartonNumber, barcode, customerId);
+            databaseHelper.close();
             return packageModel;
         }
+        databaseHelper.close();
         return null;
     }
 
@@ -247,35 +280,35 @@ public class Signature extends Activity {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected String doInBackground(Integer... integers) {
-
+            DatabaseHelper databaseHelper = new DatabaseHelper(Signature.this);
 
             for(int i = 0; i < currentOrders.size(); i++){
-                JSONObject jsonFile = createJson(currentOrders.get(i));
-                Log.d("Signature", "Json Message: \n" + jsonFile.toString());
                 try {
                     convertImageToFile(currentOrders.get(i));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                JSONObject jsonFile = createJson(currentOrders.get(i));
+                Log.d("Signature", "Json Message: \n" + jsonFile.toString());
 
                 try {
                     final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/capture")
+                            .header("Content-Type", "application/json")
                             .basicAuth("epts_app", "uB25J=UUwU")
-                            .field("json", jsonFile)
+                            .body(jsonFile.toString())
                             .asString();
 
-                    if(postResponse.getCode() > 204){
-                        databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
-                    }
-                    else{
+//                    if(postResponse.getCode() > 204){
+//                        databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
+//                    }
+//                    else{
                         databaseHelper.updateStatus(currentOrders.get(i), PackageModel.COMPLETE);
-                    }
+//                    }
 
-
-
+                    return postResponse.getBody();
                 } catch (UnirestException e) {
                     e.printStackTrace();
-                    databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
+//                    databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
                 }
             }
             return "Complete";
@@ -283,6 +316,7 @@ public class Signature extends Activity {
 
         @TargetApi(Build.VERSION_CODES.O)
         protected void onPostExecute(String result) {
+            Log.d("Result", "onPostExecute: " + result);
             returnToPrev();
         }
     }

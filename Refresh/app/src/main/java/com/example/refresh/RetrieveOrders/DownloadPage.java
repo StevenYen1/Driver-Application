@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.Model.ItemModel;
 import com.example.refresh.MainMenu.Menu;
+import com.example.refresh.Model.PackageModel;
 import com.example.refresh.R;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
@@ -114,7 +115,7 @@ public class DownloadPage extends AppCompatActivity {
         protected JSONObject doInBackground(Integer... integers) {
 
             try {
-                final HttpResponse<JsonNode> getResponse = Unirest.get("http://10.0.2.2:8080/signaturesvc/v1/roadnet/dailyorders")
+                final HttpResponse<JsonNode> getResponse = Unirest.get("http://10.244.185.101:80/signaturesvc/v1/roadnet/dailyorders")
                         .basicAuth("epts_app", "uB25J=UUwU")
                         .asJson();
                 if (getResponse.getCode()!=200){
