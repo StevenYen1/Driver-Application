@@ -1,5 +1,9 @@
 package com.example.refresh.PrintLabel;
-
+/*
+This class was not written by me.
+All credit goes to:
+"https://stackoverflow.com/users/1278967/matthes"
+ */
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,7 +15,9 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 public class BluetoothConnector {
 
@@ -21,6 +27,7 @@ public class BluetoothConnector {
     private BluetoothAdapter adapter;
     private List<UUID> uuidCandidates;
     private int candidate;
+    private Context context;
 
 
     /**
@@ -29,8 +36,9 @@ public class BluetoothConnector {
      * @param adapter the Android BT adapter
      * @param uuidCandidates a list of UUIDs. if null or empty, the Serial PP id is used
      */
-    public BluetoothConnector(BluetoothDevice device, boolean secure, BluetoothAdapter adapter,
+    public BluetoothConnector(Context context, BluetoothDevice device, boolean secure, BluetoothAdapter adapter,
                               List<UUID> uuidCandidates) {
+        this.context = context;
         this.device = device;
         this.secure = secure;
         this.adapter = adapter;
@@ -70,10 +78,12 @@ public class BluetoothConnector {
         }
 
         if (!success) {
+            Toast.makeText(this.context, "Could not connect to device.", Toast.LENGTH_SHORT).show();
             throw new IOException("Could not connect to device: "+ device.getAddress());
         }
         else{
             Log.d("BT", "connect: successful!");
+            Toast.makeText(this.context, "Connection Successful", Toast.LENGTH_SHORT).show();
         }
 
         return bluetoothSocket;

@@ -57,7 +57,7 @@ public class SignatureCall extends AppCompatActivity {
             try {
                 final HttpResponse<JsonNode> getResponse = Unirest.get("http://10.244.185.101:80/signaturesvc/v1/signature")
                         .basicAuth("epts_app", "uB25J=UUwU")
-                        .field("orderID", getIntent().getStringExtra("id"))
+                        .field("ordernumber", getIntent().getStringExtra("id"))
                         .asJson();
                 if (getResponse.getCode()!=200){
                     return null;
@@ -93,14 +93,17 @@ public class SignatureCall extends AppCompatActivity {
                 String signature = null;
                 String submissionDate = null;
                 String status = null;
+                String barcode = null;
                 try {
-                    orderId = result.get("shipmentId").toString();
+                    orderId = result.get("orderNumber").toString();
+                    barcode = result.get("barcode").toString();
                     signature = result.get("signature").toString();
                     submissionDate = result.get("submissionDate").toString();
                     status = result.get("status").toString();
 
                     String displayString =
                             "orderId: " + orderId
+                            + "\nbarcode: " + barcode
                             + "\nsubmissionDate: " + submissionDate
                             + "\nstatus: " + status;
 

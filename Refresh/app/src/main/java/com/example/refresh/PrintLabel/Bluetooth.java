@@ -1,5 +1,14 @@
 package com.example.refresh.PrintLabel;
+/*
+The purpose of this class is open a connection to a bluetooth printer
+and print a return label.
 
+Steven Yen
+Staples Intern Summer 2019
+
+Credit to solution:
+https://github.com/imrankst1221/Thermal-Printer-in-Android
+ */
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -168,7 +177,7 @@ public class Bluetooth extends AppCompatActivity {
             myLabel.setText("No Device Found. Please Check Connections.");
             return;
         }
-        BluetoothConnector bluetoothConnector = new BluetoothConnector(mmDevice, true, mBluetoothAdapter, null);
+        BluetoothConnector bluetoothConnector = new BluetoothConnector(this, mmDevice, true, mBluetoothAdapter, null);
         socket = bluetoothConnector.connect();
 
 

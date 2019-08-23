@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ADDRESS;
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_BARCODE;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_CARTONNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
@@ -122,6 +123,7 @@ public class Printer extends AppCompatActivity {
         canvas.drawColor(Color.WHITE);
 
         ArrayList<String> list = queryData(orderId);
+        String trackingNumber = list.get(COL_BARCODE);
         ArrayList<String> parsedAddress = parseAddress(list.get(COL_ADDRESS));
 
         canvas.drawText("Staples Inc. Corporate", 20,20, paint);
@@ -154,7 +156,7 @@ public class Printer extends AppCompatActivity {
         centerPaint.setTextSize(28);
         int xPos = (canvas.getWidth() / 2);
         canvas.drawText("Order Tracking #", xPos, 350, centerPaint);
-        BarcodeBitmap barcodeBitmap = new BarcodeBitmap(orderId);
+        BarcodeBitmap barcodeBitmap = new BarcodeBitmap(trackingNumber);
 
         Bitmap barcode;
         try {
@@ -163,7 +165,7 @@ public class Printer extends AppCompatActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
-        canvas.drawText(this.orderId, xPos,650, centerPaint);
+        canvas.drawText(trackingNumber, xPos,650, centerPaint);
         this.shippingLabel = bitmap;
     }
 
@@ -228,7 +230,7 @@ public class Printer extends AppCompatActivity {
         Cursor queryResults = databaseHelper.queryOrder(orderId);
         while(queryResults.moveToNext()){
             ArrayList<String> list = new ArrayList<>();
-            for(int i = 0; i < 9; i++){
+            for(int i = 0; i < 11; i++){
                 list.add(queryResults.getString(i));
             }
             return list;

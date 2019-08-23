@@ -21,8 +21,12 @@ import android.widget.TextView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.MainMenu.Menu;
+import com.example.refresh.Model.ItemModel;
 import com.example.refresh.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import me.srodrigo.androidhintspinner.HintAdapter;
@@ -72,14 +76,23 @@ public class SignatureInterface extends AppCompatActivity {
 
             String address = queryResult.getString(COL_ADDRESS);
             String recipient = queryResult.getString(COL_RECIPIENT);
-            String item = queryResult.getString(COL_ITEM);
+            String itemstring = queryResult.getString(COL_ITEM);
             String quantity = queryResult.getString(COL_QUANTITY);
             String cartionNumber = queryResult.getString(COL_CARTONNUMBER);
+            Type type = new TypeToken<ArrayList<ItemModel>>() {}.getType();
+            Gson gson = new Gson();
+            ArrayList<ItemModel> finalOutputString = gson.fromJson(itemstring, type);
+            String items = "";
+            int i = 0;
+            for(; i < finalOutputString.size()-1; i++){
+                items+= finalOutputString.get(i).getItem()+", ";
+            }
+            items+= finalOutputString.get(i).getItem();
 
             details.add("Order Number: " + orderNumber
                     +"\nShipment Address: " + address
                     +"\nRecipient: " + recipient
-                    +"\nItem: " + item
+                    +"\nItem: " + items
                     +"\nQuantity: " + quantity
                     +"\nCartonNumber: " + cartionNumber
             );

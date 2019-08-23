@@ -42,7 +42,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 import static com.example.refresh.Model.PackageModel.SCANNED;
 import static java.lang.Integer.parseInt;
 
-public class OnDownloadPage extends AppCompatActivity {
+public class DownloadPage extends AppCompatActivity {
 
     /*
     private instance variables
@@ -163,6 +163,7 @@ public class OnDownloadPage extends AppCompatActivity {
                 }
                 ordersDownloaded = true;
                 download_btn.setText("Completed Download!");
+                download_btn.setBackgroundColor(getResources().getColor(R.color.success));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

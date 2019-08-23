@@ -42,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int COL_QUANTITY = 7;
     public static final int COL_CARTONNUMBER = 8;
     public static final int COL_BARCODE = 9;
-    public static final int COL_CUSTOMERID = 8;
+    public static final int COL_CUSTOMERID = 10;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);

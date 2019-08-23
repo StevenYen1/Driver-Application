@@ -28,13 +28,16 @@
             android:layout_below="@id/choose_print"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="80dp"
             app:cardElevation="3dp"
             app:cardUseCompatPadding="true">
 
             <ImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/barcode_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

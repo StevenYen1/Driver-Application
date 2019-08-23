@@ -1,5 +1,9 @@
 package com.example.refresh.PrintLabel;
-
+/*
+This code was not written by me.
+Written by:
+https://github.com/imrankst1221/Thermal-Printer-in-Android
+ */
 import android.graphics.Bitmap;
 import android.util.Log;
 

@@ -66,8 +66,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="80dp"
             android:id="@+id/download_btn_layout"
             android:orientation="vertical">
@@ -84,10 +84,10 @@
                 fancy:fb_focusColor="#7EF9FF"
                 fancy:fb_text="@string/download"
                 fancy:fb_radius="3dp"
-                android:paddingBottom="25dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="25dp"/>
+                android:paddingBottom="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="20dp"/>
 
             <mehdi.sakout.fancybuttons.FancyButton
                 android:id="@+id/confirm_load"
@@ -100,10 +100,10 @@
                 fancy:fb_text="Confirm Load"
                 fancy:fb_textSize="20sp"
                 fancy:fb_radius="3dp"
-                android:paddingBottom="25dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="25dp"/>
+                android:paddingBottom="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="20dp"/>
 
             <mehdi.sakout.fancybuttons.FancyButton
                 android:id="@+id/download_continue"
@@ -118,10 +118,10 @@
                 fancy:fb_focusColor="#7EF9FF"
                 fancy:fb_text="Complete Setup"
                 fancy:fb_radius="3dp"
-                android:paddingBottom="25dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="25dp"/>
+                android:paddingBottom="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="20dp"/>
 
         </LinearLayout>
 

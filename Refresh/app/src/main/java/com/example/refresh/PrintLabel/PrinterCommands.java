@@ -1,5 +1,9 @@
 package com.example.refresh.PrintLabel;
-
+/*
+This code was not written by me.
+Written by:
+https://github.com/imrankst1221/Thermal-Printer-in-Android
+ */
 public class PrinterCommands {
     public static final byte HT = 0x9;
     public static final byte LF = 0x0A;
