@@ -48,3 +48,16 @@ Select a deployment target. This can be your connected device or an emulator.
 You can create an emulator by clicking "Create New Virtual Device"
 Click Ok.
 ```
+
+## Building and exporting the APK file
+```$xslt
+On the Menu Bar, click the Build > Generate Signed Bundle or APK.
+Click APK.
+
+FIRST TIME: Click create new. Fill in all the information. Not all information under "Certificate" is necessary.
+RETURNING TIME: Click choose existing.
+
+Fill in the passwords and alias. Click Next.
+For build variants select "release". For signature versions, check both V1 (Jar Signature) and V2 (Full APK Signature).
+Click Finish.
+```
