@@ -12,12 +12,12 @@
 
 ## Installing the project locally
 ```$xslt
-Install latest version of Android Studio. Link: [Android Studio](https://developer.android.com/studio)
+Install latest version of Android Studio. 
 Clone the project and save locally.
 Open Android Studio, select "Import project (Gradle, Eclipse ADT, etc.)"
 Find the saved project, and open the Refresh directory inside the root directory.
 ```
-
+Link: [Android Studio](https://developer.android.com/studio)
 
 
 
