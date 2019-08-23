@@ -42,7 +42,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 import static com.example.refresh.Model.PackageModel.SCANNED;
 import static java.lang.Integer.parseInt;
 
-public class DownloadPage extends AppCompatActivity {
+public class OnDownloadPage extends AppCompatActivity {
 
     /*
     private instance variables
@@ -147,6 +147,7 @@ public class DownloadPage extends AppCompatActivity {
                     String customerId = order.getString("customerId");
                     String cartonNumber = order.getString("cartonNumber");
                     String quantity = order.getString("quantity");
+                    String trackingBarcode = order.getString("barcode");
                     JSONArray items = order.getJSONArray("items");
                     ArrayList<ItemModel> itemList = new ArrayList<>();
                     for(int j = 0; j < items.length(); j++){
@@ -158,7 +159,7 @@ public class DownloadPage extends AppCompatActivity {
                     }
                     Gson gson = new Gson();
                     String inputString = gson.toJson(itemList);
-                    databaseHelper.insertOrder(orderNumber, address, customer, inputString, SCANNED, null, i, parseInt(quantity), cartonNumber, "1000", customerId);
+                    databaseHelper.insertOrder(orderNumber, address, customer, inputString, SCANNED, null, i, parseInt(quantity), cartonNumber, trackingBarcode, customerId);
                 }
                 ordersDownloaded = true;
                 download_btn.setText("Completed Download!");

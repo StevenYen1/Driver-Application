@@ -75,7 +75,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS "+ ORDER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+CLOSED_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS "+USER_TABLE);
         onCreate(db);
     }
 
@@ -99,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public void createUser(String username, String password, String firstname, String lastname){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("insert into " + USER_TABLE + " values ('"+username+"', '"+password+"', '"+firstname+"', '"+lastname+"')");
+        db.execSQL("insert into user_table VALUES ('"+username+"', '"+password+"', '"+firstname+"', '"+lastname+"')");
         db.close();
     }
 

@@ -153,14 +153,6 @@ public class Signature extends Activity {
         return file;
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
-    private String createTime(){
-        LocalDateTime ldt = LocalDateTime.now();
-        ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.systemDefault());
-        ZonedDateTime gmt = zdt.withZoneSameInstant(ZoneId.of("GMT"));
-        return gmt.toString();
-    }
-
     private static String getUTCDateTimeAsString() {
         final String DATEFORMATE = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATEFORMATE);
@@ -222,6 +214,7 @@ public class Signature extends Activity {
     private EmployeeModel queryEmployeeData(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         Cursor userData = databaseHelper.queryUser(MainActivity.currentUser);
+        Log.d("TAG", "queryEmployeeData: " + MainActivity.currentUser);
         while(userData.moveToNext()){
             String username = userData.getString(0);
             String firstname = userData.getString(2);
@@ -298,17 +291,17 @@ public class Signature extends Activity {
                             .body(jsonFile.toString())
                             .asString();
 
-//                    if(postResponse.getCode() > 204){
-//                        databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
-//                    }
-//                    else{
+                    if(postResponse.getCode() > 204){
+                        databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
+                    }
+                    else{
                         databaseHelper.updateStatus(currentOrders.get(i), PackageModel.COMPLETE);
-//                    }
+                    }
 
                     return postResponse.getBody();
                 } catch (UnirestException e) {
                     e.printStackTrace();
-//                    databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
+                    databaseHelper.updateStatus(currentOrders.get(i), PackageModel.FAIL_SEND);
                 }
             }
             return "Complete";
