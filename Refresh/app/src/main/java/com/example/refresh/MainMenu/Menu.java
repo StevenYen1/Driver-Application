@@ -8,13 +8,14 @@ Specific Functions:
         Scan Packages
         View Route
         Edit Orders (Add, Close, Reopen, Transfer, Adjust, Void)
-        Call Server (Retrieve Signature, Sync)
+        Call Server (Retrieve SignaturePOST, Sync)
         Sign Out
 
 Documentation & Code Written By:
     Steven Yen
     Staples Intern Summer 2019
  */
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -30,22 +31,21 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.refresh.Authentication.MainActivity;
+import com.example.refresh.DatabaseHelper.DatabaseHelper;
 import com.example.refresh.EditOrders.AddOrders;
 import com.example.refresh.EditOrders.AdjustOrders;
 import com.example.refresh.EditOrders.CloseOrders;
 import com.example.refresh.EditOrders.ReopenOrders;
 import com.example.refresh.EditOrders.TransferOrders;
 import com.example.refresh.EditOrders.VoidOrder;
+import com.example.refresh.Model.PackageModel;
 import com.example.refresh.OrderDisplay.ViewOrders;
 import com.example.refresh.R;
 import com.example.refresh.RetrieveSignatures.SignatureInterface;
-import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.Model.PackageModel;
 import com.example.refresh.ScanPackages.ExternalScanner;
 import com.example.refresh.ScanPackages.Scandit;
 import com.mashape.unirest.http.HttpResponse;
@@ -53,14 +53,13 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.ramijemli.percentagechartview.PercentageChartView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Date;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
+import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_STATUS;
 
 public class Menu extends AppCompatActivity {
@@ -70,7 +69,6 @@ public class Menu extends AppCompatActivity {
      */
     private DatabaseHelper databaseHelper;
     private ArrayList<String> sync_ids = new ArrayList<>();
-    private ArrayList<String> sync_signs = new ArrayList<>();
     private Handler mHandler = new Handler();
 
     /*
@@ -183,14 +181,12 @@ public class Menu extends AppCompatActivity {
 
                 get_btn.setOnClickListener(v1 -> openActivity(SignatureInterface.class));
                 post_btn.setOnClickListener(v1 -> {
-                    sync_signs.clear();
                     sync_ids.clear();
 
                     Cursor cursor = databaseHelper.queryAllOrders();
                     while(cursor.moveToNext()){
                         if(cursor.getInt(COL_STATUS) == PackageModel.FAIL_SEND){
-                            sync_ids.add(cursor.getString(0));
-                            sync_signs.add(cursor.getString(5));
+                            sync_ids.add(cursor.getString(COL_ORDERNUMBER));
                         }
                     }
                     startAsyncTask();
@@ -222,7 +218,7 @@ public class Menu extends AppCompatActivity {
     Executes actual post command
      */
     private void startAsyncTask() {
-        PostConnection post = new PostConnection();
+        SyncSignatures post = new SyncSignatures();
         post.execute();
     }
 
@@ -239,24 +235,6 @@ public class Menu extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-    }
-
-    /*
-    Converts a signature and packages it into a file.
-     */
-    @androidx.annotation.RequiresApi(api = Build.VERSION_CODES.O)
-    public File convertImageToFile(String sign) throws IOException {
-        File f = new File(Menu.this.getCacheDir(), "signature");
-        f.createNewFile();
-
-        byte[] b = Base64.decode(sign, Base64.DEFAULT);
-
-        FileOutputStream fos = new FileOutputStream(f);
-        fos.write(b);
-        fos.flush();
-        fos.close();
-
-        return f;
     }
 
     /*
@@ -283,34 +261,31 @@ public class Menu extends AppCompatActivity {
     }
 
     /*
+    creates the json file needed to send to the REST api
+     */
+    private JSONObject createJson(String orderId){
+        //This is where the json would be constructed.
+        //The code was removed for legal purposes
+        return new JSONObject();
+    }
+
+    /*
     Post route to rest api.
     Stores signature information.
      */
-    private class PostConnection extends AsyncTask<Integer, Integer, String> {
+    private class SyncSignatures extends AsyncTask<Integer, Integer, String> {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected String doInBackground(Integer... integers) {
             String returnString = "";
             for(int i = 0; i < sync_ids.size(); i++){
                 String id = sync_ids.get(i);
-                String sign =  sync_signs.get(i);
 
-                File file = null;
                 try {
-                    file = convertImageToFile(sign);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Date date = new Date();
-                long time = date.getTime();
-                try {
-                    final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/capture")
-                            .basicAuth("epts_app", "uB25J=UUwU")
-                            .field("status", "CLOSED")
-                            .field("signature", file)
-                            .field("shipmentId", id)
-                            .field("submissionDate", ""+time).asString();
+                    final HttpResponse<String> postResponse = Unirest.post("signature rest api endpoint")
+                            .basicAuth("mockUsername", "mockPassword")
+                            .body(createJson(sync_ids.get(i)).toString())
+                            .asString();
 
                     if(postResponse.getCode() == 201 || postResponse.getCode()== 200){
                         databaseHelper.updateStatus(id, 2);

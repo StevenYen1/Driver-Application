@@ -93,7 +93,7 @@ public class ViewOrdersAdapter extends RecyclerView.Adapter<ViewOrdersAdapter.Vi
     /*
     creates a OrderDetails dialog that displays order details.
      */
-    public void viewOrderDetails(String id){
+    private void viewOrderDetails(String id){
         OrderDetails orderDetails = new OrderDetails(mContext, id);
         orderDetails.formatOrderDetails();
     }

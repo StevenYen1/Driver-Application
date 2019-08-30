@@ -134,7 +134,7 @@ public class SignatureInterface extends AppCompatActivity {
     private void searchBtnSetup(){
         signatureSearch.setEnabled(false);
         signatureSearch.setOnClickListener(v -> {
-            Intent intent = new Intent(SignatureInterface.this, SignatureCall.class);
+            Intent intent = new Intent(SignatureInterface.this, SignatureGET.class);
             intent.putExtra("id", orderSelected);
             startActivity(intent);
         });

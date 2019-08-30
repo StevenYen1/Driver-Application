@@ -157,13 +157,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... integers) {
 
-            Date date = new Date();
-            long time = date.getTime();
             try {
-                final HttpResponse<String> postResponse = Unirest.post("http://10.244.185.101:80/signaturesvc/v1/user")
-                        .basicAuth("epts_app", "uB25J=UUwU")
-                        .field("userid", username.getText().toString())
-                        .field("last_login", ""+time).asString();
+                final HttpResponse<String> postResponse = Unirest.post("url endpoint for users")
+                        .basicAuth("mockUsername", "mockPassword")
+                        .field("username", username.getText().toString())
+                        .field("field 2", "").asString();
 
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, "Connection made.", Toast.LENGTH_SHORT).show());
                 return postResponse.getBody();

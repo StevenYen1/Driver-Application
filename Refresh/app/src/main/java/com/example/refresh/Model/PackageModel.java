@@ -1,7 +1,7 @@
 package com.example.refresh.Model;
 /*
 Description:
-    The purpose of this class is to create virtual packages that contain all neccessary order information.
+    The purpose of this class is to create virtual packages that contain all necessary order information.
 
 Specific Features:
     Getters and Setters

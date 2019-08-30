@@ -9,7 +9,7 @@ Specific Functions:
     Insert data into tables
     Delete data from tables
     Query tables for all data, or a specific instance (given an id)
-    Update Status, Signature, or Quantity in "order_table"
+    Update Status, SignaturePOST, or Quantity in "order_table"
     Edit "position"(index) of an entry in a table.
     Transfer an entry from one table to the other.
 
@@ -207,7 +207,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void updateSignature(String id, String sign){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("Signature", sign);
+        cv.put("SignaturePOST", sign);
         db.update(ORDER_TABLE, cv, "OrderNumber = ?", new String[] { id });
         db.close();
     }

@@ -52,10 +52,9 @@ public class Scandit extends Activity implements OnScanListener {
     /*
     Setup required for creating a Scandit BarcodePicker.
     NOTE: Scandit does not function unless you place the license key inside "setAppKey"
-          Currently on a 30 day free trial, trial ends 08/18/19
      */
     private void setupScandit(){
-        ScanditLicense.setAppKey("AYN9UzrQJ0caAEoW3BjRAx8G3/wkFdQURSqG2Otx0xfKXxKWBEfLLWdtSjPsW6DQ3FcVibJpcmxoNG/C7CNXD21sjZVAf5cPQgf7nk92/gwyY5lN4HzHaPN5OdjDA8PoVztHSu4+Hs2Bdky0Gz/ZIanahxxQErzpDZC9yiRZRkQ9GyFJ/K4lLwuJ11/45tanu/cXrgavxriglt8yAwyVDhQJ7q50Fo7iqBIj0oxR/HKec3NQsUt4gG/8Lebyu50MyKVPTFfm+eBmW6BRf9WzR+Nuyu3H7DdlFqIvSv/wK4PPJRuZm2itCaz4kKcY6rD2xr00yJDYRpsK6rsF29FoQ9C3GVLW07b/RcpwUWEsM1soa+c570RoqxtcXCXN6oLpJVXaYLOaRb4M0yC/mGBlMCYXCywQbJBNepOtHFNMRxUqQuS8dYbMWE2UN0mWk2IURjPZqwvUsBRZ1+ECtD3SdIhgJSgRIy3ZsjZy/Uj1KrNVT1Tu1ehLd/RulRjt1lt3ly66UB0L6mW2N/J2NhOBmQ1vy8G8f25C/tRpJtb6m3wuTbCUCJ8s5XRV3SFw0dwmNIRhHm34Myr+Oabcx1JVKvk9BOszF9DFvQ7jclMF/Bc8qcFeS03AWsJsVvPaBlnmpfJnciQOHDb3kj8XEZ8bU/W4ESD6lzLbIOAfuEgAVcYOkp2tarvkEIlLRkSqrPswgi04UhJ/qoAPkRKpoV4N6Y1GsDJGpZk2EAvYMagzvTJbB9c/ywA5fGpI+lUcaKBeql3YCVFJrjrnY3/oMHfNtZgio9gMXHahyath7K5z2U/oCY5el6mI");
+        ScanditLicense.setAppKey("Scandit license key");
         ScanSettings settings = ScanSettings.create();
         settings.setSymbologyEnabled(Barcode.SYMBOLOGY_EAN13, true);
         settings.setSymbologyEnabled(Barcode.SYMBOLOGY_UPCA, true);

@@ -46,7 +46,6 @@ public class ReopenOrders extends AppCompatActivity {
     /*
     private instance variables
      */
-    private TextView detail_display;
     private ArrayList<String> orderNums = new ArrayList<>();
     private ArrayList<String> display = new ArrayList<>();
     private ArrayList<String> details = new ArrayList<>();

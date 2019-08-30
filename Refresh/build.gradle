@@ -27,7 +27,7 @@ allprojects {
         }
         maven { url 'https://jitpack.io' }
         flatDir{
-            dirs 'C:\\Users\\YenSt001\\ScanditBarcodeScanner\\scandit-barcodescanner-android_5.11.4\\ScanditSDK'
+            dirs 'C:\\Users\\steve\\Github Projects\\mpod-sourcecode\\mpod-sourcecode\\ScanditBarcodeScanner\\scandit-barcodescanner-android_5.11.4\\ScanditSDK'
         }
 
     }

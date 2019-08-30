@@ -1,5 +1,7 @@
 package com.example.refresh.EditOrders;
-
+/*
+This was a feature that was not implemented in the latest version of the application.
+ */
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

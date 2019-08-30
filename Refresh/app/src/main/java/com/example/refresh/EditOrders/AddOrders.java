@@ -119,7 +119,7 @@ public class AddOrders extends AppCompatActivity {
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
         if(isUniqueOrder(newNo)){
-            databaseHelper.insertOrder(newNo, newAddress, newRecip, newItem, 0, "No Signature Yet",
+            databaseHelper.insertOrder(newNo, newAddress, newRecip, newItem, 0, "No SignaturePOST Yet",
                     databaseHelper.returnSize(ORDER_TABLE), parseInt(newQuantity), newCarton, "1000", "mockForNow");
         }
         else{

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
+import static com.example.refresh.Model.PackageModel.INCOMPLETE;
 import static com.example.refresh.Model.PackageModel.SCANNED;
 import static java.lang.Integer.parseInt;
 
@@ -105,19 +106,28 @@ public class DownloadPage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
+    Starts the async task that gets the orders from the REST api.
+     */
     private void startAsyncTask(){
         GetOrders task = new GetOrders();
         task.execute();
     }
 
+    /*
+    private internal class that makes a GET request to get daily orders and routes for drivers.
+     */
     private class GetOrders extends AsyncTask<Integer, Integer, JSONObject> {
         @Override
         protected JSONObject doInBackground(Integer... integers) {
 
             try {
-                final HttpResponse<JsonNode> getResponse = Unirest.get("http://10.244.185.101:80/signaturesvc/v1/roadnet/dailyorders")
-                        .basicAuth("epts_app", "uB25J=UUwU")
+                final HttpResponse<JsonNode> getResponse = Unirest.get("url endpoint for orders")
+                        .basicAuth("mockUsername", "mockPassword")
                         .asJson();
+                /*
+                For the server side, the response code was set to be HTTP.OK (200)
+                 */
                 if (getResponse.getCode()!=200){
                     return null;
                 }
@@ -138,28 +148,23 @@ public class DownloadPage extends AppCompatActivity {
             try {
                 DatabaseHelper databaseHelper = new DatabaseHelper(DownloadPage.this);
                 databaseHelper.clearTables();
-                JSONArray jsonArray = result.getJSONArray("orders");
+                /*
+                Here, there were multiple fields parsed from the json object obtained from the REST api.
+                However, they have been replaced to avoid legal action.
+                 */
+                JSONArray jsonArray = result.getJSONArray("root");
                 for(int i = 0; i < jsonArray.length(); i++) {
                     JSONObject order = jsonArray.getJSONObject(i);
-                    String orderNumber = order.getString("orderNumber");
-                    String address = order.getString("address");
-                    String customer = order.getString("customer");
-                    String customerId = order.getString("customerId");
-                    String cartonNumber = order.getString("cartonNumber");
-                    String quantity = order.getString("quantity");
-                    String trackingBarcode = order.getString("barcode");
-                    JSONArray items = order.getJSONArray("items");
-                    ArrayList<ItemModel> itemList = new ArrayList<>();
-                    for(int j = 0; j < items.length(); j++){
-                        JSONObject item = items.getJSONObject(j);
-                        String barcode = item.getString("barcode");
-                        String itemName = item.getString("item");
-                        String barcodeType = item.getString("barcodeType");
-                        itemList.add(new ItemModel(barcode, barcodeType, itemName));
-                    }
-                    Gson gson = new Gson();
-                    String inputString = gson.toJson(itemList);
-                    databaseHelper.insertOrder(orderNumber, address, customer, inputString, SCANNED, null, i, parseInt(quantity), cartonNumber, trackingBarcode, customerId);
+                    String orderNumber = "Parsed from Json";
+                    String address = "Parsed from Json";
+                    String customer = "Parsed from Json";
+                    String customerId = "Parsed from Json";
+                    String cartonNumber = "Parsed from Json";
+                    String quantity = "Parsed from Json";
+                    String trackingBarcode = "Parsed from Json";
+                    String items = "Parsed from Json";
+
+                    databaseHelper.insertOrder(orderNumber, address, customer, items, INCOMPLETE, null, i, parseInt(quantity), cartonNumber, trackingBarcode, customerId);
                 }
                 ordersDownloaded = true;
                 download_btn.setText("Completed Download!");

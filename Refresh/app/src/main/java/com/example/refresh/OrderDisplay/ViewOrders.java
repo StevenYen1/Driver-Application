@@ -64,7 +64,7 @@ public class ViewOrders extends AppCompatActivity {
     /*
     Query the database for the updated status of orders. Stores the information in private ArrayLists.
      */
-    public void setOrderInformation(){
+    private void setOrderInformation(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         Cursor rawOrders = databaseHelper.queryAllOrders();
         if(rawOrders.getCount() == 0){
@@ -90,7 +90,7 @@ public class ViewOrders extends AppCompatActivity {
     /*
     Sets the title
      */
-    public void setTitle(){
+    private void setTitle(){
         Resources res = this.getResources();
         TextView title = findViewById(R.id.table_title);
         title.setText(String.format(res.getString(R.string.DeliveriesDate), returnDate()));
@@ -99,7 +99,7 @@ public class ViewOrders extends AppCompatActivity {
     /*
     Gets the current date and returns it as a String
      */
-    public String returnDate(){
+    private String returnDate(){
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c);

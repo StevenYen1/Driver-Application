@@ -44,7 +44,7 @@
         <activity android:name=".EditOrders.CloseOrders" />
         <activity android:name=".EditOrders.AddOrders" />
         <activity android:name=".MainMenu.Menu" />
-        <activity android:name=".RetrieveSignatures.SignatureCall" />
+        <activity android:name=".RetrieveSignatures.SignatureGET" />
         <activity android:name=".OrderDisplay.ViewOrders" />
         <activity
             android:name=".SignPackages.ScannedItems"
@@ -72,7 +72,7 @@
 
         <activity android:name=".ScanPackages.ExternalScanner" />
         <activity
-            android:name=".SignPackages.Signature"
+            android:name=".SignPackages.SignaturePOST"
             android:label="@string/title_activity_feature1"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

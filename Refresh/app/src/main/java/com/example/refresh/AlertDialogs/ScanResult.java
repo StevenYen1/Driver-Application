@@ -33,14 +33,23 @@ import static com.example.refresh.ScanPackages.Scandit.getScanner;
 
 public class ScanResult {
 
+    /*
+    private instance variables
+     */
     private Context context;
     private String orderId;
 
+    /*
+    constructor that takes in a context and orderId
+     */
     public ScanResult(Context context, String orderId){
         this.context = context;
         this.orderId = orderId;
     }
 
+    /*
+    checks if the id scanned exists in the local database
+     */
     public void checkScan(){
         Cursor queryResult = getOrderDetails();
         if(isIncomplete(queryResult)){
@@ -50,11 +59,18 @@ public class ScanResult {
         }
     }
 
+    /*
+    Searches the database for a specific orderId. Returns a cursor object.
+     */
     private Cursor getOrderDetails(){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         return databaseHelper.queryOrder(orderId);
     }
 
+    /*
+    Checks if the status of an order is 'INCOMPLETE'.
+    If so, returns true. Else false.
+     */
     private boolean isIncomplete(Cursor queryResult){
         while(queryResult.moveToNext()){
             if(queryResult.getInt(COL_STATUS)==0){
@@ -64,11 +80,17 @@ public class ScanResult {
         return false;
     }
 
+    /*
+    Updates the status of an order to 'SCANNED'.
+     */
     private void statusScanned(){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         databaseHelper.updateStatus(orderId, SCANNED);
     }
 
+    /*
+    Builds the AlertDialog that briefly notifies the user that the scan was a success.
+     */
     private void buildSuccessWindow(){
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );

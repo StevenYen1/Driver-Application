@@ -12,6 +12,7 @@ Documentation & Code Written By:
     Steven Yen
     Staples Intern Summer 2019
  */
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -27,8 +28,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.refresh.DatabaseHelper.DatabaseHelper;
-import com.example.refresh.PrintLabel.BarcodeBitmap;
-import com.example.refresh.PrintLabel.Bluetooth;
 import com.example.refresh.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -45,14 +44,19 @@ import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_RECIPIENT;
 
 public class Printer extends AppCompatActivity {
 
+    /*
+    private instance variables
+     */
     private final int RETURN_LABEL = 1;
     private final int SHIPPING_LABEL = 2;
-
     private String orderId;
     private int bitmapPrint = 0;
     private Bitmap shippingLabel = null;
     private Bitmap returnLabel = null;
 
+    /*
+    Method that occurs when the activity starts.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +67,17 @@ public class Printer extends AppCompatActivity {
 
     }
 
+    /*
+    Creates both a shipping label and return label of a specific order. Stores them as bitmaps.
+     */
     private void createLabels(String orderId){
         createShippingLabel(orderId);
         createReturnLabel(orderId);
     }
 
+    /*
+    Instantiates buttons and their respective OnClickListeners
+     */
     private void setupButtons(){
         ImageView image = findViewById(R.id.barcode_image);
 
@@ -98,6 +108,9 @@ public class Printer extends AppCompatActivity {
         });
     }
 
+    /*
+    Method that opens the Print command.
+     */
     private void doBitmapPrint(){
         PrintHelper bitmapPrinter = new PrintHelper(this);
         bitmapPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
@@ -112,6 +125,9 @@ public class Printer extends AppCompatActivity {
         }
     }
 
+    /*
+    Creates a generic shipping label as saves as a Bitmap.
+     */
     private void createShippingLabel(String orderId){
         Bitmap bitmap = Bitmap.createBitmap(600, 700, Bitmap.Config.ARGB_8888);
 
@@ -169,7 +185,9 @@ public class Printer extends AppCompatActivity {
         this.shippingLabel = bitmap;
     }
 
-
+    /*
+    Creates a generic return label as saves as a Bitmap.
+     */
     private void createReturnLabel(String orderId){
         ArrayList<String> data = queryData(orderId);
         Bitmap bitmap = Bitmap.createBitmap(600, 750, Bitmap.Config.ARGB_8888);
@@ -225,6 +243,10 @@ public class Printer extends AppCompatActivity {
         Log.d("tag", "createReturnLabel: " + returnLabel.toString());
     }
 
+    /*
+    Queries the 'order_table' given an orderId.
+    Stores and returns all information related to that order in an ArrayList<String>
+     */
     private ArrayList<String> queryData(String orderId){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         Cursor queryResults = databaseHelper.queryOrder(orderId);

@@ -151,10 +151,10 @@ public class ScannedItems extends AppCompatActivity {
     }
 
     /*
-    Opens Signature activity
+    Opens SignaturePOST activity
      */
     private void openSign(){
-        Intent intent = new Intent(this, Signature.class);
+        Intent intent = new Intent(this, SignaturePOST.class);
         intent.putExtra("previousActivity", getIntent().getStringExtra("previousActivity"));
         startActivity(intent);
     }

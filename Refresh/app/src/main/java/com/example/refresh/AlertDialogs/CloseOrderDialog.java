@@ -1,5 +1,16 @@
 package com.example.refresh.AlertDialogs;
+/*
+Description:
+    The purpose of this class is to create an AlertDialog for the process of closing orders.
 
+Specific Features:
+    Creates CloseOrderDialog
+    Prompts for user Reasoning as to why they are closing the order.
+
+Documentation & Code Written By:
+    Steven Yen
+    Staples Intern Summer 2019
+ */
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,14 +35,23 @@ import static com.example.refresh.DatabaseHelper.DatabaseHelper.COL_ORDERNUMBER;
 
 public class CloseOrderDialog {
 
+    /*
+    private instance variables
+     */
     private Context context;
     private ArrayList<String> list;
 
+    /*
+    constructor that takes in a context and ArrayList of String
+     */
     public CloseOrderDialog(Context context, ArrayList<String> list){
         this.context = context;
         this.list = list;
     }
 
+    /*
+    Creates the actual dialog
+     */
     public void createReasoningDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );

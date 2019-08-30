@@ -1,7 +1,10 @@
 package com.example.refresh.AlertDialogs;
+/*
+Description:
+    The purpose of this class is to create the Item Adjustment Dialog for the 'AdjustOrders' class.
 
+ */
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -23,6 +26,9 @@ import static java.lang.Integer.parseInt;
 
 public class AdjustItemDialog {
 
+    /*
+    private instance variables
+     */
     private Context context;
     private int quantity;
     private int operation;
@@ -32,7 +38,9 @@ public class AdjustItemDialog {
     private static final int SUBTRACTION = 0;
     private static int ADDITION = 1;
 
-
+    /*
+    constructor
+     */
     public AdjustItemDialog(Context context, String orderId, int quantity) {
         this.context = context;
         this.orderId = orderId;
@@ -40,6 +48,9 @@ public class AdjustItemDialog {
         this.operation = SUBTRACTION;
     }
 
+    /*
+    creates the actual AlertDialog
+     */
     public AlertDialog createDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -53,6 +64,9 @@ public class AdjustItemDialog {
 
     }
 
+    /*
+    Sets the initial values for the AlertDialog
+     */
     private void setupInitialValues(View mView, AlertDialog alert){
         TextView titleView = mView.findViewById(R.id.quantity_layout_title);
         titleView.setText("OrderNumber: " + orderId);
@@ -68,6 +82,9 @@ public class AdjustItemDialog {
         setupValueInput(mView, remainingView);
     }
 
+    /*
+    setup for the text listener. listens for user input.
+     */
     private void setupValueInput(View mView, TextView remainingView){
         EditText adjustmentView = mView.findViewById(R.id.quantity_layout_input_adjustment);
         adjustmentView.addTextChangedListener(new TextWatcher() {
@@ -104,6 +121,9 @@ public class AdjustItemDialog {
         });
     }
 
+    /*
+    Setup for the buttons and their OnClickListeners
+     */
     private void setupButtons(View mView, TextView remainingView, AlertDialog alert){
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         ok.setOnClickListener(v -> {
@@ -142,6 +162,14 @@ public class AdjustItemDialog {
     }
 
 
+    /*
+    Computes an equation given:
+        - the original quantity of the item
+        - the amount being adjusted
+        - the sign of the operation.
+
+    Returns the result as an int.
+     */
     private int calculateResult(String quantity, String adjustment) throws Exception {
         int intQ = parseInt(quantity);
         boolean isParsable = isParsable(adjustment);
